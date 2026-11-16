@@ -226,6 +226,16 @@ input[type=range]{
 }
 .lbl.sm{font-size:calc(var(--lbl,11px) * .87);stroke-width:calc(var(--lbl,11px) * .18)}
 .lbl.core{font-size:calc(var(--lbl,11px) * 1.38);font-weight:700;letter-spacing:.14em;fill:var(--zhu)}
+.core-em{
+  font-family:var(--f-display);font-size:calc(var(--lbl,11px) * .90);fill:var(--ink);
+  paint-order:stroke;stroke:var(--paper);stroke-width:calc(var(--lbl,11px) * .17);
+  letter-spacing:.05em;pointer-events:none;
+}
+.core-ev{
+  font-family:var(--f-display);font-size:calc(var(--lbl,11px) * .76);fill:var(--zhu);
+  paint-order:stroke;stroke:var(--paper);stroke-width:calc(var(--lbl,11px) * .14);
+  letter-spacing:.04em;pointer-events:none;opacity:.92;
+}
 .pulse{fill:none;stroke:var(--zhu);stroke-width:1.4;pointer-events:none}
 
 @media (max-width:1019px){
@@ -960,7 +970,7 @@ function blobPath(cx,cy,r,seed){
 
 /* ============ 状态 ============ */
 var st={year:FMIN,sel:null,tab:'emp',playing:false,paused:false,acc:0,introStop:false};
-var entG={},lblG={},areaG={};
+var entG={},lblG={},areaG={},lblEm={},lblEv={};
 var CLBL={'西周':[110,34.5],'春秋战国':[112.5,34.5],'秦':[110,34.5],'西汉':[108,34],'新':[108,34],
 '东汉':[108,34],'三国':[110.5,33.5],'西晋':[110,33.5],'东晋':[115.5,31],'南北朝':[110,34],
 '隋':[110,34],'唐':[110,34],'五代十国':[112,34],'北宋':[112,32.5],'南宋':[114.5,29],'元':[108,36],'明':[110,33],'清':[110,33]};
@@ -1002,8 +1012,15 @@ function buildLayers(){
     p.addEventListener('click',function(ev){ev.stopPropagation();pick('c'+i)});
     $('#gAreas').appendChild(p);areaG['c'+i]=p;
     var xy=CLBL[c.n]||[110,34];
-    var t=N('text',{x:PX(xy[0]),y:PY(xy[1]),'text-anchor':'middle',class:'lbl core'});
-    t.textContent=c.n;$('#gLabels').appendChild(t);lblG['c'+i]=t;
+    var lg=N('g',{transform:'translate('+PX(xy[0])+','+PY(xy[1])+')'});
+    lg.style.transition='opacity .45s ease';
+    var t=N('text',{x:0,y:0,'text-anchor':'middle',class:'lbl core'});
+    t.textContent=c.n;lg.appendChild(t);
+    var te=N('text',{x:0,y:0,'text-anchor':'middle',class:'core-em',dy:'1.6em'});
+    lg.appendChild(te);lblEm['c'+i]=te;
+    var tv=N('text',{x:0,y:0,'text-anchor':'middle',class:'core-ev',dy:'3.05em'});
+    lg.appendChild(tv);lblEv['c'+i]=tv;
+    $('#gLabels').appendChild(lg);lblG['c'+i]=lg;
   });
   var cell={};
   FOREIGN.forEach(function(d,i){
@@ -1057,6 +1074,13 @@ function render(){
     areaG['c'+i].style.opacity=on?1:0;
     areaG['c'+i].style.pointerEvents=on?'auto':'none';
     lblG['c'+i].style.opacity=on?1:0;
+    if(on){
+      var e2=empAt(d,y);
+      if(lblEm['c'+i])lblEm['c'+i].textContent=e2?(e2[0]+' '+e2[1]):'';
+      var ev2=null;
+      if(d.evt){for(var k2=0;k2<d.evt.length;k2++){if(d.evt[k2][0]<=y)ev2=d.evt[k2];else break}}
+      if(lblEv['c'+i])lblEv['c'+i].textContent=ev2?ev2[1]:'';
+    }
   });
 
   if(st.sel&&!alive(st.sel,y))st.sel=null;
