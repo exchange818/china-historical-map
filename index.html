@@ -949,7 +949,7 @@ function blobPath(cx,cy,r,seed){
 }
 
 /* ============ 状态 ============ */
-var st={year:FMIN,sel:null,tab:'emp',playing:false,acc:0,introStop:false};
+var st={year:FMIN,sel:null,tab:'emp',playing:false,paused:false,acc:0,introStop:false};
 var entG={},lblG={},areaG={};
 var CLBL={'西周':[110,34.5],'春秋战国':[112.5,34.5],'秦':[110,34.5],'西汉':[108,34],'新':[108,34],
 '东汉':[108,34],'三国':[110.5,33.5],'西晋':[110,33.5],'东晋':[115.5,31],'南北朝':[110,34],
@@ -1217,12 +1217,14 @@ function setYear(v,keepIntro){
 /* ============ 播放 ============ */
 var rafId=null;
 function stopPlay(){
-  st.playing=false;
+  st.playing=false;st.paused=true;
   if(rafId)cancelAnimationFrame(rafId);rafId=null;
   $('#playBtn').textContent='演进';$('#playBtn').classList.remove('on');
 }
 function startPlay(){
   st.introStop=true;
+  if(!st.paused&&st.year!==FMIN){st.year=FMIN;render()}
+  st.paused=false;
   st.playing=true;st.acc=0;
   $('#playBtn').textContent='暂停';$('#playBtn').classList.add('on');
   var last=0;
@@ -1233,7 +1235,7 @@ function startPlay(){
     if(st.acc>=34){
       st.acc-=34;
       st.year+=1;
-      if(st.year>=FMAX){st.year=FMAX;render();stopPlay();return}
+      if(st.year>=FMAX){st.year=FMAX;render();stopPlay();st.paused=false;return}
       render();
     }
     rafId=requestAnimationFrame(tick);
