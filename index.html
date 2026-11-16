@@ -1288,19 +1288,17 @@ function bind(){
 
 /* ============ 开场 ============ */
 function intro(){
+  st.year=FMIN;render();
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(reduce){st.year=627;render();return}
-  var from=-1046,to=627,t0=null,dur=2500;
-  function step(ts){
-    if(st.introStop)return;
-    if(!t0)t0=ts;
-    var p=Math.min(1,(ts-t0)/dur);
-    var e=1-Math.pow(1-p,3);
-    st.year=Math.round(from+(to-from)*e);
-    render();
-    if(p<1)rafId=requestAnimationFrame(step);
-  }
-  rafId=requestAnimationFrame(step);
+  var svg=$('#map');
+  if(reduce||!svg)return;
+  svg.style.opacity='0';
+  svg.style.transform='translateY(7px)';
+  requestAnimationFrame(function(){
+    svg.style.transition='opacity 1s cubic-bezier(.22,1,.36,1),transform 1.15s cubic-bezier(.22,1,.36,1)';
+    svg.style.opacity='1';
+    svg.style.transform='translateY(0)';
+  });
 }
 
 /* ============ 启动 ============ */
