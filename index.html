@@ -54,6 +54,8 @@ h1{
   font-family:var(--f-display);font-weight:700;font-size:clamp(24px,4.6vw,42px);
   line-height:1.06;letter-spacing:.02em;color:var(--ink);
 }
+.h1row{display:flex;align-items:center;gap:clamp(10px,1.7vw,16px);flex-wrap:wrap}
+.h1row .btn.play{padding:8px 16px;font-size:12.5px;letter-spacing:.16em}
 .sub{
   font-family:var(--f-display);font-size:clamp(11px,1.6vw,13.5px);color:var(--ink-2);
   letter-spacing:.06em;margin-top:7px;
@@ -284,7 +286,10 @@ input[type=range]{
   <header class="head">
     <div class="head-l">
       <div class="eyebrow">古代东亚世界 <span>/ 前 1046 — 1912</span></div>
-      <h1>三千年的邻居</h1>
+      <div class="h1row">
+        <h1>三千年的邻居</h1>
+        <button class="btn play" id="playBtn" type="button">演进</button>
+      </div>
       <p class="sub">以中原王朝为轴心，看周边政权的兴替与往来</p>
     </div>
     <div class="head-r">
@@ -340,7 +345,6 @@ input[type=range]{
         <label for="yearInput">年代</label>
         <input type="number" id="yearInput" value="-1046" step="1" aria-label="输入年代，负数为公元前">
       </div>
-      <button class="btn play" id="playBtn" type="button">演进</button>
       <span class="tip">负数＝公元前</span>
       <div class="chips" id="chips"></div>
     </div>
@@ -1227,8 +1231,8 @@ function startPlay(){
     if(!last)last=ts;
     st.acc+=ts-last;last=ts;
     if(st.acc>=34){
-      st.acc=0;
-      st.year+=2;
+      st.acc-=34;
+      st.year+=1;
       if(st.year>=FMAX){st.year=FMAX;render();stopPlay();return}
       render();
     }
