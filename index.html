@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>三千年的邻居 · 以中原为轴心的古代世界</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%23A33B22'/><circle cx='16' cy='16' r='6.5' fill='none' stroke='%23E8E3D6' stroke-width='1.6'/><circle cx='16' cy='16' r='1.8' fill='%23E8E3D6'/></svg>">
+<style>
+:root{
+  --paper:#E8E3D6;
+  --paper-2:#DED7C6;
+  --water:#D3CBB7;
+  --ink:#23211C;
+  --ink-2:#544E45;
+  --ink-3:#8C8478;
+  --line:#BFB7A3;
+  --line-2:#A79E89;
+  --zhu:#9E3A20;
+  --grass:#63743F;
+  --sand:#A7812F;
+  --pine:#3E6470;
+  --vine:#6E5378;
+  --sea:#2A6A66;
+  --far:#494F6B;
+  --f-display:"Songti SC","STSong","SimSun","Noto Serif CJK SC","Source Han Serif SC",serif;
+  --f-body:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Noto Sans CJK SC",sans-serif;
+  --f-num:"Iowan Old Style","Georgia","Times New Roman",serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(rgba(58,48,32,.06) .55px,transparent .55px);
+  background-size:3px 3px;
+}
+.app{position:relative;z-index:1;display:flex;flex-direction:column;min-height:100vh}
+
+/* ============ 页眉 ============ */
+.head{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  padding:14px 16px 10px;border-bottom:1px solid var(--line-2);
+}
+.head-l{min-width:0;flex:1 1 auto}
+.eyebrow{
+  font-family:var(--f-display);font-size:11px;letter-spacing:.34em;color:var(--ink-3);
+  margin-bottom:6px;
+}
+.eyebrow span{letter-spacing:0}
+h1{
+  font-family:var(--f-display);font-weight:700;font-size:clamp(24px,4.6vw,42px);
+  line-height:1.06;letter-spacing:.02em;color:var(--ink);
+}
+.sub{
+  font-family:var(--f-display);font-size:clamp(11px,1.6vw,13.5px);color:var(--ink-2);
+  letter-spacing:.06em;margin-top:7px;
+}
+.head-r{text-align:right;flex:0 0 auto;padding-bottom:2px}
+.era{
+  font-family:var(--f-display);font-size:clamp(26px,5.4vw,46px);line-height:1;
+  letter-spacing:.03em;font-variant-numeric:tabular-nums;color:var(--zhu);
+}
+.era small{font-size:.42em;color:var(--ink-2);margin-left:1px;letter-spacing:0}
+.dyn{font-size:12px;color:var(--ink-2);margin-top:5px;letter-spacing:.08em}
+.dyn b{font-family:var(--f-display);font-size:14px;color:var(--ink);letter-spacing:.04em}
+
+/* ============ 地图 ============ */
+.stage{position:relative;min-height:0;overflow:hidden;background:var(--paper)}
+#map{display:block;width:100%;height:100%;touch-action:manipulation}
+.stage-inner{position:relative;width:100%;height:100%}
+
+.legend{
+  position:absolute;right:10px;top:10px;z-index:3;background:rgba(232,227,214,.94);
+  border:1px solid var(--line);padding:7px 8px 6px;font-size:10px;line-height:1.3;
+  color:var(--ink-2);max-width:140px;
+}
+.legend b{display:block;font-family:var(--f-display);font-size:11px;color:var(--ink);letter-spacing:.14em;margin-bottom:5px}
+.chb{fill:#23211C;fill-opacity:.05;stroke:none;pointer-events:none}
+.chp{fill:none;stroke:#23211C;stroke-opacity:.10;stroke-width:.45;stroke-linejoin:round;stroke-linecap:round;pointer-events:none}
+.chc{fill:none;stroke:#23211C;stroke-opacity:.25;stroke-width:.95;stroke-linejoin:round;pointer-events:none}
+.lg{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.lg i{width:9px;height:9px;flex:0 0 9px;border:1px solid rgba(0,0,0,.25)}
+
+.hint{
+  position:absolute;left:10px;bottom:8px;z-index:3;font-size:9.5px;color:var(--ink-3);
+  font-family:var(--f-display);letter-spacing:.08em;pointer-events:none;text-align:left;
+  line-height:1.45;max-width:46%;
+}
+
+/* ============ 时间轴 ============ */
+.timeline{border-top:1px solid var(--line-2);padding:10px 16px 12px;background:var(--paper-2)}
+.bands{position:relative;height:16px;margin-bottom:2px;border-bottom:1px solid var(--line-2)}
+.band{position:absolute;top:0;height:16px;border-left:1px solid rgba(158,58,32,.35);cursor:pointer;transition:filter .18s}
+.band:hover{filter:brightness(.93)}
+.band.on{background:var(--zhu)!important;border-left-color:var(--zhu)}
+.band-label{
+  position:absolute;top:0;font-family:var(--f-display);font-size:10px;color:var(--ink-2);
+  letter-spacing:.04em;transform-origin:left top;white-space:nowrap;pointer-events:none;
+  padding-left:3px;line-height:16px;
+}
+.track{position:relative;padding:0}
+input[type=range]{
+  width:100%;margin:6px 0 0;accent-color:var(--zhu);height:26px;cursor:pointer;
+  background:transparent;
+}
+.ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:2px}
+.numwrap{display:flex;align-items:center;gap:5px;border:1px solid var(--line-2);padding:3px 7px;background:var(--paper)}
+.numwrap label{font-size:11px;color:var(--ink-2);font-family:var(--f-display);letter-spacing:.08em}
+#yearInput{
+  width:76px;border:0;background:transparent;font-family:var(--f-num);font-size:16px;
+  color:var(--ink);font-variant-numeric:tabular-nums;padding:2px 0;outline:none;
+}
+#yearInput::placeholder{color:var(--ink-3);font-size:12px;font-family:var(--f-body)}
+.btn{
+  font-family:var(--f-display);font-size:12px;letter-spacing:.1em;padding:5px 11px;
+  border:1px solid var(--line-2);background:var(--paper);color:var(--ink-2);cursor:pointer;
+  transition:background .16s,color .16s,border-color .16s;
+}
+.btn:hover{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.btn:active{transform:translateY(1px)}
+.btn.play{border-color:var(--zhu);color:var(--zhu)}
+.btn.play.on{background:var(--zhu);color:var(--paper)}
+.chips{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;flex:1 1 auto;min-width:0;scrollbar-width:thin}
+.chips::-webkit-scrollbar{height:4px}
+.chips::-webkit-scrollbar-thumb{background:var(--line-2)}
+.tip{font-size:10.5px;color:var(--ink-3);font-family:var(--f-display);letter-spacing:.06em;flex:0 0 auto}
+.chip{
+  flex:0 0 auto;font-family:var(--f-display);font-size:12px;padding:3px 8px;cursor:pointer;
+  border:1px solid transparent;color:var(--ink-2);background:transparent;letter-spacing:.06em;
+  transition:all .15s;white-space:nowrap;
+}
+.chip:hover{background:var(--paper);border-color:var(--line-2);color:var(--ink)}
+.chip.on{background:var(--zhu);color:var(--paper);border-color:var(--zhu)}
+
+/* ============ 侧栏 ============ */
+.side{
+  background:var(--paper);border-left:1px solid var(--line-2);
+  overflow-y:auto;overscroll-behavior:contain;padding:0 0 14px;
+  scrollbar-width:thin;
+}
+.side::-webkit-scrollbar{width:5px}
+.side::-webkit-scrollbar-thumb{background:var(--line-2)}
+.panel{padding:14px 16px;border-bottom:1px solid var(--line)}
+.panel-label{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.kicker{font-family:var(--f-display);font-size:10.5px;letter-spacing:.22em;color:var(--ink-3)}
+.back{font-size:11px;color:var(--zhu);cursor:pointer;background:none;border:0;padding:2px;font-family:var(--f-display);letter-spacing:.06em}
+.back:hover{text-decoration:underline}
+.p-name{font-family:var(--f-display);font-size:clamp(20px,2.4vw,26px);line-height:1.16;letter-spacing:.02em;margin-bottom:2px}
+.p-alias{font-size:11.5px;color:var(--ink-3);margin-bottom:9px}
+.p-meta{display:grid;grid-template-columns:52px minmax(0,1fr);gap:4px 8px;font-size:12px;margin-bottom:11px}
+.p-meta dt{color:var(--ink-3);font-family:var(--f-display);letter-spacing:.1em}
+.p-meta dd{color:var(--ink-2);min-width:0;overflow-wrap:anywhere}
+.p-tie{font-size:12.5px;color:var(--ink);line-height:1.68;padding:9px 0 4px;border-top:1px solid var(--line)}
+.p-tie::before{
+  content:"与中原";display:block;font-family:var(--f-display);font-size:10px;letter-spacing:.2em;
+  color:var(--ink-3);margin-bottom:4px;
+}
+.sect{margin-top:12px}
+.sect-h{
+  font-family:var(--f-display);font-size:10px;letter-spacing:.2em;color:var(--ink-3);
+  margin-bottom:6px;display:flex;align-items:center;gap:7px;
+}
+.sect-h::after{content:"";flex:1 1 auto;height:1px;background:var(--line)}
+.person{display:flex;gap:8px;padding:5px 0;border-bottom:1px dotted var(--line);font-size:12px}
+.person:last-child{border-bottom:0}
+.p-year{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:11px;color:var(--zhu);flex:0 0 44px;padding-top:1px}
+.p-body{min-width:0}
+.p-body b{font-family:var(--f-display);font-size:12.5px;letter-spacing:.03em}
+.p-body span{color:var(--ink-2);display:block;line-height:1.5}
+.evt{padding:6px 0;border-bottom:1px dotted var(--line)}
+.evt:last-child{border-bottom:0}
+.evt-t{font-family:var(--f-display);font-size:12.5px;letter-spacing:.02em}
+.evt-t em{font-family:var(--f-num);font-style:normal;color:var(--zhu);font-size:11px;margin-right:6px;font-variant-numeric:tabular-nums}
+.evt-d{font-size:11.5px;color:var(--ink-2);line-height:1.55;margin-top:1px}
+
+.near{padding:12px 16px;border-bottom:1px solid var(--line);background:var(--paper-2)}
+.near-h{font-family:var(--f-display);font-size:10px;letter-spacing:.2em;color:var(--ink-3);margin-bottom:7px}
+.near-item{display:flex;gap:7px;font-size:11.5px;padding:3px 0;line-height:1.5}
+.near-item i{font-family:var(--f-num);font-style:normal;color:var(--ink-3);flex:0 0 auto;font-variant-numeric:tabular-nums}
+.near-item .g{color:var(--zhu)}
+.near-empty{font-size:11.5px;color:var(--ink-3)}
+
+.roster{padding:12px 16px 0}
+.r-group{margin-bottom:11px}
+.r-head{display:flex;align-items:baseline;gap:6px;margin-bottom:5px}
+.r-dot{width:7px;height:7px;flex:0 0 7px;border:1px solid rgba(0,0,0,.22)}
+.r-name{font-family:var(--f-display);font-size:10.5px;letter-spacing:.16em;color:var(--ink-3)}
+.chip2{
+  display:inline-block;font-size:11.5px;padding:2px 7px;margin:0 3px 3px 0;cursor:pointer;
+  border:1px solid var(--line);background:transparent;color:var(--ink-2);font-family:var(--f-display);
+  letter-spacing:.03em;transition:all .14s;
+}
+.chip2:hover{border-color:var(--ink-2);color:var(--ink);background:var(--paper-2)}
+.chip2.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+.colophon{padding:14px 16px 0;font-size:10.5px;color:var(--ink-3);line-height:1.6;font-family:var(--f-display);letter-spacing:.03em}
+
+/* ============ SVG 内部样式 ============ */
+.sea{fill:var(--water)}
+.land{fill:var(--paper);stroke:var(--line-2);stroke-width:1.05;stroke-linejoin:round}
+.grid{stroke:var(--line);stroke-width:.5;fill:none;opacity:.5}
+.grid-l{stroke:var(--line);stroke-width:.5;fill:none;opacity:.45;stroke-dasharray:1 3}
+.river{fill:none;stroke:#8E9689;stroke-width:.9;opacity:.75;stroke-linecap:round}
+.ridge{fill:none;stroke:var(--line-2);stroke-width:.9;opacity:.65}
+.ent{cursor:pointer;transition:opacity .45s ease}
+.ent path{stroke-width:1;transition:stroke-width .2s,fill-opacity .2s}
+.ent:hover path{stroke-width:1.9}
+.lbl{
+  font-family:var(--f-display);font-size:var(--lbl,11px);fill:var(--ink);paint-order:stroke;
+  stroke:var(--paper);stroke-width:calc(var(--lbl,11px) * .21);stroke-linejoin:round;pointer-events:none;
+  transition:opacity .45s ease;letter-spacing:.02em;
+}
+.lbl.sm{font-size:calc(var(--lbl,11px) * .87);stroke-width:calc(var(--lbl,11px) * .18)}
+.lbl.core{font-size:calc(var(--lbl,11px) * 1.38);font-weight:700;letter-spacing:.14em;fill:var(--zhu)}
+.pulse{fill:none;stroke:var(--zhu);stroke-width:1.4;pointer-events:none}
+
+@media (max-width:1019px){
+  .head{padding:12px 14px 9px}
+  .stage{height:clamp(270px,42vh,380px)}
+  .side{border-left:0;border-top:1px solid var(--line-2);overflow:visible;padding-bottom:18px}
+  .timeline{padding:9px 14px 11px}
+  .legend{font-size:9.5px;max-width:126px;padding:6px 7px}
+  .btn{padding:9px 13px}
+  .chip{padding:7px 10px}
+  .chip2{padding:6px 10px}
+  #slider{height:32px}
+  .numwrap{padding:5px 9px}
+}
+@media (min-width:1020px){
+  .app{
+    display:grid;grid-template-columns:minmax(0,1fr) 322px;
+    grid-template-rows:auto minmax(0,1fr) auto;
+    grid-template-areas:"head head" "map side" "time time";
+    height:100vh;max-height:100vh;
+  }
+  .head{grid-area:head}
+  .stage{grid-area:map;height:auto}
+  .side{grid-area:side;height:100%}
+  .timeline{grid-area:time}
+}
+/* 帝王 / 名臣 */
+.throne{
+  display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;padding:8px 0 9px;
+  border-bottom:1px solid var(--line);margin-bottom:2px;
+}
+.throne-k{font-family:var(--f-display);font-size:10px;letter-spacing:.2em;color:var(--ink-3)}
+.throne-n{font-family:var(--f-display);font-size:15px;font-weight:700;color:var(--zhu);letter-spacing:.03em}
+.throne-y{font-family:var(--f-num);font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.throne-note{font-size:11.5px;color:var(--ink-2);line-height:1.5;margin-top:3px;width:100%}
+.emp{padding:5px 0;border-bottom:1px dotted var(--line);font-size:12px}
+.emp:last-child{border-bottom:0}
+.emp-h{display:flex;align-items:baseline;gap:6px}
+.emp-t{font-family:var(--f-display);font-size:12px;font-weight:700;letter-spacing:.04em}
+.emp-n{font-size:11.5px;color:var(--ink-2)}
+.emp-y{font-family:var(--f-num);font-size:10.5px;color:var(--ink-3);margin-left:auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.emp-d{font-size:11px;color:var(--ink-3);line-height:1.45;margin-top:1px}
+.emp.now{background:rgba(158,58,32,.07);margin:0 -6px;padding:5px 6px;border-bottom-color:rgba(158,58,32,.25)}
+.emp.now .emp-t,.emp.now .emp-n{color:var(--zhu)}
+.min{display:flex;gap:7px;padding:4px 0;border-bottom:1px dotted var(--line);font-size:11.5px;line-height:1.5}
+.min:last-child{border-bottom:0}
+.min-y{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:10.5px;color:var(--ink-3);flex:0 0 40px;padding-top:2px}
+.min-b{min-width:0}
+.min-b b{font-family:var(--f-display);font-size:12px;letter-spacing:.03em;margin-right:5px}
+.min-b span{color:var(--ink-2)}
+.tabs{display:flex;gap:0;margin-top:12px;border-bottom:1px solid var(--line)}
+.tab{
+  font-family:var(--f-display);font-size:11.5px;letter-spacing:.08em;padding:5px 10px;cursor:pointer;
+  background:none;border:0;border-bottom:2px solid transparent;color:var(--ink-3);margin-bottom:-1px;
+}
+.tab.on{color:var(--zhu);border-bottom-color:var(--zhu)}
+.tabbody{padding-top:8px}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition-duration:.01ms!important;animation-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="head">
+    <div class="head-l">
+      <div class="eyebrow">古代东亚世界 <span>/ 前 1046 — 1912</span></div>
+      <h1>三千年的邻居</h1>
+      <p class="sub">以中原王朝为轴心，看周边政权的兴替与往来</p>
+    </div>
+    <div class="head-r">
+      <div class="era" id="eraBig">前 1046<small>年</small></div>
+      <div class="dyn" id="dynLine">中原：<b>西周</b></div>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div class="stage-inner">
+      <svg id="map" viewBox="-6 -6 919 494" preserveAspectRatio="xMidYMid meet" aria-label="古代东亚世界示意图">
+        <g id="gSea"></g>
+        <g id="gLand"></g>
+        <g id="gChina"></g>
+        <g id="gGrid"></g>
+        <g id="gRivers"></g>
+        <g id="gAreas"></g>
+        <g id="gEntities"></g>
+        <g id="gPulse"></g>
+        <g id="gLabels"></g>
+      </svg>
+      <div class="legend" id="legend">
+        <b>图 例</b>
+        <div class="lg"><i style="background:#23211C;opacity:.26"></i>现代中国 · 省界参照</div>
+        <div class="lg"><i style="background:#9E3A20"></i>中原王朝</div>
+        <div class="lg"><i style="background:#63743F"></i>北方草原</div>
+        <div class="lg"><i style="background:#3E6470"></i>东北</div>
+        <div class="lg"><i style="background:#A7812F"></i>西域 · 中亚</div>
+        <div class="lg"><i style="background:#6E5378"></i>西南 · 南亚</div>
+        <div class="lg"><i style="background:#2A6A66"></i>海路贸易</div>
+        <div class="lg"><i style="background:#494F6B"></i>远西</div>
+      </div>
+      <div class="hint">灰影与细线为今日中国省级界线，供对照；色块为势力范围示意，不作精确疆界</div>
+    </div>
+  </div>
+
+  <aside class="side">
+    <div class="panel" id="panel"></div>
+    <div class="near" id="near"></div>
+    <div class="roster" id="roster"></div>
+    <div class="colophon">
+      灰影与细线为今日中国省级行政界线，取自公开地理数据并作抽稀，用于比照古代疆域的今地范围；底图海岸线依现代轮廓简化。政权名称取其时通行称谓，存续年份多为史家通行的约数。
+    </div>
+  </aside>
+
+  <div class="timeline">
+    <div class="bands" id="bands"></div>
+    <div class="track">
+      <input type="range" id="slider" min="-1046" max="1912" step="1" value="-1046" aria-label="年代">
+    </div>
+    <div class="ctrl">
+      <div class="numwrap">
+        <label for="yearInput">年代</label>
+        <input type="number" id="yearInput" value="-1046" step="1" aria-label="输入年代，负数为公元前">
+      </div>
+      <button class="btn play" id="playBtn" type="button">演进</button>
+      <span class="tip">负数＝公元前</span>
+      <div class="chips" id="chips"></div>
+    </div>
+  </div>
+
+</div>
+<script>
+/* ===== 投影：等距圆柱，经度 26—152，纬度 57—-10 ===== */
+var X0=26, Y0=57, S=7.2;
+function PX(lon){return (lon-X0)*S}
+function PY(lat){return (Y0-lat)*S}
+
+/* ===== 底图经纬度数据（依现代轮廓简化） ===== */
+var GEO={
+  land:[[20,62],[26,60],[30,55],[40,62],[60,62],[80,62],[100,62],[120,62],[135,60],
+  [142,56],[140,53],[139,51],[137,48],[135,45],[133,43.5],[131,43],[130,42.5],[129.5,41.5],[128.5,40.5],[127.5,39.5],
+  [129.3,37.5],[129.2,35.2],[127.5,34.5],[126.5,34.6],[126.3,36],[126.6,37.4],[125.3,38.5],[124.8,39.6],[123.5,40.2],
+  [122.2,40.6],[121,39.2],[119.3,39.9],[118,39],[119.2,37.6],[121,37.5],[122.5,37.4],[122.6,36.9],[121.3,36.5],[120.2,36],
+  [119.3,34.9],[120.4,33.2],[121.6,31.5],[121.9,30.4],[121.7,29.3],[120.6,27.9],[119.6,26],[118.2,24.4],[116.7,23.3],[114.3,22.4],
+  [113.5,22.1],[111,21.6],[110.4,20.3],[109.7,21.5],[108.2,21.7],[106.7,20.8],[107.5,19],[108.5,16.5],[109.2,13.5],[109,11.4],
+  [106.6,9.6],[105,10.2],[104.3,10.6],[102.4,12.3],[100.4,13.5],[99.4,11.5],[98.5,8],[100.3,4],[103.4,1.3],[104,1.6],
+  [101.5,3.5],[99,7],[97.3,16.5],[94.5,17],[92.5,20],[91,22],[89,21.5],[87.5,21],[86.5,20.2],[84,19],
+  [81.5,16.5],[80.3,13.5],[79.9,10.3],[77.6,8.2],[75.8,11.5],[74.5,15.5],[73,18.5],[72.6,21.3],[70.3,21],[68.7,23.5],
+  [66.5,24.8],[61,25.2],[57.5,25.6],[56.3,26.8],[56.6,24.5],[58.5,23],[57,19.5],[55,17.5],[52,16],[47,13.5],
+  [44,12.5],[43,12.6],[42,15],[40,19],[38,22],[36,25],[34.5,28],[34.8,30],[35.5,33],[36.5,36.5],
+  [34,36],[30,40],[26,41],[26,47],[20,52]],
+  islands:[[[129.5,32],[131,32.3],[131.5,33.5],[130.5,33.8],[129.8,33.2]],
+  [[132.5,33.2],[134.5,33.3],[134.3,34.2],[132.8,33.9]],
+  [[135,34.2],[137,34.4],[139,35.2],[141,36.5],[141.5,39],[141.8,41.2],[141,41.3],[140,39.5],[138.5,37.5],[136.5,36],[135.5,35]],
+  [[140.5,41.5],[141.5,42],[143,42.5],[145.5,43.5],[145,44.5],[143,44],[141,43],[140.4,42]],
+  [[142,46],[143,47],[143.5,49],[142.5,52],[141.8,53],[141.5,51],[141.8,48],[141.7,46.5]],
+  [[120,22.7],[121.5,23],[122,25],[121.5,25.2],[120.6,24],[120,23.2]],
+  [[108.7,19.2],[110,19.5],[110.6,20.1],[109.5,20],[108.6,19.7]],
+  [[79.8,6],[81.5,6.2],[81.9,8.5],[80.5,9.8],[79.9,8.5]],
+  [[95.5,5.5],[98,4],[101,1.5],[104,-1],[105.5,-2],[106,-5],[104.5,-5.5],[103,-4],[101,-1],[99,2],[96,4.5]],
+  [[105.2,-6],[108,-6.5],[111,-6.8],[114,-7.5],[114.5,-8.5],[111,-8.2],[107,-7.5],[105.3,-6.8]],
+  [[109,1.5],[112,1],[115,1],[117,4],[119,5.5],[118,4],[117,1],[115,-2],[113,-3],[110,-2],[109,0]],
+  [[120,18.5],[121.5,18],[122.3,15],[121.8,13.8],[120.5,14],[119.8,16]],
+  [[122,9],[124,7],[126,6],[126.5,8],[125,9.5],[123,9.5]]],
+  seas:[[[46.5,45.5],[48,47],[52,47],[54,45],[54,42],[53,40],[51,37],[49,37.5],[48,40],[47,42.5]],
+  [[57.5,46.8],[60,46.8],[61.3,45],[60.4,43.4],[58.3,43.4],[57.4,44.8]],
+  [[28,46.8],[41,46.8],[41,44],[38,41],[34,41],[28,41]],
+  [[48,30],[50,29],[52,27],[56,26],[56.3,26.8],[55,27.5],[52,29.5],[50,30.2],[48.5,30.5]],
+  [[43,12.5],[43.5,15],[41,19],[38.5,22],[36,25],[34.5,28.5],[34.6,29.5],[36,27],[38,23.5],[40.5,20],[42.2,16.5],[43,13.5]],
+  [[41,45],[44,45],[47,43],[47.5,40],[45,38],[41,38],[40,41]],
+  [[122,40],[122,38],[120,37],[118,39],[120,40]]],
+  rivers:[[[96,35],[100,37],[103,36],[106,38],[109,41],[111,40.5],[110,37],[113,35],[116,36],[118,37.5]],
+  [[91,33],[97,30],[100,29],[103,29],[105,30],[107,30],[110,30],[113,30],[117,31],[119,32],[121.5,31.5]],
+  [[78,30],[81,26],[85,25],[88,24],[90,23]],
+  [[71,37],[67,37],[63,38.5],[60,40],[59,43]],
+  [[71,41],[68,42],[65,44],[62,45]],
+  [[74,32],[76,31],[78,30]]],
+  ridges:[[[73,36],[77,35],[81,33],[85,31],[89,29],[93,28],[95,28]],
+  [[68,42],[74,42.5],[80,43],[86,43.5],[88,43.5]],
+  [[76,36.5],[82,36],[88,36],[94,36.5],[98,36.5]],
+  [[106,41],[110,41.8],[114,42],[117,42.5]],
+  [[66,35],[68,36],[70,36],[72,36.5]],
+  [[98,30],[99,27],[100,24],[102,22]]]
+};
+
+/* ===== 周边政权与交往对象 ===== */
+/* 字段：n名称 a别名 g分组 x经度 y纬度 r半径 f起始 t结束 p今地 tie关系 f人物 e事件 */
+var FOREIGN=[
+/* —— 东北 —— */
+{n:"古朝鲜",a:"箕子朝鲜／卫氏朝鲜",g:"东北",x:125.8,y:39.8,r:1.5,f:-1046,t:-108,p:"朝鲜半岛北部",
+ tie:"周初封箕子于朝鲜；汉初燕人卫满代箕氏，汉武帝元封三年灭之，置乐浪、玄菟、真番、临屯四郡。这是中原政权第一次在半岛设治。",
+ pp:[["箕子",-1100,"商末遗臣，受封于朝鲜，教民耕织"],["卫满",-194,"燕人，亡命朝鲜，逐箕准自立"]],
+ e:[[-108,"汉灭卫氏朝鲜","楼船将军杨仆、左将军荀彘分道进击，置汉四郡"]]},
+{n:"高句丽",a:"高句骊",g:"东北",x:125.6,y:41.3,r:2.6,f:-37,t:668,p:"鸭绿江两岸—吉林集安—平壤",
+ tie:"汉置玄菟郡属县，魏晋后渐强，与中原拉锯七百年。隋炀帝三征不克，反致亡国；唐太宗亲征受挫于安市城；最终唐联合新罗于668年灭之。",
+ pp:[["乙支文德",612,"萨水之战诱敌深入，大败隋军"],["渊盖苏文",642,"弑荣留王专权，联百济抗唐"],["李世民",645,"亲征高句丽，攻安市城久不下，天寒班师"]],
+ e:[[612,"萨水之战","隋三十万九军渡辽，还者不足三千"], [645,"唐太宗亲征","安市城坚守不下，唐军班师"], [668,"唐灭高句丽","设安东都护府于平壤"]]},
+{n:"百济",a:"",g:"东北",x:126.9,y:36.3,r:1.4,f:-18,t:660,p:"半岛西南（今韩国全罗道）",
+ tie:"与高句丽、新罗三角角逐，屡结倭为援。660年唐罗联军灭其国；663年白江口海战，唐水军焚倭船四百艘，倭自此退出半岛。",
+ pp:[["义慈王",660,"耽于游乐，国灭被俘至长安"],["刘仁轨",663,"白江口之战，以少破倭百济联军"]],
+ e:[[660,"唐灭百济","唐将苏定方攻破泗沘城"], [663,"白江口之战","倭船四百艘焚毁，海水尽赤"]]},
+{n:"新罗",a:"",g:"东北",x:129.1,y:35.8,r:1.5,f:-57,t:935,p:"半岛东南（今庆州）",
+ tie:"唐的盟友，借唐之力灭百济、高句丽，完成半岛统一；随后在676年唐罗战争中驱逐唐军，唐势力退守大同江以北。",
+ pp:[["金春秋",648,"入唐乞师，结唐罗同盟"],["文武王",676,"统一三国，逐唐军于大同江"]],
+ e:[[676,"唐罗战争","新罗据大同江以南，唐安东都护府内迁"], [735,"浿江划界","唐玄宗许新罗以大同江为界"]]},
+{n:"扶余",a:"夫余",g:"东北",x:125.6,y:44.4,r:1.8,f:-200,t:494,p:"松嫩平原（今吉林农安一带）",
+ tie:"汉设玄菟郡羁縻；前燕慕容皝破其王城，掳其王；5世纪末为高句丽所并。高句丽、百济皆自称源出扶余。",
+ pp:[["慕容皝",346,"前燕破扶余王城，俘其王玄"],["好太王",410,"高句丽好太王征服扶余故地"]],
+ e:[[346,"前燕破扶余","慕容鲜卑掳扶余王及部众五万余口"], [494,"扶余亡","末王降于高句丽"]]},
+{n:"靺鞨",a:"粟末靺鞨／黑水靺鞨",g:"东北",x:128.5,y:46,r:2.2,f:-300,t:698,p:"松花江—黑龙江流域",
+ tie:"隋唐称靺鞨七部。粟末部东奔建渤海国，黑水部为唐设黑水都督府，其首领被赐姓李。靺鞨即后来女真、满洲的先世。",
+ pp:[["大祚荣",698,"粟末靺鞨首领，建震国，后改渤海"],["李多祚",705,"黑水靺鞨首领，唐赐姓李"]],
+ e:[[698,"大祚荣建国","营州之乱后东奔，据东牟山"], [726,"唐置黑水都督府","以靺鞨黑水部置，赐姓李氏"]]},
+{n:"渤海国",a:"震国／海东盛国",g:"东北",x:129,y:43.6,r:2.4,f:698,t:926,p:"东北至半岛北部（今吉林、黑龙江东部）",
+ tie:"受唐册封为渤海郡王，全面仿唐制：设五京十五府，行科举，用汉字。号「海东盛国」。926年为契丹所灭，改东丹国。",
+ pp:[["大祚荣",713,"受唐封渤海郡王，正式称国"],["大钦茂",737,"迁都上京龙泉府，全面唐化"]],
+ e:[[713,"唐封渤海郡王","渤海成为唐的羁縻国"], [926,"契丹灭渤海","耶律阿保机攻克忽汗城，改东丹国"]]},
+{n:"契丹／辽",a:"辽",g:"东北",x:119.5,y:43.4,r:3.6,f:388,t:1125,p:"西辽河—蒙古高原东部",
+ tie:"唐置松漠都督府。五代时得燕云十六州，与北宋对峙百余年：澶渊之盟约为兄弟之国，宋岁输银绢，形成百余年和平。",
+ pp:[["耶律阿保机",916,"统一八部，称帝建契丹国"],["萧太后",1004,"亲征澶渊，迫宋议和"],["石敬瑭",936,"割燕云十六州，称儿皇帝"]],
+ e:[[936,"割燕云十六州","石敬瑭以父礼事契丹，割十六州"], [1004,"澶渊之盟","宋辽约为兄弟，宋岁输银十万两、绢二十万匹"], [1125,"金灭辽","天祚帝被俘，辽亡；耶律大石西走建西辽"]]},
+{n:"奚",a:"库莫奚",g:"东北",x:119.6,y:42,r:1.2,f:400,t:1125,p:"辽西（今赤峰一带）",
+ tie:"与契丹并为唐之「东北两蕃」，唐置饶乐都督府，嫁公主以羁縻。后为契丹所并，成为辽之属部。",
+ pp:[["李大酺",717,"奚王，尚唐固安公主"]],
+ e:[[717,"唐奚和亲","以宗室女封公主嫁奚王，置饶乐都督府"]]},
+{n:"室韦",a:"蒙兀室韦",g:"东北",x:120,y:49.5,r:2.4,f:400,t:1200,p:"呼伦贝尔—大兴安岭",
+ tie:"唐置室韦都督府。居于额尔古纳河流域的蒙兀室韦，即蒙古部先世，13世纪走出森林，成为世界帝国起点。",
+ pp:[["成吉思汗",1206,"出蒙兀室韦一系，统一蒙古诸部"]],
+ e:[[790,"唐置室韦都督府","羁縻东北诸部"]]},
+{n:"女真／金",a:"女直／金",g:"东北",x:127,y:45,r:3.6,f:1115,t:1234,p:"白山黑水（今东北东部）",
+ tie:"辽时受压迫，完颜阿骨打起兵，十年间灭辽、灭北宋，制造靖康之变。金与南宋以淮河—大散关为界对峙百年，1234年亡于蒙古。",
+ pp:[["完颜阿骨打",1115,"起兵反辽，建金称帝"],["完颜宗弼",1140,"即兀术，郾城、朱仙镇为岳飞所挫"],["岳飞",1140,"郾城大捷，旋被召还"]],
+ e:[[1115,"阿骨打称帝","会宁府建国，国号大金"], [1127,"靖康之变","金军破汴京，掳徽钦二帝，北宋亡"], [1141,"绍兴和议","宋金以淮水、大散关为界，岳飞已死"], [1234,"蒙古灭金","蔡州城破，金哀宗自缢"]]},
+{n:"朝鲜",a:"李氏朝鲜",g:"东北",x:127.5,y:38.5,r:1.8,f:1392,t:1910,p:"朝鲜半岛",
+ tie:"奉行事大主义，为明清最恭顺的藩属。1592年壬辰倭乱，明倾国力援朝；1636年丙子之役后改奉清朝。",
+ pp:[["李舜臣",1597,"鸣梁海战以十二船破倭三百艘"],["万历帝",1592,"派李如松率军援朝"]],
+ e:[[1592,"壬辰倭乱","丰臣秀吉侵朝，明军入援，七年方平"], [1636,"丙子之役","皇太极迫朝鲜由明改奉清"]]},
+{n:"倭／日本",a:"倭国",g:"东北",x:137,y:36.5,r:2.4,f:-100,t:1912,p:"日本列岛",
+ tie:"汉赐「汉倭奴国王」金印；隋唐时遣隋使、遣唐使十九次，全面移植唐制。两次兵锋相交：663年白江口、1592年壬辰倭乱。",
+ pp:[["小野妹子",607,"遣隋使，携国书入隋"],["阿倍仲麻吕",717,"入唐仕至秘书监，终老长安"],["丰臣秀吉",1592,"侵朝鲜，明出兵相抗"]],
+ e:[[57,"汉赐倭奴王印","光武帝赐金印「汉委奴国王」"], [663,"白江口之战","倭水军为唐所破，退出半岛"], [894,"停派遣唐使","菅原道真建议废止，唐风输入中断"]]},
+
+/* —— 北方草原 —— */
+{n:"匈奴",a:"胡",g:"北疆",x:108,y:45,r:5.2,f:-300,t:155,p:"蒙古高原",
+ tie:"汉匈关系是中原与草原关系的第一范本：和亲、岁币、战争交替。漠北之战后匈奴势衰，前51年呼韩邪单于归汉，48年分裂为南北。",
+ pp:[["冒顿单于",-200,"围汉高祖于白登七日，结和亲之约"],["卫青",-127,"收河南地，置朔方郡"],["霍去病",-119,"漠北之战封狼居胥"],["王昭君",-33,"出塞和亲，号宁胡阏氏"],["苏武",-100,"使匈奴被留，牧羊北海十九年"]],
+ e:[[-200,"白登之围","汉高祖被围，始行和亲"], [-119,"漠北之战","卫霍分道绝漠，匈奴远遁"], [-51,"呼韩邪归汉","南匈奴附汉，昭君出塞"], [48,"匈奴分裂","南北匈奴分立，南匈奴内徙"]]},
+{n:"东胡",a:"",g:"北疆",x:120,y:43.5,r:2.2,f:-500,t:-300,p:"辽西—内蒙东部",
+ tie:"为匈奴所破，余部退保鲜卑山、乌桓山，分别成为乌桓与鲜卑。中原史书由此把「东胡」作为东北诸族的共同源头。",
+ pp:[["冒顿单于",-300,"破东胡，取其地与民"]],
+ e:[[-300,"匈奴灭东胡","余众散保鲜卑山、乌桓山"]]},
+{n:"乌桓",a:"乌丸",g:"北疆",x:119,y:42.5,r:1.4,f:-200,t:207,p:"辽西、河北北部",
+ tie:"汉置护乌桓校尉。袁绍时助其为患，207年曹操北征白狼山，斩蹋顿，迁乌桓万余落入中原，从此融入汉地。",
+ pp:[["蹋顿",207,"乌桓单于，白狼山战死"],["曹操",207,"白狼山之战，胡汉降者二十余万口"]],
+ e:[[207,"白狼山之战","曹操破乌桓，北方底定"]]},
+{n:"鲜卑",a:"拓跋／慕容／宇文",g:"北疆",x:113,y:45,r:4.2,f:100,t:400,p:"蒙古高原东部—辽西",
+ tie:"檀石槐尽据匈奴故地。其后慕容部建前燕、后燕，拓跋部建北魏统一北方，宇文部衍化为北周。北魏孝文帝汉化，是中原与草原深度融合的关键。",
+ pp:[["檀石槐",150,"立庭于弹汗山，尽有匈奴故地"],["拓跋珪",386,"建北魏，定都平城"],["孝文帝",494,"迁都洛阳，改汉姓、易汉服"]],
+ e:[[386,"北魏建立","拓跋珪称代王，改国号魏"], [439,"北魏统一北方","太武帝灭北凉，十六国终"], [494,"孝文帝迁洛","推行汉化，鲜卑贵族改元氏"]]},
+{n:"柔然",a:"蠕蠕／芮芮",g:"北疆",x:105,y:46.5,r:4.6,f:402,t:552,p:"蒙古高原",
+ tie:"与北魏百年攻防。北魏太武帝七次北伐，柔然远遁；柔然可汗阿那瓌一度归附北魏。552年为突厥所破，汗国崩溃。",
+ pp:[["社仑",402,"统一漠北，称丘豆伐可汗"],["阿那瓌",520,"归附北魏，助魏守边"]],
+ e:[[429,"太武帝北伐","北魏六军深入漠北，柔然衰"], [552,"突厥灭柔然","土门东击柔然，可汗自杀"]]},
+{n:"高车",a:"敕勒／丁零",g:"北疆",x:100,y:47,r:3.2,f:300,t:550,p:"漠北",
+ tie:"丁零后裔，因车轮高大得名。北魏掠其众数十万置于漠南，其歌谣《敕勒歌》经斛律金传唱，成为北朝文学的名篇。",
+ pp:[["斛律金",546,"高车酋长，唱《敕勒歌》于北齐宴上"]],
+ e:[[399,"北魏破高车","道武帝北征，虏获数十万，徙之漠南"]]},
+{n:"突厥",a:"东突厥／西突厥",g:"北疆",x:100,y:47.5,r:5.4,f:552,t:745,p:"蒙古高原—中亚",
+ tie:"北周、北齐争相结好，输绢以求援。隋用离间之计分其为东西；唐太宗于630年灭东突厥，高宗于657年平西突厥，蒙古高原归唐。",
+ pp:[["土门",552,"破柔然，称伊利可汗"],["启民可汗",599,"归隋，为隋守边"],["李靖",630,"阴山夜袭，俘颉利可汗"],["苏定方",657,"平西突厥，擒沙钵罗可汗"]],
+ e:[[552,"突厥建国","土门称汗，柔然亡"], [583,"东西分裂","达头与沙钵略对立，汗国二分"], [630,"唐灭东突厥","颉利被俘，漠南归唐"], [657,"唐平西突厥","安西都护府移治龟兹"]]},
+{n:"东突厥",a:"",g:"北疆",x:108,y:46.5,r:3.2,f:583,t:630,p:"蒙古高原",
+ tie:"隋末大乱时复强，控弦百万。626年颉利直抵渭水便桥，李世民倾府库与之盟。三年后李靖夜袭阴山，一战灭国。",
+ pp:[["颉利可汗",626,"率骑至渭水便桥，与唐结盟而退"],["李世民",626,"渭水之盟，亲临便桥"]],
+ e:[[626,"渭水之盟","太宗匹马临水，责颉利背约"], [630,"阴山之战","李靖夜袭，颉利被擒，东突厥亡"]]},
+{n:"西突厥",a:"",g:"北疆",x:82,y:44,r:4.2,f:583,t:658,p:"中亚—天山以北",
+ tie:"控丝路北道，与唐争夺西域。唐设安西四镇与之拉锯数十年，657年苏定方灭之，唐势力直达咸海。",
+ pp:[["统叶护可汗",615,"盛时控弦数十万，霸西域"],["苏定方",657,"曳咥河大破西突厥"]],
+ e:[[657,"唐平西突厥","沙钵罗被擒，西域尽入唐"]]},
+{n:"薛延陀",a:"",g:"北疆",x:103,y:48,r:2.4,f:628,t:646,p:"漠北",
+ tie:"唐扶之以制东突厥，势盛后反成边患。646年唐将李勣北征，薛延陀溃散，漠北遂归唐之安北都护府。",
+ pp:[["夷男",628,"称真珠毗伽可汗，受唐册封"],["李勣",646,"北征破薛延陀"]],
+ e:[[646,"唐灭薛延陀","回纥等部附唐，置安北都护府"]]},
+{n:"回鹘",a:"回纥",g:"北疆",x:102,y:47.5,r:3.6,f:744,t:840,p:"漠北（今蒙古国）",
+ tie:"安史之乱时出兵助唐收复两京，唐三次以公主和亲，绢马贸易年年不绝。840年为黠戛斯所破，部众西迁，成为今维吾尔族先世。",
+ pp:[["骨力裴罗",744,"建回纥汗国，受唐封怀仁可汗"],["宁国公主",758,"唐真公主出塞和亲"],["牟羽可汗",763,"助唐平乱，掠洛阳三日"]],
+ e:[[755,"助唐平叛","回纥骑兵入援，收复长安洛阳"], [763,"洛阳劫掠","回纥纵兵剽掠，唐廷不敢问"], [840,"回鹘汗国亡","黠戛斯破牙帐，部众西迁"]]},
+{n:"黠戛斯",a:"坚昆／结骨",g:"北疆",x:92,y:53,r:2.4,f:100,t:1200,p:"叶尼塞河上游",
+ tie:"汉称坚昆，唐设坚昆都督府，其首领自称李陵之后。840年破回鹘汗国，一度成为漠北霸主，后为契丹所阻。",
+ pp:[["阿热",840,"破回鹘牙帐，焚其城"]],
+ e:[[840,"灭回鹘汗国","漠北易主，回鹘西迁"]]},
+{n:"葛逻禄",a:"",g:"北疆",x:78,y:44.5,r:2.2,f:600,t:1000,p:"巴尔喀什湖—天山",
+ tie:"唐属羁縻州。751年怛罗斯之战，唐军与阿拉伯军相持时葛逻禄阵前倒戈，唐军大败，造纸术由此西传。",
+ pp:[["高仙芝",751,"怛罗斯之战，唐军败绩"]],
+ e:[[751,"怛罗斯之战","葛逻禄反戈，唐军溃；造纸术西传"]]},
+{n:"蒙古",a:"蒙兀",g:"北疆",x:108,y:47.5,r:5.0,f:1206,t:1271,p:"蒙古高原",
+ tie:"成吉思汗统一诸部后，先攻金、再灭西夏，三度西征。忽必烈1271年建元，1279年灭南宋，第一次由草原政权统治整个中原。",
+ pp:[["成吉思汗",1206,"斡难河源称汗，号成吉思"],["忽必烈",1271,"建元，定都大都"],["速不台",1220,"与哲别西征，抵里海"],["丘处机",1220,"应召西行，著《长春真人西游记》"]],
+ e:[[1206,"成吉思汗建国","统一草原诸部，颁大札撒"], [1227,"灭西夏","西夏末主降，成吉思汗病逝于军中"], [1271,"忽必烈建元","取《易经》「大哉乾元」为国号"]]},
+{n:"瓦剌",a:"卫拉特／厄鲁特",g:"北疆",x:92,y:45.5,r:3.2,f:1400,t:1750,p:"漠西（今科布多—准噶尔）",
+ tie:"明封马哈木为顺宁王。1449年也先南下，土木堡俘明英宗，兵临北京，于谦守城力战却之。后瓦剌衰落，为准噶尔部所并。",
+ pp:[["也先",1449,"土木堡之变，俘明英宗"],["于谦",1449,"北京保卫战，拥立景帝"]],
+ e:[[1449,"土木堡之变","明五十万大军覆没，英宗被俘"], [1453,"也先称汗","自称大元天圣可汗，不久内乱被杀"]]},
+{n:"鞑靼",a:"东蒙古",g:"北疆",x:110,y:44.5,r:3.0,f:1400,t:1635,p:"漠南—漠北",
+ tie:"明称东蒙古。1550年俺答围北京（庚戌之变），1571年俺答封贡，明封顺义王，开马市互市，边境安堵数十年。",
+ pp:[["俺答汗",1571,"受明封顺义王，开互市"],["三娘子",1571,"主贡市事，维系和平数十年"]],
+ e:[[1550,"庚戌之变","俺答兵临北京，明廷震恐"], [1571,"俺答封贡","封顺义王，开马市，边境息兵"]]},
+{n:"准噶尔",a:"",g:"北疆",x:84,y:44,r:3.4,f:1635,t:1755,p:"天山以北—漠西",
+ tie:"噶尔丹东侵喀尔喀，1690年乌兰布通之战为清军所败。乾隆于1755年平准噶尔、1759年平大小和卓，设伊犁将军，新疆归清。",
+ pp:[["噶尔丹",1690,"乌兰布通之战，驼城为清军炮破"],["乾隆帝",1755,"两路进军，平准噶尔"],["兆惠",1759,"平大小和卓，定回部"]],
+ e:[[1690,"乌兰布通之战","康熙亲征，噶尔丹败走"], [1755,"清平准噶尔","达瓦齐被俘，准部瓦解"], [1759,"平定大小和卓","设伊犁将军，统辖天山南北"]]},
+{n:"俄罗斯",a:"莫斯科大公国／沙俄",g:"北疆",x:60,y:56,r:4.0,f:1547,t:1912,p:"莫斯科沙皇国",
+ tie:"清俄两次交手于东北：1685年雅克萨之战，1689年《尼布楚条约》划定东段边界。1727年《恰克图条约》开后，恰克图成为中俄贸易枢纽。",
+ pp:[["康熙帝",1685,"遣彭春攻雅克萨"],["戈洛文",1689,"尼布楚谈判，索额图与之折冲"]],
+ e:[[1685,"雅克萨之战","清军围城，俄军乞降"], [1689,"尼布楚条约","划定外兴安岭以南属中国"], [1727,"恰克图条约","开恰克图互市，贸易百年"]]},
+
+/* —— 西域·中亚 —— */
+{n:"月氏",a:"大月氏",g:"西域",x:68,y:37.5,r:2.8,f:-200,t:400,p:"阿姆河流域（原居河西）",
+ tie:"匈奴破之，西迁伊犁，再徙阿姆河，臣大夏而居。张骞前138年使月氏欲夹击匈奴未成，却由此凿空西域。其后建贵霜帝国，为佛教东传之中介。",
+ pp:[["张骞",-138,"使月氏，被匈奴扣留十年"],["丘就却",30,"统一五翕侯，建贵霜"]],
+ e:[[-138,"张骞凿空","首通西域，汉始知域外之大"], [1,"贵霜兴起","佛教经犍陀罗东传西域"]]},
+{n:"乌孙",a:"",g:"西域",x:82,y:43,r:2.4,f:-200,t:500,p:"伊犁河流域",
+ tie:"汉以江都公主细君、楚王孙女解忧两度和亲，结昆弟之好以断匈奴右臂。解忧在乌孙五十余年，其侍女冯嫽持节行赏，号「冯夫人」。",
+ pp:[["细君公主",-105,"首嫁乌孙昆莫，作《悲愁歌》"],["解忧公主",-101,"在乌孙五十年，稳定西域"],["冯嫽",-100,"中国第一位女外交使节"]],
+ e:[[-105,"汉乌孙和亲","江都公主嫁昆莫，结盟制匈奴"], [-60,"西域都护","汉置都护，西域正式内属"]]},
+{n:"大宛",a:"",g:"西域",x:71,y:40.5,r:1.6,f:-200,t:500,p:"费尔干纳盆地",
+ tie:"以汗血马闻名。汉武帝为求良马，两次遣李广利西征，第二次围宛城四十余日，宛人杀其王请降，汉威震西域。",
+ pp:[["李广利",-104,"伐大宛，首战失利，再征乃克"]],
+ e:[[-104,"李广利伐宛","围城四十日，取汗血马数十匹"]]},
+{n:"康居",a:"",g:"西域",x:66,y:40,r:2.2,f:-200,t:500,p:"撒马尔罕一带",
+ tie:"粟特城邦之地，汉使往来不绝。唐时其地以「昭武九姓」见称，粟特商人执丝路贸易之牛耳，安禄山即出此族。",
+ pp:[["康居王",-36,"与汉约，送匈奴郅支单于首"]],
+ e:[[-36,"康居送郅支首","陈汤矫诏破郅支，传首长安"]]},
+{n:"大夏",a:"巴克特里亚",g:"西域",x:67,y:37,r:2.0,f:-300,t:-130,p:"今阿富汗北部",
+ tie:"张骞前128年抵大夏，见邛竹杖、蜀布，方知有「蜀—身毒—大夏」的南方通道，汉始谋通西南夷。",
+ pp:[["张骞",-128,"至大夏，见蜀布邛竹杖"]],
+ e:[[-128,"张骞抵大夏","发现蜀身毒道，汉始经营西南"]]},
+{n:"安息",a:"帕提亚",g:"西域",x:52,y:34,r:4.2,f:-247,t:224,p:"伊朗高原",
+ tie:"丝路西端大国，垄断汉与罗马之间的转口贸易。《史记》载「安息在大月氏西可数千里」，汉使至安息，安息王发使随汉使来观汉地。",
+ pp:[["甘英",97,"使大秦至条支临海，为安息船人所阻"]],
+ e:[[97,"甘英使大秦","临波斯湾而返，汉使未达罗马"]]},
+{n:"条支",a:"",g:"西域",x:40,y:34,r:2.0,f:-300,t:-100,p:"两河流域（塞琉古）",
+ tie:"《史记》所称条支，指塞琉古叙利亚一带。甘英至此临海欲渡，为安息人所止。",
+ pp:[["甘英",97,"临海欲渡，闻海道艰难而返"]],
+ e:[[97,"甘英临海","汉使足迹最西之处"]]},
+{n:"奄蔡",a:"阿兰",g:"西域",x:48,y:47,r:2.6,f:-300,t:400,p:"咸海—里海北岸",
+ tie:"《史记》记其「控弦者十余万」，与康居同俗。后为匈奴所破，部众西迁，成为欧洲史上的阿兰人。",
+ pp:[["—",-100,"游牧于咸海北岸，未与汉直接通使"]],
+ e:[[-100,"奄蔡见录","《史记·大宛列传》载其国"]]},
+{n:"罽宾",a:"迦湿弥罗",g:"西域",x:75,y:34.5,r:1.6,f:-200,t:600,p:"克什米尔",
+ tie:"汉通西域南道之要冲，佛教经犍陀罗—罽宾东传。唐称迦湿弥罗，玄奘曾在此留学。",
+ pp:[["玄奘",631,"居迦湿弥罗，习经论"]],
+ e:[[631,"玄奘入迦湿弥罗","留学两年，访四毗陀论"]]},
+{n:"楼兰",a:"鄯善",g:"西域",x:89.5,y:40.5,r:1.2,f:-200,t:400,p:"罗布泊西岸",
+ tie:"丝路咽喉，汉匈反复争夺。前77年傅介子刺杀其王安归，另立在汉质子，改名鄯善。唐诗「不破楼兰终不还」即本此。",
+ pp:[["傅介子",-77,"刺杀楼兰王，悬首北阙"],["张骞",-126,"归途经楼兰，为匈奴所困"]],
+ e:[[-77,"傅介子斩楼兰王","汉使以赏赐为名诱杀，西域震服"]]},
+{n:"龟兹",a:"丘慈",g:"西域",x:82.5,y:41.5,r:1.2,f:-200,t:700,p:"天山南麓（今库车）",
+ tie:"安西四镇之一，佛教音乐、乐舞极盛。高僧鸠摩罗什出此，384年前秦吕光破龟兹，携罗什东归，长安译经遂开中观之学。",
+ pp:[["鸠摩罗什",384,"被吕光携至凉州，后入长安译经"],["吕光",384,"伐龟兹，破其城"]],
+ e:[[384,"吕光伐龟兹","携鸠摩罗什东归，西域佛法东流"]]},
+{n:"于阗",a:"瞿萨旦那",g:"西域",x:79.5,y:37.5,r:1.4,f:-200,t:1000,p:"昆仑山北麓（今和田）",
+ tie:"安西四镇之一，尉迟氏王族世袭，为西域佛教中心。玄奘归途在此停留七月，记载「佛塔林立」。1006年为喀喇汗王朝所灭，伊斯兰化。",
+ pp:[["玄奘",644,"归途至于阗，停留七月抄经"],["尉迟胜",750,"入唐宿卫，安史之乱率兵勤王"]],
+ e:[[644,"玄奘至于阗","遣使入唐，太宗许其归国"], [1006,"喀喇汗灭于阗","佛教西域自此衰绝"]]},
+{n:"疏勒",a:"喀什噶尔",g:"西域",x:76,y:39.5,r:1.1,f:-200,t:1000,p:"帕米尔东麓（今喀什）",
+ tie:"安西四镇之一。东汉班超以疏勒为据点经营西域三十一年，使西域五十余国归汉。",
+ pp:[["班超",74,"定疏勒，废亲匈奴之王，立故王后"],["耿恭",75,"守疏勒城，煮铠弩食筋革"]],
+ e:[[74,"班超定疏勒","西域五十余国遣子入侍"]]},
+{n:"莎车",a:"",g:"西域",x:77.2,y:38.5,r:1.2,f:-200,t:500,p:"塔里木盆地西缘",
+ tie:"东汉初一度称霸西域南道，为班超所破，西域复归汉。",
+ pp:[["班超",84,"击破莎车，南道平"]],
+ e:[[84,"班超破莎车","西域南道悉平"]]},
+{n:"焉耆",a:"",g:"西域",x:85.5,y:42,r:1.1,f:-200,t:700,p:"博斯腾湖（今焉耆）",
+ tie:"安西四镇之一，唐初与西突厥联兵拒唐，644年郭孝恪破其城。",
+ pp:[["郭孝恪",644,"率军破焉耆，擒其王"]],
+ e:[[644,"唐平焉耆","安西四镇之一确立"]]},
+{n:"车师",a:"高昌",g:"西域",x:89,y:43,r:1.3,f:-200,t:640,p:"吐鲁番盆地",
+ tie:"汉分车师前、后部，为匈奴与汉必争之地。麴氏高昌奉唐为正朔，640年因阻绝西域贡道被唐所灭，置西州。",
+ pp:[["麴文泰",630,"入唐朝觐，后阻西域使路"],["侯君集",640,"灭高昌，置西州、安西都护府"]],
+ e:[[640,"唐灭高昌","置西州，设安西都护府于交河"]]},
+{n:"昭武九姓",a:"粟特",g:"西域",x:65.5,y:39.5,r:2.0,f:500,t:900,p:"康、安、曹、石、米、何、史诸城邦",
+ tie:"唐设康居、大宛等都督府羁縻。粟特人掌丝路贸易，长安西市多其邸店；安禄山、史思明皆出粟特，安史之乱根源在此。",
+ pp:[["安禄山",750,"营州杂胡，兼任三镇节度使"],["粟特商队",700,"自敦煌至撒马尔罕，往来如织"]],
+ e:[[751,"怛罗斯后中断","粟特商路为大食所据"]]},
+{n:"吐火罗",a:"睹货逻",g:"西域",x:68,y:36.5,r:2.0,f:-200,t:800,p:"今阿富汗北部",
+ tie:"唐设月氏都督府。玄奘西行经此，记其「文字二十五言」，为梵语与中亚文明交汇之地。",
+ pp:[["玄奘",630,"经吐火罗入北印度"]],
+ e:[[630,"玄奘过吐火罗","《大唐西域记》详记其国"]]},
+{n:"花剌子模",a:"火寻",g:"西域",x:60,y:42,r:2.4,f:1000,t:1231,p:"阿姆河下游",
+ tie:"中亚大国。1219年蒙古西征，撒马尔罕、玉龙杰赤相继被毁，玉龙杰赤屠城，死者逾百万，是蒙古西征最惨烈的一役。",
+ pp:[["摩诃末",1219,"弃城西逃，死于里海小岛"],["成吉思汗",1219,"四路进军，破撒马尔罕"],["耶律楚材",1219,"扈从西征，著《西游录》"]],
+ e:[[1219,"蒙古西征","讹答剌事件为导火索，花剌子模覆亡"], [1221,"玉龙杰赤屠城","阿姆河改道，城为泽国"]]},
+{n:"西辽",a:"哈剌契丹",g:"西域",x:78,y:43,r:3.4,f:1124,t:1218,p:"中亚（今新疆西部—哈萨克",
+ tie:"耶律大石西走建哈剌契丹，以汉制治中亚，行汉字、用中国年号。1141年卡特万之战大败塞尔柱，威震西亚。「契丹」一名由此西传，成为欧洲对中国的称呼。",
+ pp:[["耶律大石",1124,"西迁建西辽，称菊儿汗"],["屈出律",1211,"篡西辽，1218年为蒙古所灭"]],
+ e:[[1141,"卡特万之战","大败塞尔柱苏丹，中亚归西辽"], [1218,"蒙古灭西辽","哲别追击屈出律，西辽亡"]]},
+{n:"喀喇汗",a:"黑汗",g:"西域",x:76,y:40,r:2.8,f:840,t:1212,p:"新疆西部—中亚",
+ tie:"突厥化伊斯兰政权。与于阗佛教国进行百年圣战，1006年灭于阗，西域佛教文明自此终结。",
+ pp:[["萨图克",950,"皈依伊斯兰，推行圣战"]],
+ e:[[1006,"喀喇汗灭于阗","西域佛教中心覆灭"]]},
+{n:"吐谷浑",a:"河南国",g:"西域",x:100,y:36.5,r:2.4,f:300,t:663,p:"青海—柴达木",
+ tie:"慕容鲜卑支系，据青海道，为南朝与西域通使之枢纽。唐以弘化公主和亲；663年为吐蕃所并，唐蕃直接接壤。",
+ pp:[["弘化公主",640,"唐宗室女，嫁吐谷浑可汗诺曷钵"],["慕容顺",635,"归唐，受封青海王"]],
+ e:[[640,"弘化公主和亲","唐吐谷浑结好，共制吐蕃"], [663,"吐蕃灭吐谷浑","青海道断绝，唐蕃交兵"]]},
+{n:"吐蕃",a:"Tibet",g:"西域",x:91,y:32,r:4.8,f:600,t:877,p:"青藏高原",
+ tie:"唐蕃两百年，和亲与战争交织。641年文成公主入藏；670年大非川唐军覆没；763年吐蕃一度攻陷长安；823年长庆会盟立碑，甥舅和好。",
+ pp:[["松赞干布",641,"迎文成公主，创制文字"],["文成公主",641,"携佛经、工匠、种子入藏"],["薛仁贵",670,"大非川之战，十万唐军覆没"],["禄东赞",641,"赴唐请婚，应对得体"]],
+ e:[[641,"文成公主入藏","唐蕃和亲，佛教入藏"], [670,"大非川之战","薛仁贵败绩，吐谷浑亡"], [763,"吐蕃陷长安","立广武王承宏，十五日而退"], [823,"长庆会盟","「甥舅和好」，碑存拉萨"]]},
+{n:"西夏",a:"大白高国",g:"西域",x:105.5,y:38.5,r:2.4,f:1038,t:1227,p:"宁夏—河西走廊",
+ tie:"党项拓跋氏。李元昊1038年称帝，宋夏百年战争：三川口、好水川、定川砦三战宋军皆败。后与宋议和，岁赐银绢。1227年为蒙古所灭。",
+ pp:[["李元昊",1038,"称帝建大夏，创西夏文"],["范仲淹",1040,"经略陕西，筑城御夏"],["韩琦",1040,"好水川之败，死者万余"]],
+ e:[[1040,"三川口之战","宋军大败，刘平被俘"], [1044,"好水川之战","宋军覆没，仁宗震悼"], [1227,"蒙古灭西夏","末主投降，城邑尽毁"]]},
+
+/* —— 西南·南亚 —— */
+{n:"天竺",a:"身毒／贤豆",g:"西南",x:82,y:25,r:4.4,f:-300,t:1200,p:"印度次大陆",
+ tie:"汉称身毒，唐称天竺。玄奘西行求法十七年；王玄策借吐蕃、泥婆罗兵大破中天竺，一人灭一国。佛教由此东传，成为中原文明的重要一脉。",
+ pp:[["玄奘",629,"西行五万里，归译经七十五部"],["王玄策",648,"借兵破中天竺，俘其王阿罗那顺"],["义净",671,"海路求法，著《南海寄归内法传》"]],
+ e:[[629,"玄奘西行","贞观十九年归长安，太宗命译经"], [648,"王玄策破中天竺","以蕃兵破城，献俘长安"], [671,"义净海路求法","由广州出海，历三十余国"]]},
+{n:"泥婆罗",a:"尼婆罗",g:"西南",x:84.5,y:28,r:1.0,f:600,t:1200,p:"尼泊尔",
+ tie:"唐蕃通道之要冲。尺尊公主入藏，与文成公主并称；王玄策破天竺时曾借泥婆罗骑兵。",
+ pp:[["尺尊公主",639,"尼婆罗公主，嫁松赞干布"],["王玄策",648,"借泥婆罗七千骑"]],
+ e:[[639,"尺尊公主入藏","携佛像入藏，建大昭寺"]]},
+{n:"师子国",a:"狮子国／锡兰",g:"西南",x:80.8,y:7.3,r:1.2,f:-300,t:1400,p:"斯里兰卡",
+ tie:"东晋法显自海路归国，在此留居二年抄经。唐称狮子国，屡遣使献象牙、珍珠；郑和船队亦至此。",
+ pp:[["法显",411,"居师子国二年，携梵本归"],["义净",673,"经师子国赴印度"]],
+ e:[[411,"法显至师子国","得《弥沙塞律》等梵本"]]},
+{n:"骠国",a:"Pyu",g:"西南",x:95.5,y:21.5,r:2.0,f:100,t:832,p:"缅甸中部",
+ tie:"唐贞元十八年（802）骠国王遣使献「骠国乐」，白居易作《骠国乐》诗记之，是中原与缅甸音乐交流的著名事件。",
+ pp:[["骠国王",802,"遣使献乐，乐器二十二种"],["白居易",802,"作《骠国乐》，讽其劳民"]],
+ e:[[802,"骠国献乐","乐工三十五人，曲十二章"]]},
+{n:"蒲甘",a:"",g:"西南",x:95,y:21,r:1.8,f:849,t:1287,p:"缅甸",
+ tie:"元初蒙古军南下，1277年牙嵩羌之战破蒲甘象阵，蒲甘王朝瓦解，缅甸进入分裂时期。",
+ pp:[["忽必烈",1277,"遣军征缅，破象阵"]],
+ e:[[1277,"元征缅","象阵为蒙古骑兵所破，蒲甘衰"]]},
+{n:"扶南",a:"",g:"西南",x:104.5,y:11.5,r:2.2,f:100,t:627,p:"湄公河三角洲",
+ tie:"南海贸易枢纽。三国吴孙权遣康泰、朱应出使扶南，归国后著《吴时外国传》，是中原最早的南海行记。",
+ pp:[["康泰",245,"出使扶南，历百数十国"],["朱应",245,"与康泰同行，著《扶南异物志》"]],
+ e:[[245,"吴使扶南","首开中原与南海诸国的官方往来"]]},
+{n:"真腊",a:"甘孛智",g:"西南",x:104.5,y:12.5,r:2.4,f:627,t:1431,p:"柬埔寨",
+ tie:"唐称真腊，分水真腊、陆真腊。元成宗时周达观随使至吴哥一年，著《真腊风土记》，是现存唯一详记吴哥盛世的文献。",
+ pp:[["周达观",1296,"随使至吴哥，留一年"]],
+ e:[[1296,"周达观使真腊","《真腊风土记》记吴哥城郭、宫室、风俗"]]},
+{n:"占城",a:"林邑／环王",g:"西南",x:108.5,y:14.5,r:2.0,f:192,t:1697,p:"越南中南部",
+ tie:"唐称林邑、环王，屡与安南争锋。446年宋文帝遣檀和之伐林邑，掠其黄金；郑和船队七下西洋，首站即占城。",
+ pp:[["檀和之",446,"伐林邑，破区粟城"],["郑和",1405,"首航抵占城，受其国王迎"]],
+ e:[[446,"宋伐林邑","掠黄金数十万斤，林邑衰"], [1405,"郑和抵占城","立碑刻石，赐以冠带"]]},
+{n:"南诏",a:"蒙舍诏",g:"西南",x:101,y:25,r:2.4,f:738,t:902,p:"云南",
+ tie:"唐扶之以抗吐蕃，后因边吏苛扰而反。751年西洱河之战、754年李宓再征，唐军两次全军覆没，是唐由盛转衰的重要一击。《南诏德化碑》述其不得已。",
+ pp:[["阁罗凤",751,"投吐蕃，立《南诏德化碑》"],["鲜于仲通",751,"西洱河之战，八万唐军覆没"],["李宓",754,"再征南诏，全军皆没"]],
+ e:[[751,"西洱河之战","唐军八万覆没，南诏附吐蕃"], [754,"李宓败没","唐前后死者二十万"], [794,"点苍山会盟","南诏复归唐，立誓和好"]]},
+{n:"大理",a:"",g:"西南",x:101,y:25.5,r:2.2,f:937,t:1253,p:"云南",
+ tie:"宋时以茶马互市，保持藩属关系。1253年忽必烈率军革囊渡金沙江，灭大理，形成对南宋的侧翼包抄。",
+ pp:[["忽必烈",1253,"革囊渡江，破大理城"]],
+ e:[[1253,"革囊渡江","蒙古灭大理，南宋腹背受敌"]]},
+{n:"交趾",a:"安南",g:"西南",x:105.5,y:20.5,r:1.6,f:679,t:1802,p:"越南北部",
+ tie:"唐置安南都护府，为中原郡县千余年。968年丁部领独立建大瞿越；明成祖一度收复，1427年黎利逐明军，此后仅为藩属。",
+ pp:[["丁部领",968,"建大瞿越，号万胜王"],["陈兴道",1288,"白藤江之战，破元军水师"],["黎利",1427,"逐明军，建后黎朝"]],
+ e:[[968,"丁部领独立","安南脱离中原，始为藩国"], [1288,"白藤江之战","元军水师覆没，陈朝复国"], [1427,"黎利逐明军","明交趾布政使司废"]]},
+
+/* —— 海路与远西 —— */
+{n:"三佛齐",a:"室利佛逝",g:"海路",x:104,y:0,r:3.0,f:600,t:1397,p:"苏门答腊（今巨港）",
+ tie:"南海贸易总汇，唐宋商舶必经。义净往返天竺均在此译经研习，著《南海寄归内法传》，记其「亦善梵语」。",
+ pp:[["义净",671,"留佛逝六月，习声明"],["法显",413,"归途经耶婆提"]],
+ e:[[671,"义净居佛逝","南海梵学中心，译经二年"]]},
+{n:"阇婆",a:"爪哇",g:"海路",x:110,y:-6.5,r:2.0,f:400,t:1500,p:"爪哇岛",
+ tie:"宋称阇婆，香料、胡椒所出。1292年元世祖遣史弼、亦黑迷失率舟师征爪哇，无功而返，为元代规模最大的一次海外用兵。",
+ pp:[["史弼",1292,"率军征爪哇，败归"]],
+ e:[[1292,"元征爪哇","水陆三万，无功而返"]]},
+{n:"渤泥",a:"文莱",g:"海路",x:114,y:2,r:2.0,f:600,t:1500,p:"婆罗洲北部",
+ tie:"宋元时以龙脑、沉香贸易。1408年渤泥国王率眷属入朝，病卒于南京，明成祖以王礼葬之，墓存今南京雨花台。",
+ pp:[["渤泥国王",1408,"率妻子入朝，卒于南京"]],
+ e:[[1408,"渤泥王入朝","卒葬南京石子冈，为中外友好之证"]]},
+{n:"麻逸",a:"",g:"海路",x:121,y:13,r:1.6,f:900,t:1400,p:"菲律宾民都洛岛",
+ tie:"宋商舶至麻逸，以瓷器、铁器易其沉香、玳瑁。宋《诸蕃志》记其「交易用瓷碗、铁鼎」。",
+ pp:[["宋商",1100,"以泉瓷易香药，留数月不归"]],
+ e:[[1100,"宋商通麻逸","泉州海舶南下，瓷器贸易盛行"]]},
+{n:"满剌加",a:"马六甲",g:"海路",x:102.2,y:2.2,r:1.2,f:1397,t:1511,p:"马六甲",
+ tie:"明封满剌加国，郑和七下西洋皆以此为中转站与官厂（仓库）所在地。1511年被葡萄牙攻灭，明廷因财政拮据未出兵。",
+ pp:[["拜里米苏拉",1405,"亲率妻子入朝，受明册封"],["郑和",1405,"设官厂于满剌加，贮粮储货"]],
+ e:[[1405,"明封满剌加","立碑纪功，赐诰印"], [1511,"葡萄牙灭满剌加","明廷坐视，南洋门户易主"]]},
+{n:"旧港",a:"巴邻旁",g:"海路",x:104.7,y:-2.9,r:1.2,f:1300,t:1500,p:"苏门答腊巨港",
+ tie:"郑和首航至此，擒华人首领陈祖义，设旧港宣慰使司——是明代在海外设置的最高行政机构。",
+ pp:[["陈祖义",1407,"海盗首领，被郑和诱擒送京"],["施进卿",1407,"继任旧港宣慰使"]],
+ e:[[1407,"郑和擒陈祖义","献俘南京，斩于都市"]]},
+{n:"榜葛剌",a:"孟加拉",g:"海路",x:88,y:24,r:1.6,f:1300,t:1576,p:"孟加拉",
+ tie:"郑和两次至榜葛剌，其王屡献「麒麟」（长颈鹿）、珊瑚树，是明代朝贡体系中最富盛的一环。",
+ pp:[["郑和",1406,"抵榜葛剌，赐锦绮"],["榜葛剌王",1414,"献麒麟、名马"]],
+ e:[[1414,"献麒麟","长颈鹿自东非转致，朝野以为祥瑞"]]},
+{n:"古里",a:"卡利卡特",g:"海路",x:75.8,y:11.2,r:1.2,f:1300,t:1600,p:"印度西南岸",
+ tie:"郑和船队印度洋段的中枢，在此立碑刻石：「其国去中国十万余里，民物咸若，熙皞同风」。此后明代航海图以此为西行终点。",
+ pp:[["郑和",1405,"至古里，立碑纪功、建停泊所"]],
+ e:[[1405,"古里立碑","《天妃灵应之记》记七下西洋事"]]},
+{n:"柯枝",a:"柯钦",g:"海路",x:76.2,y:10,r:0.9,f:1300,t:1600,p:"印度西南岸",
+ tie:"郑和至柯枝，明成祖封其国中之山为「镇国山」，御制碑文赐之，是中国首次为外国山川封号。",
+ pp:[["郑和",1416,"至柯枝，封镇国山"]],
+ e:[[1416,"封柯枝镇国山","御制碑文，赐其王印诰"]]},
+{n:"注辇",a:"朱罗",g:"海路",x:79,y:11,r:2.4,f:848,t:1279,p:"印度南部",
+ tie:"南印度海权国。1015年注辇王遣使入宋，贡象牙、乳香、珍珠，是宋代海外贸易的重要伙伴。",
+ pp:[["注辇王",1015,"遣使浮海入宋，历三年方达"]],
+ e:[[1015,"注辇入贡","宋真宗召见，赐冠带"]]},
+{n:"故临",a:"奎隆",g:"海路",x:76,y:9,r:1.0,f:800,t:1300,p:"印度西南岸",
+ tie:"宋代商舶至故临，换乘大食船只西行。《岭外代答》记「中国舶欲往大食，必自故临易小舟而往」。",
+ pp:[["宋商",1100,"至故临换大食商船"]],
+ e:[[1100,"故临中转","宋舶与大食舶在此交接货物"]]},
+{n:"忽鲁谟斯",a:"霍尔木兹",g:"海路",x:56.5,y:27,r:1.2,f:1300,t:1700,p:"波斯湾口",
+ tie:"郑和船队西行终点之一，明廷宝物、狮子、琥珀多由此购得。明人称其「诸番之总会」。",
+ pp:[["郑和",1414,"分遣队至忽鲁谟斯，购狮子、宝石"]],
+ e:[[1414,"郑和抵忽鲁谟斯","明使购奇珍异宝以归"]]},
+{n:"阿丹",a:"亚丁",g:"海路",x:45,y:13,r:1.2,f:1200,t:1600,p:"也门亚丁",
+ tie:"郑和分遣队所至，明赐其王冠带，阿丹遣使入贡。",
+ pp:[["郑和",1418,"遣使阿丹，赐冠服"]],
+ e:[[1418,"明使至阿丹","阿丹王遣使随船入贡"]]},
+{n:"天方",a:"麦加",g:"海路",x:40,y:21.5,r:1.4,f:600,t:1800,p:"阿拉伯半岛汉志",
+ tie:"郑和第七次下西洋，分遣队抵天方（麦加），携回《古兰经》与「麒麟」，绘《天方图》。",
+ pp:[["郑和",1430,"遣分宗至天方，朝天方礼拜寺"]],
+ e:[[1430,"明使至天方","携回经像与长颈鹿，朝野称瑞"]]},
+{n:"米昔儿",a:"勿斯里／埃及",g:"海路",x:31,y:27,r:1.4,f:900,t:1517,p:"埃及（马穆鲁克）",
+ tie:"元称蜜昔儿，明称米昔儿。郑和分遣队至其地，为明代航海所达最西之处。",
+ pp:[["郑和",1430,"遣使米昔儿，赐彩币"]],
+ e:[[1430,"明使至米昔儿","明代西行最远记录之一"]]},
+{n:"层拔",a:"桑给巴尔",g:"海路",x:39,y:-6,r:1.6,f:900,t:1500,p:"东非沿岸",
+ tie:"宋元海外贸易极西之地，宋钱、龙泉青瓷在东非海岸大量出土。汪大渊《岛夷志略》记其「地产象牙、龙涎」。",
+ pp:[["汪大渊",1330,"附舶至层拔，记其风土"]],
+ e:[[1330,"汪大渊记层拔","《岛夷志略》录东非诸国"]]},
+{n:"木骨都束",a:"摩加迪沙",g:"海路",x:45,y:2,r:1.2,f:1300,t:1500,p:"索马里",
+ tie:"郑和第四次出航分遣队所至，其王遣使随船入贡狮子、犀牛。",
+ pp:[["郑和",1417,"遣使木骨都束"]],
+ e:[[1417,"明使至木骨都束","贡狮子、犀象"]]},
+{n:"大食",a:"白衣／黑衣大食",g:"远西",x:44,y:30,r:5.5,f:632,t:1258,p:"阿拉伯帝国（西亚—北非）",
+ tie:"唐称大食。651年首次遣使至唐；751年怛罗斯之战后造纸术西传；安史之乱时大食兵助唐平叛。宋元时期，大食商人成为海上贸易最大力量，广州、泉州设蕃坊。",
+ pp:[["阿布·穆斯林",751,"怛罗斯之战，破唐军"],["高仙芝",751,"唐军统帅，怛罗斯败绩"],["蒲寿庚",1276,"泉州市舶使，掌海贸三十年"]],
+ e:[[651,"大食首次遣使","哈里发奥斯曼遣使至唐"], [751,"怛罗斯之战","造纸术西传撒马尔罕"], [758,"大食兵助唐","广州蕃兵助平安史之乱"], [1260,"蒙古陷巴格达","阿拔斯朝亡，伊斯兰黄金时代终"]]},
+{n:"波斯",a:"萨珊",g:"远西",x:54,y:30,r:3.6,f:-550,t:651,p:"伊朗高原",
+ tie:"萨珊波斯与北魏、北周、隋、唐皆有通使。651年亡于大食，末王伊嗣俟之子卑路斯流亡长安，唐授右武卫将军，设波斯都督府。",
+ pp:[["卑路斯",670,"流亡长安，求唐出兵复国"],["玄奘",630,"经波斯故地，记其风俗"]],
+ e:[[651,"萨珊亡","末王伊嗣俟死于木鹿"], [670,"波斯都督府","唐以卑路斯为都督，名义统其地"]]},
+{n:"拂菻",a:"大秦／拜占庭",g:"远西",x:34,y:39,r:3.0,f:300,t:1453,p:"拜占庭帝国",
+ tie:"《旧唐书》记拂菻。635年景教（基督教聂斯脱利派）传入长安，阿罗本译经；781年立《大秦景教流行中国碑》，现存西安碑林。",
+ pp:[["阿罗本",635,"携经像至长安，太宗迎于仪门"],["景净",781,"撰《大秦景教流行中国碑》"]],
+ e:[[635,"景教入唐","建波斯寺，后改大秦寺"], [781,"景教碑立","叙利亚文与汉文并书，中西交流之证"]]},
+{n:"大秦",a:"黎轩／罗马",g:"远西",x:38,y:36,r:3.6,f:-100,t:300,p:"罗马帝国",
+ tie:"汉称罗马为大秦，「其王无常人，皆简立贤者」。《后汉书》载166年「大秦王安敦遣使自日南徼外献象牙、犀角」，为罗马与中国首次直接通使记录。",
+ pp:[["甘英",97,"欲往大秦，临海而返"],["安敦",166,"罗马皇帝马可·奥勒留，遣使至汉"]],
+ e:[[97,"甘英临海","为安息船人所阻，汉使未抵罗马"], [166,"大秦遣使","自日南徼外至，献象牙犀角"]]},
+{n:"佛郎机",a:"葡萄牙",g:"远西",x:113.5,y:22.2,r:1.4,f:1511,t:1700,p:"据马六甲、澳门（图示广州口）",
+ tie:"明称佛郎机。1521年屯门海战、1523年西草湾之战后，葡萄牙转而贿赂地方官，1553年入居澳门。其火炮「佛郎机铳」被明军仿制，是明末军事改革的关键。",
+ pp:[["汪鋐",1521,"屯门海战，以火攻破葡船"],["利玛窦",1582,"入华传教，与徐光启译《几何原本》"]],
+ e:[[1521,"屯门海战","明军驱葡人出屯门"], [1553,"葡人据澳门","渐成租居之势，至1887年"]]},
+{n:"红毛番",a:"荷兰",g:"远西",x:120.5,y:23.5,r:1.4,f:1600,t:1700,p:"据台湾、巴达维亚",
+ tie:"明称红毛番。1604年据澎湖，1624年退据台湾，建热兰遮城。1662年郑成功围城九月，荷兰投降，结束其在大陆沿海的势力。",
+ pp:[["郑成功",1661,"围热兰遮城九月，迫荷人降"],["揆一",1662,"荷兰台湾长官，签降约"]],
+ e:[[1624,"荷据台湾","建热兰遮城，为东亚贸易枢纽"], [1662,"郑成功收复台湾","荷人退出，台湾重归华人治下"]]},
+{n:"英吉利",a:"英国",g:"远西",x:112.2,y:21.4,r:1.0,f:1637,t:1842,p:"以广州贸易点为位置",
+ tie:"1637年威德尔船队炮击虎门，为中西首次武装冲突。1839年林则徐虎门销烟，1840年鸦片战争，《南京条约》开五口、割香港。",
+ pp:[["威德尔",1637,"率船队入珠江，炮击虎门"],["林则徐",1839,"虎门销烟，两万箱鸦片尽毁"],["耆英",1842,"签订《南京条约》"]],
+ e:[[1637,"虎门事件","英船炮击炮台，强购货物"], [1839,"虎门销烟","六月三日开始，历时二十三日"], [1842,"南京条约","割香港、开五口、赔款"]]},
+{n:"吕宋",a:"西班牙",g:"远西",x:121,y:16,r:1.4,f:1565,t:1898,p:"菲律宾（西班牙殖民地）",
+ tie:"明称吕宋。月港开海后，白银经吕宋大量流入中国。1603年西班牙屠杀马尼拉华人，明廷仅以檄文责问。",
+ pp:[["林凤",1574,"率战船攻马尼拉，为西班牙所拒"]],
+ e:[[1574,"林凤攻马尼拉","明末海商武装的一次远征"], [1603,"马尼拉屠华","华人死者数万，明廷未究"]]}
+];
+
+/* ===== 中原王朝：疆域、帝王、名臣、大事 ===== */
+/* emp：庙号, 姓名, 即位, 退位, 说明 ｜ min：姓名, 年份, 事略 ｜ evt：年, 标题, 说明 */
+var CORE=[
+{n:"西周",a:"周",from:-1046,to:-771,cap:"镐京（今西安）",
+ tie:"封建宗法与礼乐秩序的确立期。「普天之下，莫非王土」的天下观在此定型，后世中原王朝处理四夷的基本观念由此而来。",
+ ext:[[104,39],[109,41],[114,41],[118,40],[122,40],[124,39.8],[122,37],[121.5,34.5],[121,31],[119,28],[117,25],[114,23],[110,22],[107,23],[105,26],[104,29],[103,32],[104,35],[102,36],[101,38]],
+ emp:[["武王","姬发",-1046,-1043,"牧野一战灭商，二年而崩"],["成王","姬诵",-1042,-1021,"周公摄政，制礼作乐，成康之治"],["穆王","姬满",-976,-922,"西征犬戎，作《吕刑》"],["厉王","姬胡",-877,-841,"专利监谤，国人暴动，流于彘"],["宣王","姬静",-827,-782,"中兴周室，号宣王中兴"],["幽王","姬宫涅",-781,-771,"烽火戏诸侯，犬戎破镐京"]],
+ min:[["周公旦",-1042,"摄政七年，平三监之乱，制礼作乐"],["姜尚",-1046,"即姜子牙，牧野之战的谋主"],["召公奭",-1042,"与周公分陕而治，甘棠遗爱"],["尹吉甫",-820,"宣王时北伐猃狁，作《六月》"],["祭公谋父",-980,"谏穆王征犬戎"]],
+ evt:[[-1046,"牧野之战","武王伐纣，商军倒戈，殷亡"],[-1042,"周公东征","平管蔡武庚之乱，营建洛邑"],[-841,"国人暴动","厉王奔彘，周召共和行政"],[-771,"犬戎破镐京","幽王死，平王东迁，西周终"]]},
+
+{n:"春秋战国",a:"东周",from:-770,to:-221,cap:"洛邑（今洛阳）",
+ tie:"王纲解纽，诸侯争霸。齐桓「尊王攘夷」、晋文退避三舍，霸主政治取代王权；至战国七雄并立，秦以耕战体制胜出。",
+ ext:[[104,37],[110,39],[115,39],[119,38],[121,36],[122,33],[121,30],[119,27],[116,25],[112,25],[108,27],[105,30],[103,33],[102,35]],
+ emp:[["平王","姬宜臼",-770,-720,"东迁洛邑，王纲始坠"],["桓王","姬林",-719,-697,"繻葛之战，王师为郑所败"],["敬王","姬匄",-519,-476,"王子朝之乱，典籍散佚"],["显王","姬扁",-368,-321,"商鞅变法，诸侯相王"],["赧王","姬延",-314,-256,"债台高筑，周为秦所灭"]],
+ min:[["管仲",-685,"相齐桓公，九合诸侯，一匡天下"],["孔子",-551,"删诗书，订礼乐，开儒学"],["孙武",-512,"著《孙子兵法》，吴军入郢"],["商鞅",-356,"变法强秦，徙木立信"],["苏秦",-334,"合纵六国，佩六国相印"],["张仪",-328,"连横破纵，欺楚绝齐"],["白起",-260,"长平之战坑赵卒四十万"]],
+ evt:[[-770,"平王东迁","王室衰微，春秋始"],[-685,"齐桓公称霸","尊王攘夷，葵丘会盟"],[-632,"城濮之战","晋文公退避三舍，楚师败"],[-453,"三家分晋","韩赵魏列为诸侯，战国始"],[-356,"商鞅变法","废井田、开阡陌、行军功"],[-260,"长平之战","赵卒四十万降而被坑"]]},
+
+{n:"秦",a:"",from:-221,to:-206,cap:"咸阳",
+ tie:"中国第一次大一统。北逐匈奴、南取百越，筑长城、置郡县，确立此后两千年中原王朝的基本形态。",
+ ext:[[103,40],[108,42],[113,42],[118,41],[122,40.5],[124,40],[122,37],[121,34],[121.5,31.5],[119,28],[117,24],[114,22.5],[110,21.5],[106,20],[103,22],[101,24],[102,28],[103,30],[104,33],[103,35],[100,36],[99,38]],
+ emp:[["始皇帝","嬴政",-221,-210,"并六国，称皇帝，书同文车同轨"],["二世","胡亥",-210,-207,"沙丘之变，赵高专权"],["秦王","子婴",-207,-206,"降刘邦，秦亡"]],
+ min:[["李斯",-221,"丞相，定郡县、统一文字度量衡"],["王翦",-223,"灭楚灭赵，秦军主帅"],["蒙恬",-215,"北逐匈奴，筑长城，守上郡"],["赵高",-210,"沙丘篡诏，指鹿为马"]],
+ evt:[[-221,"秦统一","分天下为三十六郡"],[-213,"焚书坑儒","禁私学，坑术士四百六十人"],[-214,"北筑长城","蒙恬取河南地，连接燕赵旧城"],[-209,"陈胜吴广起义","大泽乡揭竿，天下响应"],[-207,"巨鹿之战","项羽破釜沉舟，秦军主力尽丧"]]},
+
+{n:"西汉",a:"前汉",from:-202,to:8,cap:"长安",
+ tie:"中原王朝第一次大规模经营域外：张骞凿空、西域都护、朝鲜四郡、南越九郡。匈奴由和亲转为臣服，丝路自此贯通。",
+ ext:[[76,41],[82,43],[88,42.5],[94,43],[100,42],[106,44],[112,44],[118,43],[124,41],[126,40],[127,38],[127,35],[125,34],[122,33],[121,31],[119,28],[117,24],[114,22.5],[110,21.5],[106,20],[104,22],[102,25],[101,28],[102,31],[103,33],[100,35],[96,37],[90,38],[84,39],[80,40]],
+ emp:[["高祖","刘邦",-202,-195,"布衣天子，约法三章，白登受困"],["文帝","刘恒",-180,-157,"与民休息，轻徭薄赋，文景之治"],["景帝","刘启",-157,-141,"平七国之乱，削藩集权"],["武帝","刘彻",-141,-87,"罢黜百家，北伐匈奴，通西域"],["宣帝","刘询",-74,-49,"昭宣中兴，匈奴呼韩邪来朝"],["成帝","刘骜",-33,-7,"外戚王氏擅权，赵飞燕入宫"]],
+ min:[["萧何",-202,"定律令，收秦图籍，镇守关中"],["张良",-202,"运筹帷幄，功成身退"],["韩信",-202,"背水一战，垓下十面埋伏"],["贾谊",-178,"上《治安策》，痛哭流涕言事"],["晁错",-154,"削藩策，七国之乱中被诛"],["卫青",-127,"七战七捷，收河南地"],["霍去病",-119,"封狼居胥，禅于姑衍"],["董仲舒",-134,"天人三策，独尊儒术"],["张骞",-138,"凿空西域，封博望侯"],["苏武",-100,"持节牧羊十九年"]],
+ evt:[[-202,"汉称帝","垓下灭项羽，定都长安"],[-200,"白登之围","高祖被匈奴围七日，始和亲"],[-154,"七国之乱","吴楚以诛晁错为名反，三月而平"],[-138,"张骞凿空","出使月氏，西域之路始通"],[-119,"漠北之战","卫霍绝漠，匈奴远遁"],[-91,"巫蛊之祸","太子据兵败自杀，死者数万"],[-60,"西域都护","汉置都护府于乌垒"]]},
+
+{n:"东汉",a:"后汉",from:25,to:220,cap:"洛阳",
+ tie:"班超以三十六人定西域，西域三绝三通。北匈奴西迁、南匈奴内附，草原格局由此重排；佛教东传与造纸术成，皆在此朝。",
+ ext:[[76,41],[84,43],[92,43],[100,42],[106,44],[112,44],[118,43],[124,41],[126,40],[127,37],[126,35],[122,34],[121,31],[119,28],[117,24],[112,21.5],[108,21],[105,20],[103,22],[101,25],[100,28],[99,31],[100,34],[98,37],[92,39],[86,40],[80,40]],
+ emp:[["光武帝","刘秀",25,57,"昆阳之战，中兴汉室，柔道治国"],["明帝","刘庄",57,75,"遣班超使西域，求佛法"],["章帝","刘炟",75,88,"明章之治，白虎观会议"],["和帝","刘肇",88,105,"窦宪北击匈奴，勒石燕然"],["桓帝","刘志",146,168,"宦官专权，党锢之祸"],["灵帝","刘宏",168,189,"卖官鬻爵，黄巾起义"],["献帝","刘协",189,220,"董卓挟持，禅位曹丕"]],
+ min:[["邓禹",25,"云台二十八将之首"],["班超",73,"投笔从戎，三十一年定西域"],["班固",82,"著《汉书》，第一部断代史"],["蔡伦",105,"改进造纸，封龙亭侯"],["张衡",132,"造候风地动仪"],["马援",43,"伏波将军，马革裹尸"],["窦宪",89,"破北匈奴，登燕然山刻石"]],
+ evt:[[25,"光武中兴","定都洛阳，东汉始"],[73,"班超出使西域","三十六人定鄯善，斩匈奴使"],[89,"勒石燕然","窦宪破北匈奴，班固作铭"],[105,"蔡伦造纸","造纸术成，文明传播之变"],[166,"党锢之祸","李膺等被杀，士林摧折"],[184,"黄巾起义","张角三十六方同日举事"]]},
+
+{n:"三国",a:"魏蜀吴",from:220,to:265,cap:"洛阳／成都／建业",
+ tie:"中原分裂为三，各自向外经营：魏统乌桓、蜀平南中、吴通南海（康泰使扶南），是中原与周边互动最活跃的一段。",
+ ext:[[104,38],[110,40],[115,40],[119,39],[121,37],[122,34],[121,31],[119,28],[117,25],[114,23],[111,22],[108,25],[105,28],[103,31],[102,34]],
+ emp:[["魏文帝","曹丕",220,226,"代汉称帝，行九品中正制"],["蜀先主","刘备",221,223,"三顾茅庐，夷陵败亡"],["吴大帝","孙权",229,252,"据江东，赤壁拒曹"],["魏明帝","曹叡",226,239,"拒诸葛亮北伐，大兴土木"],["蜀后主","刘禅",223,263,"乐不思蜀，蜀汉亡"]],
+ min:[["诸葛亮",221,"隆中对，六出祁山，鞠躬尽瘁"],["周瑜",208,"赤壁之战，火烧曹军"],["鲁肃",208,"力主孙刘联盟"],["司马懿",234,"拒诸葛亮，后发动高平陵之变"],["荀彧",196,"迎献帝都许，王佐之才"],["陆逊",222,"夷陵之战，火烧连营"]],
+ evt:[[207,"三顾茅庐","隆中对定三分之策"],[208,"赤壁之战","孙刘联军破曹，天下三分"],[219,"关羽失荆州","吕蒙白衣渡江，关羽败亡"],[234,"五丈原","诸葛亮病逝军中"],[263,"蜀汉亡","邓艾偷渡阴平，刘禅降"]]},
+
+{n:"西晋",a:"",from:266,to:316,cap:"洛阳",
+ tie:"短暂统一后即陷内乱。八王之乱耗尽国力，匈奴刘渊起兵，五胡入主中原——中原王朝第一次整体失去北方。",
+ ext:[[98,40],[104,42],[110,42],[116,42],[121,41],[124,40],[122,37],[121,34],[121.5,31.5],[119,28],[117,24],[114,22.5],[110,21.5],[106,20],[103,22],[101,25],[100,28],[98,30],[96,33],[96,36]],
+ emp:[["武帝","司马炎",266,290,"代魏灭吴，太康之治"],["惠帝","司马衷",290,306,"何不食肉糜，八王之乱"],["怀帝","司马炽",307,311,"永嘉之乱，被掳于平阳"],["愍帝","司马邺",313,316,"长安陷落，西晋亡"]],
+ min:[["羊祜",280,"镇襄阳，与陆抗隔江相对"],["杜预",280,"《左传》注家，率军灭吴"],["张华",290,"博学多识，辅政之臣"],["刘琨",311,"闻鸡起舞，守晋阳孤城"],["祖逖",313,"中流击楫，北伐后赵"],["王导",317,"东晋开国，王与马共天下"]],
+ evt:[[280,"晋灭吴","三国归晋，天下一统"],[291,"八王之乱","宗室相残十六年"],[304,"刘渊起兵","匈奴建汉赵，五胡乱华始"],[311,"永嘉之乱","洛阳陷，怀帝被掳"],[316,"西晋亡","长安失守，愍帝降"]]},
+
+{n:"东晋",a:"江左",from:317,to:420,cap:"建康（今南京）",
+ tie:"衣冠南渡，偏安江左。北方为五胡十六国所据，南北对峙格局确立；淝水一战八万破八十万，江左得以延续。",
+ ext:[[105,34],[110,34],[115,34],[119,33.5],[121.5,32],[122,30],[120,27],[118,24.5],[114,22.5],[110,21.5],[108,21],[106,23],[105,27],[104,31]],
+ emp:[["元帝","司马睿",317,323,"衣冠南渡，王导辅政"],["明帝","司马绍",323,325,"平王敦之乱"],["孝武帝","司马曜",372,396,"淝水之战，谢安当国"],["恭帝","司马德文",419,420,"禅位刘裕，东晋终"]],
+ min:[["王导",317,"王与马，共天下"],["谢安",383,"淝水之战，围棋赌墅"],["桓温",354,"三次北伐，枋头败归"],["祖逖",317,"击楫中流，收复河南"],["陶侃",330,"运甓自励，镇荆州"],["顾恺之",400,"传神写照，画《洛神赋图》"]],
+ evt:[[317,"衣冠南渡","士族南迁，文化重心南移"],[383,"淝水之战","八万破八十万，风声鹤唳"],[399,"孙恩起义","海路攻建康，士族重创"],[420,"刘裕代晋","南朝宋立，东晋亡"]]},
+
+{n:"南北朝",a:"南朝／北朝",from:420,to:589,cap:"建康／平城—洛阳",
+ tie:"南北各朝并立一百七十年。北魏统一北方并全面汉化，南朝保存华夏典章；胡汉融合在此完成，为隋唐盛世奠基。",
+ ext:[[100,42],[106,43],[112,43],[118,43],[124,41],[126,40],[127,37],[126,35],[122,34],[121,31],[119,28],[117,24],[112,21.5],[108,21],[105,20],[103,22],[101,25],[99,28],[97,31],[96,35],[98,39]],
+ emp:[["太武帝","拓跋焘",423,452,"灭柔然、北凉，统一北方"],["宋文帝","刘义隆",424,453,"元嘉之治，三次北伐无功"],["孝文帝","元宏",471,499,"迁都洛阳，全面汉化"],["梁武帝","萧衍",502,549,"崇佛，侯景之乱饿死台城"],["北周武帝","宇文邕",560,578,"灭北齐，禁佛道"],["陈后主","陈叔宝",582,589,"《玉树后庭花》，国亡"]],
+ min:[["崔浩",450,"北魏谋主，修国史被灭族"],["高允",460,"历五帝，直谏不阿"],["苏绰",541,"西魏六条诏书，创府兵制"],["陈庆之",529,"七千白袍军，入洛阳"],["宇文护",556,"专权弑三帝，终为周武所诛"],["颜之推",550,"著《颜氏家训》"]],
+ evt:[[439,"北魏统一北方","灭北凉，十六国终"],[494,"孝文帝迁洛","改汉姓、禁胡服、通婚汉族"],[529,"陈庆之北伐","十四旬平三十二城，后全军覆没"],[548,"侯景之乱","建康残破，江南士族凋零"],[577,"北周灭北齐","北方再归一统"]]},
+
+{n:"隋",a:"",from:581,to:618,cap:"大兴（今西安）／洛阳",
+ tie:"结束三百年分裂。开运河、创科举、行三省六部，制度遗产为唐所承；然三征高句丽耗尽民力，二世而亡。",
+ ext:[[98,40],[104,42],[110,42],[116,42],[121,41],[124,40],[126,39],[127,37],[126,35],[122,34],[121,31],[119,28],[117,24],[112,21.5],[108,21],[105,20],[103,22],[101,25],[100,28],[98,30],[96,33],[96,36]],
+ emp:[["文帝","杨坚",581,604,"代周建隋，开皇之治，创科举"],["炀帝","杨广",604,618,"开运河，三征高句丽，江都被杀"],["恭帝","杨侑",617,618,"李渊所立，禅位而亡"]],
+ min:[["高颎",581,"一代名相，后被炀帝诛"],["杨素",588,"率水军灭陈"],["宇文恺",605,"营建大兴城、洛阳城"],["韩擒虎",589,"夜渡采石，入建康擒陈后主"],["裴矩",608,"《西域图记》，通商西域"]],
+ evt:[[589,"隋灭陈","分裂三百年，至此统一"],[605,"开凿大运河","通济渠、永济渠，南北贯通"],[612,"三征高句丽","百万之众，死者过半"],[613,"杨玄感起兵","贵族反叛，隋室动摇"],[618,"江都之变","炀帝被缢，隋亡"]]},
+
+{n:"唐",a:"大唐",from:618,to:907,cap:"长安",
+ tie:"中原王朝经营周边的巅峰。天可汗体系、安西四镇、羁縻州府覆盖草原与绿洲；怛罗斯一败后中亚易手，安史之乱更使西域尽失。",
+ ext:[[60,44],[66,46],[74,49],[82,51],[90,51],[98,51],[106,50],[114,50],[122,49],[128,48],[133,47],[135,45],[130,43],[128,41],[127,39],[126,36],[125,35],[122,34],[121,31],[119,28],[117,24],[112,21.5],[108,21],[105,20],[103,22],[101,25],[100,28],[98,30],[95,32],[90,33],[85,35],[80,36],[75,37],[70,37],[66,39],[62,42]],
+ emp:[["高祖","李渊",618,626,"晋阳起兵，禅位太宗"],["太宗","李世民",626,649,"玄武门之变，贞观之治，天可汗"],["高宗","李治",649,683,"平西突厥，唐疆最大"],["则天","武则天",690,705,"中国唯一女皇帝，改国号周"],["玄宗","李隆基",712,756,"开元盛世，天宝之乱"],["肃宗","李亨",756,762,"灵武即位，平安史之乱"],["宪宗","李纯",805,820,"元和中兴，削平藩镇"],["武宗","李炎",840,846,"会昌灭佛，击破回鹘"],["僖宗","李儇",873,888,"黄巢入长安，奔蜀"],["哀帝","李柷",904,907,"禅位朱温，唐亡"]],
+ min:[["房玄龄",626,"贞观名相，善谋能断"],["杜如晦",626,"房谋杜断，贞观之治"],["魏征",626,"谏臣，前后陈事二百余"],["李靖",630,"灭东突厥，著《李卫公问对》"],["长孙无忌",649,"托孤之臣，后为武后所杀"],["狄仁杰",690,"举贤荐能，复唐之基"],["姚崇",713,"开元名相，十事要说"],["张九龄",733,"开元最后一位贤相"],["李林甫",736,"口蜜腹剑，酿安史之乱"],["郭子仪",757,"再造唐室，单骑退回纥"],["李德裕",840,"会昌名相，平泽潞"],["颜真卿",755,"书法大家，守平原郡抗安禄山"]],
+ evt:[[626,"玄武门之变","世民杀兄建成、弟元吉"],[630,"灭东突厥","天可汗号加于太宗"],[641,"文成公主入藏","唐蕃和亲，汉藏通道开"],[645,"亲征高句丽","安市城不下，班师"],[755,"安史之乱","八年战乱，唐由盛转衰"],[763,"吐蕃陷长安","代宗奔陕，十五日而退"],[780,"两税法","杨炎改革，赋税由人丁转向资产"],[845,"会昌灭佛","拆寺四千六百所，僧尼还俗"],[875,"黄巢起义","转战南北，长安称帝"],[907,"朱温代唐","唐亡，五代始"]]},
+{n:"五代十国",a:"五代",from:907,to:959,cap:"汴州／洛阳",
+ tie:"中原五十三年，八姓十四君。后晋割燕云十六州予契丹，中原失去北部门户，直接导致此后四百年的北方压力。",
+ ext:[[104,36],[108,39],[112,40],[116,40],[120,39],[122,37],[121,34],[120,31],[118,27],[115,24],[112,22.5],[109,22],[107,24],[106,27],[104,31],[103,33]],
+ emp:[["后梁太祖","朱温",907,912,"灭唐建梁，荒淫被弑"],["后唐庄宗","李存勖",923,926,"灭梁，好俳优而亡"],["后晋高祖","石敬瑭",936,942,"割燕云，称儿皇帝"],["后周太祖","郭威",951,954,"改革弊政，节俭治国"],["后周世宗","柴荣",954,959,"高平之战，整军经武，早逝"]],
+ min:[["敬翔",907,"后梁谋臣，梁亡自缢"],["冯道",930,"历四朝十君，号长乐老"],["桑维翰",936,"力主割燕云以结契丹"],["王朴",955,"《平边策》，后周统一方略"],["赵匡胤",956,"后周殿前都点检，陈桥兵变"]],
+ evt:[[923,"后唐灭梁","李存勖建唐，定都洛阳"],[936,"割燕云十六州","石敬瑭事契丹为父，中原失北屏"],[947,"契丹灭后晋","耶律德光入汴，改国号辽"],[955,"高平之战","周世宗破北汉，整军强兵"]]},
+
+{n:"北宋",a:"",from:960,to:1127,cap:"开封",
+ tie:"重文抑武，以岁币换和平。澶渊之盟后宋辽百余年无大战；西夏崛起于西北，宋夏三战皆败。海上贸易极盛，广州、泉州、明州设市舶司。",
+ ext:[[104,36],[108,38],[112,39],[116,39],[119,39.5],[121,38],[122,37],[121,34],[120,32],[119,28],[117,24],[114,22.5],[110,21.5],[108,21],[106,23],[105,27],[104,31],[103,33]],
+ emp:[["太祖","赵匡胤",960,976,"陈桥兵变，杯酒释兵权"],["太宗","赵光义",976,997,"灭北汉，高粱河败于辽"],["真宗","赵恒",997,1022,"澶渊之盟，封禅泰山"],["仁宗","赵祯",1022,1063,"庆历新政，君子满朝"],["神宗","赵顼",1067,1085,"熙宁变法，元丰改制"],["徽宗","赵佶",1100,1125,"瘦金体，花石纲，靖康被掳"],["钦宗","赵桓",1126,1127,"靖康之变，北宋亡"]],
+ min:[["赵普",960,"半部《论语》治天下"],["寇准",1004,"力主真宗亲征澶渊"],["范仲淹",1043,"庆历新政，先忧后乐"],["包拯",1050,"知开封府，铁面无私"],["欧阳修",1050,"主盟文坛，修《新唐书》"],["王安石",1069,"熙宁变法，青苗免役"],["司马光",1085,"《资治通鉴》，尽废新法"],["苏轼",1079,"乌台诗案，赤壁赋"],["沈括",1080,"《梦溪笔谈》，博通百科"],["李纲",1126,"东京保卫战，力阻南迁"]],
+ evt:[[960,"陈桥兵变","黄袍加身，宋立"],[1004,"澶渊之盟","宋辽兄弟，岁币三十万"],[1043,"庆历新政","范仲淹十事，一年而废"],[1069,"王安石变法","青苗、免役、保甲诸法"],[1120,"方腊起义","东南震动，为童贯所平"],[1127,"靖康之变","二帝北狩，北宋亡"]]},
+
+{n:"南宋",a:"",from:1127,to:1279,cap:"临安（今杭州）",
+ tie:"偏安东南一隅半。岳飞北伐功败垂成，此后主和为主；海上贸易成为财政命脉，泉州跃为世界第一大港。末路崖山，十万军民蹈海。",
+ ext:[[105,34],[108,34],[112,34],[116,33.5],[119,33],[121,31.5],[121,29],[119,26],[117,24],[114,22.5],[110,21.5],[108,21],[106,23],[105,27],[104,31]],
+ emp:[["高宗","赵构",1127,1162,"南渡立国，杀岳飞，偏安"],["孝宗","赵昚",1162,1189,"乾淳之治，志在恢复"],["宁宗","赵扩",1194,1224,"开禧北伐，韩侂胄被杀"],["理宗","赵昀",1224,1264,"联蒙灭金，端平入洛"],["恭帝","赵㬎",1274,1276,"临安陷落，被掳北上"],["帝昺","赵昺",1278,1279,"崖山蹈海，宋亡"]],
+ min:[["岳飞",1140,"郾城大捷，十二金牌召还"],["韩世忠",1130,"黄天荡困兀术四十八日"],["秦桧",1131,"主和，以莫须有杀岳飞"],["虞允文",1161,"采石之战，书生却敌"],["辛弃疾",1162,"醉里挑灯看剑，词中之龙"],["文天祥",1275,"《正气歌》，从容就义"],["陆秀夫",1279,"负帝投海，宋祚终"],["朱熹",1175,"集理学之大成"]],
+ evt:[[1140,"郾城大捷","岳飞破拐子马，进抵朱仙镇"],[1141,"绍兴和议","称臣纳贡，岳飞下狱死"],[1161,"采石之战","虞允文以文臣却金主亮"],[1206,"开禧北伐","轻启战端，函韩侂胄首以和"],[1276,"临安陷落","谢太后奉表出降"],[1279,"崖山海战","张弘范破宋军，陆秀夫负帝死"]]},
+
+{n:"元",a:"大元",from:1271,to:1368,cap:"大都（今北京）",
+ tie:"第一次由草原政权统治整个中原。四大汗国并立，欧亚陆路空前畅通，马可·波罗、伊本·白图泰东来；两征日本皆败于台风。",
+ ext:[[58,46],[66,50],[76,52],[86,53],[96,53],[106,53],[116,53],[126,52],[136,51],[142,48],[142,46],[136,44],[131,43],[128,41],[127,39],[126,36],[125,35],[122,34],[121,31],[119,28],[117,24],[112,21.5],[108,21],[105,20],[102,22],[98,25],[95,28],[92,29],[88,28],[84,29],[80,30],[75,33],[70,35],[65,38],[60,42]],
+ emp:[["世祖","忽必烈",1271,1294,"建元灭宋，行汉法，两征日本"],["成宗","铁穆耳",1294,1307,"守成之君，西北平叛"],["仁宗","爱育黎拔力八达",1311,1320,"恢复科举，延祐复科"],["文宗","图帖睦尔",1328,1332,"奎章阁，修《经世大典》"],["顺帝","妥懽帖睦尔",1333,1368,"治黄河，红巾蜂起，北遁"]],
+ min:[["刘秉忠",1271,"定国号、都城与朝仪"],["耶律楚材",1230,"以汉法治中原，止屠城"],["郭守敬",1280,"《授时历》，四海测验"],["伯颜",1274,"率军灭宋，下临安"],["脱脱",1350,"修辽金宋三史，治黄河"],["张弘范",1279,"崖山灭宋"]],
+ evt:[[1271,"忽必烈建元","国号取《易经》大哉乾元"],[1279,"元灭南宋","崖山之后，宋祚终"],[1281,"征日本失败","弘安之役，舰队遭台风覆没"],[1315,"恢复科举","程朱理学定于一尊"],[1351,"红巾军起义","韩山童、刘福通揭竿"],[1368,"明军入大都","顺帝北遁，元亡"]]},
+
+{n:"明",a:"大明",from:1368,to:1644,cap:"南京→北京",
+ tie:"郑和七下西洋是中原王朝最后一次主动经略海洋。此后海禁渐严，北边防鞑靼、东北御女真、东南抗倭，三线作战耗尽国力。",
+ ext:[[100,42],[105,43],[110,43],[115,43],[120,42],[124,41],[126,40],[128,42],[127,38],[126,36],[125,35],[122,34],[121,31],[119,28],[117,24],[112,21.5],[108,21],[105,23],[102,25],[100,27],[98,28],[95,29],[98,31],[97,34],[98,37]],
+ emp:[["太祖","朱元璋",1368,1398,"布衣开国，废丞相，设锦衣卫"],["成祖","朱棣",1402,1424,"靖难夺位，迁都北京，五征漠北"],["仁宗","朱高炽",1424,1425,"仁宣之治，宽仁短祚"],["宣宗","朱瞻基",1425,1435,"仁宣之治，罢下西洋"],["英宗","朱祁镇",1435,1449,"土木堡被俘，后复辟"],["世宗","朱厚熜",1521,1567,"大礼议，崇道，严嵩专权"],["神宗","朱翊钧",1572,1620,"张居正辅政，后三十年不朝"],["熹宗","朱由校",1620,1627,"魏忠贤乱政，木匠皇帝"],["思宗","朱由检",1627,1644,"煤山自缢，明亡"]],
+ min:[["刘基",1368,"定策帷幄，料事如神"],["宋濂",1370,"开国文臣之首，修《元史》"],["解缙",1403,"主修《永乐大典》"],["郑和",1405,"七下西洋，最远至东非"],["于谦",1449,"北京保卫战，力挽危局"],["张居正",1572,"一条鞭法，考成法，万历中兴"],["海瑞",1566,"上《治安疏》，抬棺进谏"],["戚继光",1562,"戚家军，平倭于浙闽"],["袁崇焕",1626,"宁远大捷，炮伤努尔哈赤"]],
+ evt:[[1368,"明军北伐","徐达入大都，元亡"],[1402,"靖难之役","燕王南下，建文帝失踪"],[1405,"郑和下西洋","七下西洋，宝船六十余艘"],[1449,"土木堡之变","英宗被俘，于谦守北京"],[1571,"俺答封贡","封顺义王，开马市"],[1592,"援朝抗日","李如松入朝，平壤大捷"],[1619,"萨尔浒之战","四路出师，三路覆没"],[1644,"甲申之变","李自成入京，思宗自缢"]]},
+
+{n:"清",a:"大清",from:1644,to:1912,cap:"北京",
+ tie:"以少数民族入主中原，疆域达到历代之最：收台湾、定喀尔喀、平准回、设驻藏大臣。晚清则在海通冲击下，从朝贡体系被拖入条约体系。",
+ ext:[[70,42],[76,45],[82,49],[90,50],[98,50],[106,50],[114,50],[122,53],[130,53],[136,50],[141,48],[143,47],[140,45],[135,43],[130,42],[128,41],[127,39],[126,36],[126,34],[122,25],[121,22],[118,22],[114,22.5],[110,21.5],[108,21],[106,20],[102,22],[98,24],[95,28],[92,28],[88,28],[82,30],[78,35],[74,38]],
+ emp:[["世祖","福临",1644,1661,"顺治入关，多尔衮摄政"],["圣祖","玄烨",1661,1722,"平三藩、收台湾、抗沙俄、征准部"],["世宗","胤禛",1722,1735,"摊丁入亩，设军机处，改土归流"],["高宗","弘历",1735,1796,"十全武功，修四库全书"],["仁宗","颙琰",1796,1820,"白莲教起义，清由盛转衰"],["宣宗","旻宁",1820,1850,"鸦片战争，南京条约"],["文宗","奕詝",1850,1861,"太平天国，英法联军，圆明园"],["穆宗","载淳",1861,1875,"同治中兴，洋务运动"],["德宗","载湉",1875,1908,"甲午败，戊戌变法，庚子"],["逊帝","溥仪",1908,1912,"辛亥逊位，清亡"]],
+ min:[["范文程",1644,"四朝元老，定鼎之谋"],["张廷玉",1729,"军机处规制，三朝宰相"],["鄂尔泰",1730,"改土归流，云贵总督"],["和珅",1770,"贪墨之极，嘉庆赐死"],["林则徐",1839,"虎门销烟，开眼看世界"],["曾国藩",1864,"湘军平太平天国，理学名臣"],["李鸿章",1870,"洋务运动，北洋水师，马关条约"],["左宗棠",1876,"收复新疆，设新疆省"],["张之洞",1890,"汉阳铁厂，中体西用"],["袁世凯",1895,"小站练兵，辛亥逼宫"]],
+ evt:[[1644,"清军入关","吴三桂开关，多尔衮入北京"],[1681,"平定三藩","吴三桂等八年之乱平"],[1683,"收复台湾","施琅澎湖大捷，郑氏降"],[1689,"尼布楚条约","划定东段边界"],[1729,"设军机处","君主专制达于顶峰"],[1755,"平准噶尔","乾隆两路进军，新疆内属"],[1793,"马戛尔尼使华","英使觐见，通商请求被拒"],[1840,"鸦片战争","南京条约，割香港开五口"],[1851,"太平天国","金田起义，十四年而亡"],[1894,"甲午战争","黄海海战，马关条约割台"],[1900,"庚子事变","八国联军入京，辛丑条约"],[1911,"辛亥革命","武昌起义，清帝逊位"]]},
+]
+/* —— 补：新朝（西汉与东汉之间） —— */
+CORE.push({n:"新",a:"王莽新朝",from:9,to:23,cap:"常安（长安）",
+ tie:"王莽代汉，托古改制：改井田、易币制、更官名，四夷降王为侯，匈奴单于改「降奴服于」。改制失败，绿林赤壁并起，十五而亡。",
+ ext:[[104,40],[110,41],[115,41],[119,40],[122,38],[121,34],[120,31],[118,27],[115,24],[112,22],[109,21],[106,20],[103,22],[101,25],[100,28],[99,32],[100,36]],
+ emp:[["王莽",9,23,"篡汉建新，托古改制，昆阳败死"]],
+ min:[["刘歆",9,"古文经学大家，后谋反被杀"],["王匡",17,"绿林军首领，攻入长安"],["隗嚣",23,"割据陇右，后归光武"]],
+ evt:[[9,"王莽代汉","废孺子婴，改国号新"],[17,"绿林起义","湖北饥民据绿林山"],[23,"昆阳之战","刘秀以少破新军四十二万"],[23,"新朝亡","长安陷，王莽被杀于渐台"]]});
+CORE.sort(function(a,b){return a.from-b.from});
+
+/* ============ 现代中国参照层数据（真实省级边界，抽稀后内嵌） ============ */
+var CHN=[[[124.52,40.22],[124.91,40.48],[125.04,40.47],[125.02,40.53],[125.28,40.66],[125.42,40.64],[125.59,40.79],[125.69,40.77],[125.71,40.87],[126.04,40.93],[126.12,41.09],[126.54,41.37],[126.56,41.61],[126.69,41.75],[126.8,41.7],[126.93,41.81],[127.18,41.6],[127.12,41.54],[127.25,41.49],[127.64,41.41],[128.0,41.44],[128.11,41.36],[128.32,41.58],[128.03,42.0],[128.95,42.03],[129.22,42.21],[129.24,42.38],[129.34,42.45],[129.55,42.36],[129.59,42.45],[129.7,42.43],[129.9,43.0],[130.28,42.89],[130.26,42.71],[130.44,42.55],[130.52,42.62],[130.65,42.43],[130.57,42.51],[130.63,42.6],[130.59,42.67],[130.41,42.73],[131.15,42.94],[131.1,43.02],[131.31,43.39],[131.32,43.5],[131.2,43.53],[131.31,44.05],[131.11,44.71],[130.97,44.85],[131.5,44.98],[131.89,45.34],[132.0,45.25],[132.95,45.02],[133.14,45.13],[133.14,45.43],[133.47,45.63],[133.47,45.83],[133.68,45.94],[133.75,46.08],[133.71,46.16],[133.91,46.25],[133.87,46.34],[133.95,46.4],[133.85,46.48],[134.01,46.64],[134.06,46.98],[134.22,47.11],[134.18,47.33],[134.57,47.48],[134.78,47.72],[134.55,47.98],[134.68,48.26],[135.1,48.44],[134.2,48.38],[133.74,48.25],[133.55,48.12],[133.13,48.13],[132.82,47.94],[132.66,47.94],[132.56,47.72],[131.03,47.69],[130.89,47.93],[130.67,48.11],[130.85,48.3],[130.75,48.4],[130.77,48.51],[130.62,48.5],[130.54,48.61],[130.68,48.88],[130.24,48.87],[129.94,49.04],[129.73,49.29],[129.56,49.3],[129.52,49.42],[129.08,49.36],[129.01,49.46],[128.76,49.48],[128.81,49.56],[128.74,49.6],[128.19,49.54],[127.82,49.59],[127.53,49.83],[127.5,50.06],[127.6,50.24],[127.33,50.34],[127.36,50.44],[127.29,50.47],[127.37,50.58],[127.3,50.76],[126.92,51.06],[126.9,51.2],[126.98,51.32],[126.89,51.32],[126.91,51.25],[126.82,51.28],[126.91,51.41],[126.79,51.43],[126.84,51.54],[126.68,51.6],[126.73,51.71],[126.46,51.95],[126.56,52.14],[126.31,52.21],[126.43,52.3],[126.33,52.31],[126.35,52.39],[126.15,52.57],[125.97,52.63],[126.12,52.77],[125.97,52.76],[125.83,52.9],[125.68,52.86],[125.74,52.99],[125.61,53.08],[125.53,53.05],[125.14,53.2],[124.89,53.16],[124.87,53.1],[124.68,53.21],[124.44,53.22],[124.24,53.38],[124.13,53.35],[123.52,53.56],[123.5,53.5],[123.27,53.56],[122.83,53.46],[122.44,53.44],[122.35,53.51],[121.23,53.28],[120.88,53.29],[120.3,52.87],[120.03,52.77],[120.08,52.59],[120.46,52.65],[120.73,52.54],[120.63,52.32],[120.79,52.16],[120.66,51.93],[120.09,51.68],[119.95,51.36],[119.76,51.21],[119.76,51.09],[119.49,50.88],[119.51,50.76],[119.13,50.39],[119.36,50.36],[119.35,50.17],[119.09,49.99],[118.57,49.93],[117.81,49.52],[116.72,49.85],[116.05,48.87],[116.08,48.82],[115.8,48.51],[115.82,48.26],[115.53,48.16],[115.58,47.92],[115.94,47.68],[116.27,47.88],[116.79,47.9],[117.09,47.82],[117.38,47.64],[117.81,48.02],[118.57,47.99],[118.77,47.77],[119.13,47.66],[119.15,47.54],[119.37,47.48],[119.32,47.43],[119.72,47.2],[119.93,46.9],[119.91,46.67],[119.68,46.58],[119.37,46.6],[119.12,46.64],[118.91,46.78],[118.79,46.69],[118.32,46.74],[117.75,46.52],[117.6,46.6],[117.42,46.58],[117.37,46.36],[116.83,46.38],[116.59,46.29],[116.27,45.97],[116.29,45.78],[116.17,45.69],[116.04,45.69],[115.7,45.46],[115.36,45.39],[114.55,45.39],[114.46,45.21],[114.12,44.96],[113.63,44.75],[112.85,44.84],[112.44,45.07],[112.0,45.09],[111.76,44.97],[111.42,44.36],[111.66,44.06],[111.87,43.94],[111.95,43.69],[111.02,43.33],[110.44,42.78],[109.29,42.44],[107.47,42.46],[105.74,41.95],[105.23,41.75],[105.01,41.58],[104.92,41.65],[104.52,41.66],[104.53,41.88],[103.87,41.8],[103.42,41.88],[102.71,42.15],[102.07,42.23],[101.8,42.5],[100.86,42.67],[100.33,42.69],[99.51,42.57],[97.17,42.8],[96.39,42.73],[96.36,42.9],[95.88,43.28],[95.53,44.01],[95.33,44.03],[95.41,44.3],[95.0,44.25],[94.72,44.34],[94.22,44.67],[93.51,44.97],[92.88,45.05],[92.24,45.02],[92.06,45.09],[91.56,45.08],[91.13,45.22],[90.88,45.19],[90.68,45.58],[90.71,45.73],[91.03,46.02],[90.9,46.31],[91.08,46.56],[91.02,46.58],[91.05,46.72],[90.9,46.96],[90.77,46.99],[90.56,47.21],[90.38,47.64],[90.14,47.72],[90.07,47.88],[89.76,47.84],[89.57,48.04],[89.08,47.99],[88.94,48.12],[88.64,48.18],[88.52,48.4],[87.97,48.58],[88.09,48.72],[87.74,48.88],[87.91,48.98],[87.82,49.17],[87.44,49.08],[86.89,49.13],[86.73,48.99],[86.82,48.85],[86.78,48.73],[86.58,48.54],[86.23,48.43],[85.79,48.42],[85.59,48.19],[85.53,48.05],[85.7,47.29],[85.55,47.06],[85.28,47.07],[84.96,46.86],[84.75,47.01],[83.93,46.97],[83.37,47.18],[83.03,47.22],[82.46,45.98],[82.34,45.94],[82.27,45.62],[82.28,45.54],[82.55,45.43],[82.56,45.2],[81.92,45.23],[81.79,45.38],[80.9,45.13],[80.11,45.05],[79.89,44.91],[80.0,44.79],[80.17,44.84],[80.4,44.63],[80.39,44.13],[80.76,43.49],[80.69,43.33],[80.78,43.31],[80.8,43.18],[80.38,43.03],[80.6,42.89],[80.26,42.83],[80.16,42.63],[80.27,42.5],[80.21,42.43],[80.29,42.26],[80.17,42.2],[80.14,42.03],[79.92,42.04],[79.78,41.89],[79.33,41.81],[78.65,41.47],[78.16,41.38],[78.13,41.23],[77.84,41.15],[77.78,41.02],[76.89,41.03],[76.76,40.95],[76.54,40.46],[76.33,40.34],[76.28,40.44],[75.71,40.28],[75.73,40.47],[75.6,40.66],[75.24,40.45],[74.84,40.52],[74.8,40.44],[74.91,40.34],[74.7,40.35],[74.36,40.09],[74.02,40.09],[73.85,39.83],[73.95,39.6],[73.87,39.48],[73.61,39.47],[73.5,39.38],[73.74,39.03],[73.84,39.01],[73.83,38.92],[73.74,38.93],[73.7,38.86],[73.8,38.61],[74.01,38.52],[74.15,38.68],[74.42,38.65],[74.86,38.48],[74.8,38.17],[75.01,37.77],[74.89,37.67],[75.13,37.46],[75.14,37.36],[74.91,37.23],[74.51,37.24],[74.5,37.07],[74.85,37.06],[74.89,36.94],[75.03,37.02],[75.41,36.95],[75.46,36.72],[75.63,36.77],[75.87,36.67],[76.06,36.23],[75.95,36.07],[76.1,36.02],[76.16,35.82],[76.56,35.92],[76.59,35.77],[76.77,35.65],[77.2,35.52],[77.69,35.45],[77.82,35.52],[78.14,35.49],[78.01,35.37],[78.02,35.23],[78.2,34.97],[78.28,34.62],[78.71,34.52],[78.9,34.35],[79.04,34.33],[78.91,34.14],[78.66,34.09],[78.78,33.73],[78.68,33.65],[79.15,33.18],[79.31,32.6],[79.1,32.37],[78.97,32.33],[78.78,32.48],[78.74,32.7],[78.4,32.53],[78.51,32.3],[78.43,32.21],[78.47,32.13],[78.76,31.95],[78.65,31.82],[78.85,31.61],[78.74,31.53],[78.76,31.36],[78.87,31.31],[79.1,30.99],[79.33,30.97],[79.4,31.07],[79.6,30.93],[79.67,30.98],[79.91,30.83],[80.04,30.6],[80.63,30.46],[81.03,30.25],[81.13,30.02],[81.26,30.01],[81.27,30.15],[81.39,30.2],[81.42,30.42],[82.1,30.35],[82.18,30.07],[82.56,29.96],[82.83,29.69],[83.27,29.57],[83.6,29.17],[83.91,29.32],[84.12,29.29],[84.2,29.24],[84.23,28.89],[84.41,28.85],[84.48,28.74],[84.62,28.73],[84.86,28.57],[85.13,28.68],[85.2,28.62],[85.11,28.34],[85.38,28.27],[85.52,28.33],[85.6,28.25],[85.72,28.37],[86.0,27.91],[86.13,27.92],[86.09,28.09],[86.19,28.17],[86.23,27.97],[86.41,27.9],[86.57,28.1],[86.7,28.1],[87.23,27.81],[87.58,27.86],[87.73,27.8],[87.83,27.93],[88.11,27.86],[88.16,27.96],[88.4,27.98],[88.65,28.11],[88.76,28.07],[88.89,27.85],[88.78,27.47],[88.98,27.21],[89.18,27.37],[89.1,27.47],[89.24,27.8],[89.51,28.09],[89.79,28.24],[90.03,28.14],[90.3,28.15],[90.59,28.02],[90.7,28.08],[91.03,27.86],[91.11,27.85],[91.31,28.06],[91.46,28.0],[91.61,27.89],[91.54,27.82],[91.64,27.77],[91.59,27.54],[91.72,27.47],[92.01,27.47],[92.06,27.39],[92.13,27.27],[92.03,27.11],[92.11,26.85],[92.65,26.95],[93.11,26.88],[93.57,26.94],[93.84,27.05],[93.85,27.17],[94.28,27.58],[94.89,27.74],[95.29,27.94],[95.4,28.14],[95.74,28.28],[95.87,28.3],[95.99,28.2],[96.28,28.23],[96.3,28.14],[96.43,28.16],[97.1,27.74],[97.25,27.89],[97.39,27.88],[97.41,28.01],[97.31,28.07],[97.35,28.24],[97.52,28.33],[97.57,28.54],[97.69,28.52],[97.8,28.33],[97.91,28.36],[98.14,28.14],[98.17,27.85],[98.32,27.52],[98.43,27.55],[98.44,27.67],[98.71,27.55],[98.78,26.62],[98.67,26.24],[98.72,26.13],[98.58,26.12],[98.71,25.86],[98.64,25.8],[98.53,25.84],[98.31,25.54],[98.17,25.62],[98.14,25.38],[97.94,25.21],[97.84,25.27],[97.72,25.08],[97.8,24.85],[97.55,24.74],[97.53,24.44],[97.67,24.45],[97.67,24.3],[97.77,24.26],[97.73,24.11],[97.53,23.93],[97.65,23.84],[98.09,24.09],[98.88,24.15],[98.9,24.1],[98.67,23.96],[98.67,23.8],[98.78,23.78],[98.88,23.62],[98.8,23.54],[98.91,23.43],[98.89,23.21],[99.11,23.09],[99.35,23.13],[99.53,23.07],[99.56,22.93],[99.45,22.93],[99.46,22.84],[99.32,22.74],[99.38,22.49],[99.25,22.39],[99.16,22.16],[99.22,22.11],[99.97,22.05],[99.99,21.7],[100.13,21.7],[100.13,21.5],[100.24,21.47],[100.44,21.53],[100.58,21.45],[101.12,21.77],[101.15,21.56],[101.23,21.5],[101.14,21.41],[101.22,21.23],[101.29,21.18],[101.53,21.25],[101.76,21.15],[101.83,21.25],[101.73,21.34],[101.75,21.58],[101.83,21.62],[101.77,21.83],[101.61,21.97],[101.55,22.24],[101.67,22.48],[101.77,22.51],[101.9,22.38],[102.05,22.46],[102.27,22.42],[102.38,22.68],[102.51,22.77],[103.03,22.44],[103.32,22.81],[103.53,22.59],[103.64,22.79],[103.96,22.5],[104.12,22.81],[104.26,22.84],[104.27,22.74],[104.38,22.69],[104.6,22.85],[104.74,22.83],[104.86,22.97],[104.8,23.11],[105.24,23.26],[105.33,23.39],[105.56,23.18],[105.57,23.07],[105.72,23.06],[105.88,22.92],[106.15,22.99],[106.37,22.86],[106.53,22.95],[106.84,22.8],[106.56,22.46],[106.56,22.35],[106.69,22.26],[106.7,21.96],[107.0,21.95],[107.06,21.91],[107.02,21.82],[107.31,21.73],[107.36,21.6],[107.86,21.65],[107.96,21.53],[108.11,21.51],[108.24,21.6],[108.23,21.49],[108.49,21.55],[108.63,21.68],[109.14,21.57],[109.04,21.46],[109.14,21.39],[109.54,21.47],[109.61,21.56],[109.7,21.46],[109.89,21.44],[109.76,21.35],[109.66,20.93],[109.74,20.62],[109.89,20.48],[109.93,20.21],[110.35,20.26],[110.54,20.42],[110.39,20.82],[110.18,20.89],[110.21,21.05],[110.42,21.19],[110.63,21.22],[110.8,21.37],[111.28,21.49],[111.29,21.42],[111.44,21.51],[111.65,21.51],[111.74,21.61],[111.81,21.56],[111.97,21.6],[112.03,21.63],[111.96,21.71],[112.14,21.79],[112.35,21.71],[112.45,21.8],[112.65,21.76],[112.79,21.92],[112.93,21.84],[113.09,22.13],[113.27,21.87],[113.57,22.08],[113.54,22.21],[113.67,22.44],[113.57,22.41],[113.74,22.53],[113.68,22.73],[113.73,22.74],[113.89,22.44],[114.38,22.6],[114.51,22.44],[114.63,22.51],[114.56,22.58],[114.6,22.64],[114.52,22.66],[114.71,22.79],[114.75,22.58],[114.89,22.54],[115.08,22.79],[115.19,22.82],[115.58,22.65],[115.61,22.75],[115.54,22.76],[115.65,22.87],[115.83,22.73],[116.3,22.95],[116.51,22.93],[116.57,23.13],[116.81,23.2],[116.78,23.31],[116.89,23.5],[117.46,23.58],[117.67,23.88],[117.91,24.01],[118.16,24.27],[118.05,24.42],[118.12,24.57],[118.24,24.51],[118.51,24.61],[118.61,24.52],[118.79,24.78],[118.65,24.84],[118.99,24.88],[118.92,24.93],[119.01,24.94],[119.02,25.04],[118.89,25.09],[118.99,25.17],[118.92,25.26],[119.07,25.21],[119.03,25.14],[119.13,25.11],[119.12,25.01],[119.13,25.22],[119.27,25.16],[119.38,25.25],[119.14,25.39],[119.22,25.47],[119.35,25.41],[119.36,25.52],[119.45,25.49],[119.44,25.41],[119.55,25.37],[119.58,25.45],[119.6,25.33],[119.68,25.47],[119.77,25.4],[119.87,25.46],[119.79,25.67],[119.68,25.59],[119.68,25.48],[119.48,25.63],[119.6,25.69],[119.72,26.01],[119.6,26.17],[119.95,26.35],[119.79,26.58],[119.58,26.62],[119.66,26.73],[119.87,26.64],[119.94,26.78],[120.06,26.77],[119.83,26.52],[120.14,26.64],[120.14,26.8],[120.05,26.86],[120.23,26.91],[120.28,27.09],[120.55,27.16],[120.7,27.48],[120.63,27.58],[120.71,27.68],[120.94,27.9],[121.13,27.79],[121.19,27.82],[121.16,27.91],[120.99,27.95],[121.06,28.1],[121.11,28.14],[121.14,28.03],[121.26,28.03],[121.49,28.3],[121.63,28.25],[121.69,28.41],[121.54,28.66],[121.69,28.72],[121.69,28.86],[121.77,28.86],[121.61,29.17],[121.97,29.05],[121.99,29.11],[121.94,29.35],[122.0,29.58],[121.83,29.65],[122.14,29.9],[121.72,29.99],[121.37,30.37],[121.06,30.56],[121.68,30.82],[121.9,30.81],[122.13,30.6],[121.99,30.7],[121.95,31.07],[121.72,31.3],[121.34,31.51],[121.43,31.59],[121.82,31.44],[121.98,31.46],[121.97,31.72],[121.86,31.96],[121.46,32.18],[121.49,32.26],[121.39,32.46],[120.96,32.61],[120.92,32.7],[120.98,32.86],[120.83,33.27],[120.74,33.34],[120.31,34.31],[119.64,34.57],[119.47,34.67],[119.53,34.73],[119.38,34.75],[119.5,34.75],[119.44,34.79],[119.24,34.8],[119.21,34.98],[119.43,35.12],[119.41,35.23],[119.54,35.3],[119.66,35.59],[119.93,35.64],[119.93,35.76],[120.01,35.71],[120.06,35.87],[120.31,35.97],[120.12,36.1],[120.18,36.2],[120.36,36.2],[120.29,36.05],[120.71,36.13],[120.69,36.39],[120.83,36.47],[120.87,36.37],[120.97,36.47],[120.98,36.55],[120.85,36.62],[121.03,36.57],[121.57,36.83],[121.49,36.79],[121.65,36.72],[121.63,36.8],[122.01,36.96],[122.04,36.87],[122.14,36.94],[122.17,36.84],[122.53,36.9],[122.58,37.04],[122.47,37.04],[122.48,37.13],[122.62,37.19],[122.57,37.3],[122.71,37.39],[122.17,37.44],[122.15,37.56],[121.57,37.44],[121.39,37.63],[121.22,37.58],[121.14,37.72],[120.73,37.83],[120.23,37.69],[120.25,37.56],[119.84,37.38],[119.89,37.26],[119.74,37.13],[119.33,37.12],[119.2,37.28],[119.08,37.24],[119.0,37.32],[118.94,37.53],[118.99,37.62],[119.28,37.74],[119.13,37.81],[118.97,38.09],[118.7,38.15],[118.55,38.06],[118.02,38.2],[117.9,38.28],[117.96,38.38],[117.78,38.37],[117.64,38.53],[117.66,38.66],[117.74,38.7],[117.65,38.83],[117.85,38.86],[117.9,38.95],[117.84,39.06],[118.03,39.22],[118.49,38.91],[118.6,38.97],[118.53,39.09],[118.58,39.13],[118.95,39.18],[118.93,39.12],[119.32,39.41],[119.27,39.5],[119.37,39.73],[119.54,39.81],[119.54,39.89],[120.49,40.2],[120.62,40.46],[120.83,40.67],[121.03,40.71],[120.97,40.81],[121.09,40.8],[121.13,40.87],[121.5,40.88],[121.55,40.82],[121.82,40.89],[121.95,40.68],[122.15,40.67],[122.27,40.48],[121.94,40.24],[122.0,40.13],[121.78,39.94],[121.47,39.8],[121.45,39.62],[121.23,39.55],[121.3,39.48],[121.27,39.37],[121.52,39.29],[121.72,39.36],[121.59,39.26],[121.68,39.12],[121.63,39.08],[121.59,39.15],[121.51,39.03],[121.37,39.06],[121.34,38.98],[121.09,38.92],[121.14,38.72],[121.71,38.87],[121.62,38.95],[121.67,39.01],[121.92,38.97],[121.85,39.04],[122.06,39.06],[122.17,39.16],[122.12,39.21],[122.37,39.39],[123.01,39.66],[123.21,39.67],[123.27,39.75],[123.81,39.83],[124.1,39.82],[124.15,39.75],[124.51,40.22]],[[114.03,22.5],[113.92,22.42],[114.03,22.35],[113.9,22.31],[113.85,22.19],[114.0,22.21],[114.07,22.33],[114.27,22.2],[114.28,22.39],[114.39,22.36],[114.33,22.48],[114.22,22.43],[114.34,22.5],[114.26,22.55],[114.08,22.51]],[[110.11,20.03],[109.66,20.01],[109.5,19.87],[109.3,19.92],[109.15,19.7],[108.64,19.35],[108.59,19.14],[108.64,18.49],[108.88,18.42],[108.94,18.31],[109.11,18.32],[109.58,18.14],[109.75,18.19],[109.79,18.34],[110.07,18.38],[110.25,18.61],[110.5,18.65],[110.68,19.29],[111.06,19.61],[111.04,19.76],[110.97,20.02],[110.81,20.04],[110.69,20.16],[110.53,20.08],[110.14,20.07]],[[120.44,22.44],[120.64,22.24],[120.7,21.93],[120.87,21.9],[120.98,22.53],[121.43,23.14],[121.64,24.1],[121.89,24.53],[121.84,24.84],[122.01,25.0],[121.92,25.14],[121.54,25.31],[121.37,25.16],[121.02,25.04],[120.1,23.7],[120.11,23.34],[120.02,23.07],[120.13,23.0],[120.3,22.53]],[[122.16,29.99],[122.32,29.94],[122.34,30.02],[122.29,30.1],[121.96,30.18],[122.03,29.99],[122.12,29.99]],[[113.9,7.61],[114.06,7.54],[114.37,7.64],[114.54,7.95],[114.41,7.95],[113.92,7.64]]];
+var CHP=[[[117.35,40.58],[117.51,40.66],[116.96,40.71],[116.65,41.06],[116.48,40.9],[116.34,40.93],[116.47,40.77],[116.25,40.79],[116.16,40.66],[115.76,40.54],[115.97,40.26],[115.45,40.03],[115.57,39.82],[115.44,39.79],[115.48,39.65],[115.81,39.51],[116.2,39.59],[116.43,39.44],[116.52,39.6],[116.79,39.6],[116.95,39.78],[116.78,39.89],[116.78,40.03],[117.35,40.14],[117.21,40.5],[117.35,40.58]],[[117.77,39.4],[117.93,39.57],[117.65,39.58],[117.51,39.9],[117.55,40.0],[117.78,39.97],[117.78,40.06],[117.42,40.25],[117.19,40.07],[117.18,39.65],[116.93,39.71],[116.81,39.62],[116.91,39.11],[116.75,39.03],[116.75,38.75],[117.25,38.56],[117.73,38.68],[117.65,38.83],[117.85,38.86],[117.87,39.12],[118.06,39.26],[117.52,39.36],[117.7,39.41]],[[117.47,40.65],[117.21,40.5],[117.23,40.37],[117.78,40.06],[117.78,39.97],[117.51,39.95],[117.64,39.6],[117.93,39.57],[117.81,39.35],[118.49,38.91],[118.6,38.97],[118.58,39.13],[118.93,39.12],[119.27,39.36],[119.37,39.73],[119.54,39.89],[119.87,39.96],[119.64,40.23],[119.56,40.55],[119.26,40.54],[118.85,40.82],[119.24,41.31],[118.35,41.34],[118.13,41.73],[118.34,41.85],[118.3,42.06],[118.12,42.04],[117.98,42.23],[118.02,42.39],[117.8,42.61],[116.92,42.4],[116.8,41.98],[116.31,42.0],[116.1,41.78],[115.83,41.94],[115.35,41.71],[115.38,41.6],[114.86,41.6],[114.94,41.85],[114.79,42.15],[114.51,42.11],[114.51,41.98],[114.2,41.79],[114.23,41.51],[113.93,41.49],[113.9,41.32],[114.02,41.23],[113.82,41.1],[114.06,40.93],[114.31,40.37],[114.53,40.35],[113.91,40.02],[114.4,39.87],[114.41,39.65],[114.57,39.57],[114.35,39.08],[113.9,39.07],[113.77,38.96],[113.84,38.76],[113.56,38.56],[113.54,38.27],[113.83,38.17],[113.99,37.71],[114.14,37.68],[113.77,37.15],[113.77,36.86],[113.47,36.71],[113.59,36.46],[114.59,36.12],[114.91,36.14],[114.91,36.05],[115.2,36.21],[115.37,36.1],[115.47,36.25],[115.27,36.5],[115.48,36.76],[115.68,36.81],[115.98,37.34],[116.24,37.36],[116.34,37.58],[116.43,37.47],[116.8,37.85],[117.44,37.85],[117.77,38.13],[117.96,38.38],[117.78,38.37],[117.64,38.63],[117.25,38.56],[116.75,38.75],[116.75,39.03],[116.91,39.11],[116.81,39.62],[116.52,39.6],[116.43,39.44],[116.2,39.59],[115.75,39.52],[115.52,39.6],[115.44,39.75],[115.57,39.82],[115.45,40.03],[115.97,40.26],[115.76,40.54],[116.16,40.66],[116.25,40.79],[116.45,40.77],[116.34,40.93],[116.48,40.9],[116.62,41.05],[116.96,40.71],[117.47,40.65]],[[117.21,40.08],[116.78,40.03],[116.78,39.89],[116.95,39.78],[116.89,39.69],[117.18,39.65],[117.19,40.07]],[[110.38,34.6],[111.57,34.84],[111.81,35.06],[112.06,35.06],[112.06,35.28],[112.77,35.21],[113.63,35.63],[113.73,36.36],[113.47,36.71],[113.77,36.86],[113.77,37.15],[114.14,37.68],[113.99,37.71],[113.83,38.17],[113.54,38.27],[113.56,38.56],[113.84,38.76],[113.77,38.96],[113.9,39.07],[114.35,39.08],[114.57,39.57],[114.41,39.65],[114.4,39.87],[113.91,40.02],[114.53,40.35],[114.31,40.37],[114.13,40.74],[114.06,40.53],[113.79,40.52],[113.56,40.35],[113.03,40.37],[112.74,40.17],[112.31,40.26],[111.94,39.62],[111.5,39.66],[111.36,39.43],[111.14,39.41],[111.25,39.3],[110.98,38.97],[110.87,38.45],[110.51,38.19],[110.52,37.96],[110.8,37.56],[110.64,37.44],[110.69,37.29],[110.38,37.02],[110.61,35.63],[110.23,34.88],[110.3,34.61]],[[97.17,42.8],[97.85,41.66],[97.63,41.44],[98.33,40.92],[98.34,40.57],[98.67,40.77],[98.8,40.61],[98.79,40.71],[98.98,40.78],[99.1,40.68],[99.17,40.86],[100.11,40.88],[100.24,40.72],[100.17,40.28],[99.84,40.01],[99.44,39.89],[100.25,39.69],[100.5,39.4],[100.84,39.41],[100.84,39.03],[100.97,38.95],[101.23,39.02],[101.33,38.78],[101.78,38.66],[102.08,38.89],[101.9,39.11],[102.45,39.26],[103.01,39.1],[103.34,39.33],[104.09,39.42],[104.2,38.99],[103.42,38.4],[103.53,38.16],[103.36,38.04],[103.41,37.86],[104.18,37.41],[105.76,37.8],[105.97,38.91],[106.15,39.15],[106.29,39.15],[106.28,39.26],[106.6,39.38],[106.78,39.37],[106.97,39.03],[106.48,38.32],[106.94,38.13],[107.19,38.15],[107.41,37.95],[107.98,37.79],[108.03,37.65],[108.78,37.68],[108.8,38.05],[108.93,37.92],[109.07,38.02],[108.94,38.21],[109.05,38.43],[109.92,39.11],[109.9,39.27],[110.22,39.28],[110.15,39.45],[110.63,39.27],[111.14,39.59],[111.09,39.38],[111.34,39.42],[111.5,39.66],[111.94,39.62],[112.31,40.26],[112.74,40.17],[113.03,40.37],[113.5,40.33],[113.79,40.52],[114.06,40.53],[114.06,40.93],[113.82,41.1],[114.02,41.23],[113.87,41.41],[114.23,41.51],[114.2,41.79],[114.51,41.98],[114.56,42.13],[114.86,42.1],[114.94,41.85],[114.86,41.6],[115.2,41.57],[115.83,41.94],[116.1,41.78],[116.31,42.0],[116.8,41.98],[116.92,42.4],[117.78,42.62],[118.02,42.39],[117.98,42.23],[118.12,42.04],[118.3,42.06],[118.34,41.85],[118.13,41.73],[118.38,41.31],[118.84,41.37],[119.2,41.28],[119.42,41.57],[119.29,41.79],[119.38,42.09],[119.24,42.2],[119.5,42.39],[119.84,42.22],[120.1,41.7],[120.47,42.11],[121.07,42.25],[121.39,42.47],[121.7,42.44],[121.94,42.69],[122.4,42.68],[122.46,42.76],[122.35,42.83],[122.44,42.84],[122.85,42.71],[123.23,42.83],[123.26,42.99],[123.57,43.0],[123.7,43.37],[123.32,43.49],[123.54,43.63],[123.33,44.03],[123.39,44.16],[123.13,44.37],[123.12,44.51],[122.68,44.29],[122.27,44.26],[122.29,44.48],[122.13,44.58],[122.17,44.77],[122.05,44.91],[122.24,45.28],[121.97,45.69],[121.64,45.75],[121.84,46.02],[122.25,45.8],[122.45,45.92],[122.74,45.71],[122.79,46.07],[123.05,46.1],[123.18,46.25],[123.0,46.57],[123.6,46.69],[123.61,46.89],[123.51,46.83],[123.53,46.94],[123.3,47.0],[123.37,46.84],[123.0,46.73],[122.9,46.96],[122.77,46.97],[122.85,47.07],[122.62,47.12],[122.42,47.35],[124.26,48.54],[124.48,48.17],[124.42,48.09],[124.53,48.15],[124.52,48.56],[124.81,49.12],[125.22,49.19],[125.27,49.45],[125.13,49.66],[125.22,49.67],[125.26,50.1],[125.83,50.56],[125.76,50.75],[126.0,50.87],[126.06,51.04],[125.35,51.62],[125.13,51.66],[124.86,51.38],[124.49,51.38],[124.41,51.27],[123.71,51.4],[123.44,51.27],[123.0,51.31],[122.63,52.07],[122.79,52.25],[122.48,52.3],[122.17,52.51],[121.95,52.3],[121.71,52.32],[121.64,52.44],[121.18,52.6],[121.79,53.02],[121.68,53.24],[121.5,53.34],[120.82,53.27],[120.03,52.77],[120.08,52.59],[120.46,52.65],[120.73,52.54],[120.63,52.32],[120.79,52.16],[120.66,51.93],[120.09,51.68],[119.76,51.09],[119.13,50.39],[119.36,50.36],[119.35,50.17],[119.09,49.99],[118.57,49.93],[117.81,49.52],[116.72,49.85],[115.8,48.51],[115.82,48.26],[115.53,48.16],[115.58,47.92],[115.94,47.68],[116.27,47.88],[116.79,47.9],[117.38,47.64],[117.81,48.02],[118.57,47.99],[119.72,47.2],[119.93,46.9],[119.91,46.67],[119.37,46.6],[118.91,46.78],[118.79,46.69],[118.32,46.74],[117.75,46.52],[117.42,46.58],[117.37,46.36],[116.59,46.29],[116.27,45.97],[116.29,45.78],[116.17,45.69],[115.36,45.39],[114.55,45.39],[114.12,44.96],[113.63,44.75],[112.85,44.84],[112.44,45.07],[111.9,45.05],[111.42,44.36],[111.87,43.94],[111.95,43.69],[111.02,43.33],[110.44,42.78],[109.54,42.47],[107.47,42.46],[105.74,41.95],[105.01,41.58],[104.52,41.66],[104.53,41.88],[103.87,41.8],[103.42,41.88],[102.71,42.15],[102.07,42.23],[101.8,42.5],[100.86,42.67],[99.51,42.57],[97.28,42.78]],[[123.53,39.79],[124.15,39.75],[124.35,40.08],[124.74,40.37],[125.69,40.77],[125.59,40.93],[125.79,41.17],[125.29,41.82],[125.3,41.97],[125.49,42.14],[125.31,42.15],[125.07,42.5],[125.1,42.62],[124.87,42.79],[124.88,43.13],[124.47,42.85],[124.28,43.23],[123.8,43.49],[123.57,43.0],[123.26,42.99],[123.23,42.83],[122.85,42.71],[122.44,42.84],[122.35,42.83],[122.46,42.76],[122.4,42.68],[121.94,42.69],[121.7,42.44],[121.39,42.47],[121.07,42.25],[120.47,42.11],[120.1,41.7],[119.84,42.22],[119.5,42.39],[119.24,42.2],[119.38,42.09],[119.29,41.79],[119.4,41.47],[118.94,41.05],[119.0,40.97],[118.85,40.82],[119.26,40.54],[119.56,40.55],[119.64,40.23],[119.85,39.99],[120.49,40.2],[120.62,40.46],[121.13,40.87],[121.82,40.89],[122.25,40.52],[121.94,40.24],[122.0,40.13],[121.54,39.87],[121.45,39.62],[121.23,39.55],[121.27,39.37],[121.52,39.29],[121.72,39.36],[121.59,39.26],[121.63,39.08],[121.59,39.15],[121.09,38.92],[121.14,38.72],[121.71,38.87],[121.67,39.01],[121.92,38.97],[121.85,39.04],[122.06,39.06],[122.12,39.21],[122.65,39.52],[123.52,39.77]],[[129.6,42.42],[129.75,42.47],[129.95,43.01],[130.28,42.89],[130.26,42.71],[130.44,42.55],[130.52,42.62],[130.65,42.43],[130.59,42.67],[130.41,42.73],[131.15,42.94],[131.32,43.5],[130.86,43.44],[130.41,43.65],[130.37,44.04],[130.08,43.84],[129.95,44.03],[129.74,43.88],[129.25,43.82],[129.23,43.59],[128.88,43.54],[128.76,43.86],[128.47,44.16],[128.37,44.51],[128.05,44.35],[128.09,44.13],[127.78,44.07],[127.49,44.41],[127.56,44.58],[127.18,44.64],[127.05,44.57],[126.98,44.82],[127.09,44.95],[126.96,45.13],[126.57,45.25],[126.0,45.16],[125.7,45.35],[125.69,45.51],[125.36,45.39],[125.1,45.38],[124.91,45.54],[124.89,45.44],[124.4,45.44],[124.0,45.77],[124.04,46.02],[123.9,46.3],[123.25,46.27],[123.05,46.1],[122.79,46.07],[122.74,45.71],[122.45,45.92],[122.25,45.8],[121.84,46.02],[121.64,45.75],[121.97,45.69],[122.24,45.28],[122.05,44.91],[122.17,44.77],[122.13,44.58],[122.29,44.48],[122.27,44.26],[122.68,44.29],[123.12,44.51],[123.13,44.37],[123.39,44.16],[123.33,44.03],[123.52,43.71],[123.45,43.55],[123.3,43.55],[123.42,43.41],[123.86,43.46],[124.28,43.23],[124.47,42.85],[124.88,43.13],[124.87,42.79],[125.1,42.62],[125.07,42.5],[125.31,42.15],[125.49,42.14],[125.29,41.96],[125.32,41.68],[125.45,41.68],[125.79,41.17],[125.58,40.89],[126.04,40.93],[126.54,41.37],[126.61,41.67],[126.93,41.81],[127.25,41.49],[128.11,41.36],[128.32,41.58],[128.03,42.0],[128.95,42.03],[129.37,42.46],[129.57,42.4]],[[123.57,46.22],[123.96,46.29],[124.0,45.77],[124.4,45.44],[124.89,45.44],[124.91,45.54],[125.1,45.38],[125.36,45.39],[125.69,45.51],[125.7,45.35],[126.0,45.16],[126.57,45.25],[126.96,45.13],[127.09,44.95],[126.98,44.82],[127.05,44.57],[127.18,44.64],[127.56,44.58],[127.49,44.41],[127.78,44.07],[128.09,44.13],[128.05,44.35],[128.37,44.51],[128.47,44.16],[128.76,43.86],[128.88,43.54],[129.23,43.59],[129.25,43.82],[129.74,43.88],[129.95,44.03],[130.08,43.84],[130.37,44.04],[130.41,43.65],[131.14,43.43],[131.3,43.5],[131.2,43.53],[131.31,44.05],[131.11,44.71],[130.97,44.85],[131.5,44.98],[131.89,45.34],[132.95,45.02],[133.14,45.13],[133.14,45.43],[133.47,45.63],[133.47,45.83],[133.91,46.25],[133.95,46.4],[133.85,46.48],[134.22,47.11],[134.18,47.33],[134.57,47.48],[134.78,47.72],[134.55,47.98],[134.68,48.26],[135.1,48.44],[134.2,48.38],[133.55,48.12],[133.13,48.13],[132.66,47.94],[132.56,47.72],[131.03,47.69],[130.67,48.11],[130.85,48.3],[130.77,48.51],[130.54,48.61],[130.68,48.88],[130.24,48.87],[129.52,49.42],[129.08,49.36],[128.76,49.48],[128.74,49.6],[127.82,49.59],[127.53,49.83],[127.6,50.24],[127.33,50.34],[127.3,50.76],[126.92,51.06],[126.98,51.32],[126.82,51.28],[126.91,51.41],[126.46,51.95],[126.56,52.14],[126.31,52.21],[126.43,52.3],[125.97,52.63],[126.12,52.77],[125.68,52.86],[125.74,52.99],[125.61,53.08],[125.14,53.2],[124.87,53.1],[123.52,53.56],[121.7,53.39],[121.5,53.34],[121.82,53.06],[121.18,52.6],[121.84,52.28],[122.17,52.51],[122.48,52.3],[122.79,52.25],[122.63,52.07],[123.0,51.31],[123.44,51.27],[123.71,51.4],[124.41,51.27],[124.49,51.38],[124.86,51.38],[125.13,51.66],[125.35,51.62],[126.06,51.04],[126.0,50.87],[125.76,50.75],[125.83,50.56],[125.26,50.1],[125.22,49.67],[125.13,49.66],[125.27,49.45],[125.22,49.19],[124.81,49.12],[124.52,48.56],[124.53,48.15],[124.42,48.09],[124.48,48.17],[124.26,48.54],[122.42,47.35],[122.62,47.12],[122.85,47.07],[122.77,46.97],[122.9,46.96],[123.03,46.72],[123.37,46.84],[123.3,47.0],[123.53,46.94],[123.51,46.83],[123.61,46.89],[123.6,46.69],[123.0,46.57],[123.18,46.25],[123.57,46.22]],[[120.9,31.02],[121.27,30.68],[121.99,30.86],[121.72,31.3],[121.34,31.51],[121.11,31.37],[121.08,31.16],[120.89,31.09]],[[121.97,31.62],[121.32,31.87],[121.12,31.76],[121.37,31.55],[122.0,31.49]],[[117.31,34.56],[117.17,34.43],[117.07,34.71],[116.79,34.98],[116.45,34.9],[116.37,34.75],[116.59,34.49],[116.97,34.39],[117.13,34.1],[117.63,34.03],[117.75,33.71],[118.16,33.74],[117.94,33.22],[118.04,33.13],[118.22,33.19],[118.25,32.85],[118.38,32.72],[118.76,32.74],[118.85,32.96],[119.18,32.83],[119.23,32.61],[119.08,32.45],[118.91,32.59],[118.57,32.59],[118.7,32.33],[118.39,32.08],[118.48,31.78],[118.86,31.62],[118.85,31.39],[118.72,31.32],[118.79,31.23],[119.35,31.3],[119.39,31.17],[119.6,31.11],[119.92,31.17],[120.11,30.96],[120.44,30.92],[120.5,30.76],[120.9,31.02],[120.88,31.13],[121.08,31.16],[121.11,31.37],[121.37,31.55],[121.12,31.76],[121.2,31.83],[121.97,31.62],[121.86,31.96],[121.46,32.18],[121.43,32.43],[120.96,32.61],[120.83,33.27],[120.31,34.31],[119.24,34.8],[119.29,35.12],[118.86,35.03],[118.78,34.72],[118.46,34.66],[118.38,34.42],[118.18,34.38],[118.19,34.54],[117.95,34.68],[117.59,34.46],[117.31,34.56]],[[118.43,28.29],[118.8,28.24],[118.73,27.97],[118.91,27.46],[119.27,27.42],[119.61,27.67],[119.77,27.31],[120.26,27.43],[120.55,27.16],[120.78,27.77],[120.94,27.9],[121.19,27.82],[120.99,27.95],[121.06,28.1],[121.26,28.03],[121.49,28.3],[121.63,28.25],[121.69,28.41],[121.54,28.66],[121.77,28.86],[121.61,29.17],[121.97,29.05],[122.0,29.58],[121.83,29.65],[122.14,29.9],[121.72,29.99],[121.09,30.52],[121.27,30.72],[120.99,30.84],[120.99,31.01],[120.7,30.97],[120.5,30.76],[120.44,30.92],[120.11,30.96],[119.92,31.17],[119.68,31.17],[119.44,30.65],[119.24,30.61],[119.4,30.37],[118.88,30.32],[118.89,29.94],[118.74,29.74],[118.04,29.21],[118.1,29.0],[118.36,28.81],[118.48,28.33]],[[122.16,29.99],[122.34,30.02],[121.96,30.18],[122.12,29.99]],[[116.6,34.01],[116.63,33.89],[116.16,33.71],[115.96,34.01],[115.66,34.06],[115.55,33.87],[115.63,33.87],[115.64,33.59],[115.35,33.5],[115.29,33.13],[114.9,33.13],[114.88,32.99],[115.2,32.86],[115.2,32.59],[115.63,32.41],[115.91,32.57],[115.91,31.81],[115.5,31.67],[115.37,31.35],[115.59,31.14],[115.7,31.2],[116.06,31.01],[115.76,30.69],[115.91,30.52],[115.9,30.31],[116.07,30.2],[116.14,29.82],[116.55,29.91],[116.67,30.08],[116.9,29.95],[116.67,29.71],[116.72,29.56],[117.11,29.71],[117.07,29.83],[117.22,29.93],[117.42,29.85],[117.54,29.59],[118.0,29.58],[118.14,29.42],[118.32,29.42],[118.89,29.94],[118.88,30.32],[119.4,30.37],[119.24,30.61],[119.44,30.65],[119.63,31.02],[119.35,31.3],[118.79,31.23],[118.72,31.32],[118.85,31.39],[118.86,31.62],[118.64,31.65],[118.7,31.71],[118.36,31.93],[118.7,32.33],[118.57,32.59],[118.91,32.59],[119.08,32.45],[119.23,32.61],[119.18,32.83],[118.85,32.96],[118.76,32.74],[118.38,32.72],[118.25,32.85],[118.22,33.19],[118.04,33.13],[117.94,33.22],[118.16,33.74],[117.75,33.71],[117.63,34.03],[117.19,34.07],[117.03,34.17],[116.97,34.39],[116.43,34.65],[116.2,34.58],[116.21,34.38],[116.58,34.27],[116.6,34.01]],[[119.0,24.97],[118.92,25.26],[119.07,25.21],[119.12,25.01],[119.13,25.22],[119.27,25.16],[119.38,25.25],[119.14,25.39],[119.22,25.47],[119.45,25.49],[119.6,25.33],[119.68,25.47],[119.87,25.46],[119.79,25.67],[119.68,25.48],[119.48,25.63],[119.6,25.69],[119.72,26.01],[119.6,26.17],[119.95,26.35],[119.79,26.58],[119.58,26.62],[119.66,26.73],[119.87,26.64],[119.94,26.78],[120.06,26.77],[119.83,26.52],[120.14,26.64],[120.05,26.86],[120.46,27.14],[120.43,27.26],[120.26,27.43],[119.77,27.31],[119.61,27.67],[119.27,27.42],[118.91,27.46],[118.72,28.31],[118.42,28.29],[118.31,28.22],[118.36,28.09],[117.86,27.95],[117.74,27.8],[117.52,27.98],[117.28,27.87],[117.3,27.76],[117.0,27.63],[117.17,27.29],[117.05,27.1],[116.55,26.84],[116.6,26.37],[116.41,26.3],[116.49,26.11],[116.37,25.96],[116.13,25.86],[116.01,25.32],[115.86,25.21],[115.87,24.96],[116.24,24.79],[116.4,24.88],[116.53,24.6],[116.82,24.65],[116.76,24.55],[117.0,24.18],[116.98,23.86],[117.3,23.55],[117.46,23.58],[118.16,24.27],[118.05,24.42],[118.12,24.57],[118.51,24.61],[118.61,24.52],[118.79,24.78],[118.65,24.84],[119.01,24.96]],[[118.19,29.4],[118.0,29.58],[117.54,29.59],[117.42,29.85],[117.22,29.93],[117.07,29.83],[117.11,29.71],[116.72,29.56],[116.65,29.69],[116.9,29.95],[116.67,30.08],[116.28,29.79],[115.91,29.72],[115.51,29.84],[115.29,29.62],[115.11,29.68],[115.15,29.51],[115.0,29.57],[114.9,29.4],[114.31,29.37],[113.95,29.09],[113.97,28.94],[114.15,28.83],[114.09,28.56],[114.25,28.32],[113.99,28.16],[114.03,28.03],[113.75,27.93],[113.58,27.55],[113.62,27.35],[113.87,27.38],[113.77,27.1],[113.93,26.95],[113.86,26.66],[114.11,26.57],[113.96,26.15],[114.24,26.15],[114.01,26.02],[113.94,25.44],[114.04,25.25],[114.54,25.42],[114.74,25.27],[114.74,25.12],[114.4,24.95],[114.19,24.66],[114.43,24.49],[115.41,24.79],[115.69,24.55],[115.84,24.56],[115.76,24.75],[115.93,24.96],[115.86,25.21],[116.01,25.32],[116.13,25.86],[116.37,25.96],[116.49,26.11],[116.41,26.3],[116.64,26.48],[116.54,26.56],[116.55,26.84],[117.05,27.1],[117.17,27.29],[117.0,27.63],[117.52,27.98],[117.74,27.8],[117.86,27.95],[118.36,28.09],[118.31,28.22],[118.48,28.33],[118.36,28.81],[118.04,29.1],[118.21,29.34]],[[116.37,34.64],[116.45,34.9],[116.79,34.98],[117.07,34.71],[117.17,34.43],[117.37,34.58],[117.54,34.47],[117.8,34.52],[117.79,34.65],[117.95,34.68],[118.19,34.54],[118.18,34.38],[118.38,34.42],[118.46,34.66],[118.78,34.72],[118.86,35.03],[119.37,35.08],[119.66,35.59],[119.93,35.64],[119.93,35.76],[120.01,35.71],[120.06,35.87],[120.31,35.97],[120.12,36.1],[120.18,36.2],[120.36,36.2],[120.29,36.05],[120.71,36.13],[120.69,36.39],[120.97,36.47],[120.85,36.62],[121.03,36.57],[121.57,36.83],[121.49,36.79],[121.65,36.72],[121.63,36.8],[122.01,36.96],[122.17,36.84],[122.53,36.9],[122.58,37.04],[122.47,37.04],[122.48,37.13],[122.71,37.39],[122.17,37.44],[122.15,37.56],[121.57,37.44],[121.39,37.63],[121.22,37.58],[121.14,37.72],[120.73,37.83],[120.23,37.69],[120.25,37.56],[119.84,37.38],[119.89,37.26],[119.74,37.13],[119.33,37.12],[119.2,37.28],[119.05,37.25],[118.94,37.53],[119.26,37.66],[119.29,37.87],[119.16,37.82],[118.91,38.14],[118.55,38.06],[117.9,38.3],[117.44,37.85],[116.8,37.85],[116.43,37.47],[116.34,37.58],[116.24,37.36],[115.98,37.34],[115.68,36.81],[115.36,36.63],[115.27,36.5],[115.48,36.13],[115.34,35.8],[116.1,36.11],[116.05,35.97],[115.04,35.38],[114.82,35.05],[115.22,34.96],[115.55,34.57],[116.33,34.62]],[[112.72,32.36],[113.21,32.43],[113.43,32.27],[113.74,32.41],[113.85,31.84],[113.99,31.75],[114.19,31.85],[114.59,31.76],[114.56,31.56],[114.83,31.46],[115.16,31.6],[115.3,31.38],[115.5,31.67],[115.89,31.78],[115.91,32.57],[115.63,32.41],[115.2,32.59],[115.2,32.86],[114.88,32.99],[114.9,33.13],[115.3,33.15],[115.35,33.5],[115.64,33.59],[115.61,34.03],[115.96,34.01],[116.07,33.78],[116.26,33.73],[116.64,33.9],[116.53,34.12],[116.58,34.27],[116.37,34.27],[116.1,34.61],[115.52,34.58],[115.22,34.96],[114.82,35.05],[115.04,35.38],[116.05,35.97],[116.1,36.11],[115.36,35.78],[115.47,36.17],[115.31,36.09],[115.13,36.21],[114.91,36.05],[114.91,36.14],[114.59,36.12],[113.73,36.36],[113.63,35.63],[113.13,35.33],[112.77,35.21],[112.06,35.28],[112.06,35.06],[111.81,35.06],[111.57,34.84],[110.38,34.6],[110.5,34.34],[110.44,34.24],[110.64,34.16],[110.59,33.89],[111.0,33.58],[110.98,33.26],[111.26,33.01],[111.26,32.88],[111.58,32.59],[112.16,32.38],[112.65,32.37]],[[111.05,33.17],[110.96,33.25],[110.7,33.1],[110.58,33.25],[110.22,33.16],[109.62,33.28],[109.44,33.15],[109.79,33.07],[109.79,32.88],[110.16,32.77],[110.21,32.63],[110.02,32.55],[109.63,32.6],[109.5,32.3],[109.62,32.11],[109.59,31.73],[109.73,31.7],[109.73,31.55],[110.12,31.41],[110.2,31.16],[110.08,30.8],[109.89,30.9],[109.35,30.49],[109.3,30.63],[109.14,30.52],[109.04,30.66],[108.81,30.49],[108.69,30.59],[108.43,30.49],[108.4,30.38],[108.58,30.26],[108.52,29.89],[108.37,29.84],[108.5,29.71],[108.66,29.85],[108.69,29.69],[108.9,29.6],[108.92,29.33],[109.06,29.4],[109.14,29.17],[109.27,29.12],[109.43,29.53],[109.72,29.62],[109.78,29.76],[110.11,29.79],[110.37,29.63],[110.56,29.71],[110.64,29.78],[110.5,30.06],[110.85,30.13],[111.39,29.91],[111.81,29.9],[112.24,29.66],[112.29,29.52],[112.44,29.63],[112.69,29.6],[112.9,29.79],[112.94,29.68],[113.03,29.77],[112.95,29.47],[113.15,29.45],[113.57,29.85],[113.55,29.68],[113.66,29.68],[113.74,29.58],[113.63,29.52],[113.76,29.45],[113.61,29.25],[113.7,29.08],[113.9,29.03],[114.31,29.37],[114.9,29.4],[115.0,29.57],[115.15,29.51],[115.11,29.68],[115.29,29.62],[115.51,29.84],[115.91,29.72],[116.14,29.82],[116.07,30.2],[115.9,30.31],[115.91,30.52],[115.76,30.69],[116.07,30.96],[115.87,31.15],[115.59,31.14],[115.37,31.41],[115.25,31.39],[115.16,31.6],[114.83,31.46],[114.56,31.56],[114.59,31.76],[114.19,31.85],[113.99,31.75],[113.76,31.99],[113.74,32.41],[113.43,32.27],[113.21,32.43],[112.33,32.32],[111.58,32.59],[111.09,33.18]],[[112.02,24.74],[112.17,24.86],[112.19,25.18],[112.66,25.13],[112.87,24.9],[112.99,24.93],[113.03,25.2],[112.85,25.34],[113.25,25.51],[113.58,25.31],[113.94,25.44],[114.01,26.02],[114.24,26.15],[113.96,26.15],[114.11,26.57],[113.86,26.66],[113.93,26.95],[113.77,27.1],[113.87,27.38],[113.62,27.35],[113.58,27.55],[113.75,27.93],[114.03,28.03],[113.99,28.16],[114.25,28.32],[114.09,28.56],[114.15,28.83],[113.94,29.05],[113.7,29.08],[113.61,29.25],[113.76,29.45],[113.63,29.52],[113.74,29.58],[113.55,29.68],[113.57,29.85],[113.08,29.44],[112.91,29.61],[113.03,29.77],[112.29,29.52],[112.24,29.66],[111.76,29.92],[111.39,29.91],[110.85,30.13],[110.5,30.06],[110.64,29.78],[110.56,29.71],[110.37,29.63],[110.11,29.79],[109.87,29.77],[109.43,29.53],[109.26,29.22],[109.3,28.75],[109.19,28.64],[109.32,28.58],[109.27,28.34],[109.39,28.27],[109.3,27.96],[109.46,27.57],[109.3,27.42],[109.14,27.45],[108.79,27.08],[108.94,27.02],[109.47,27.13],[109.56,26.95],[109.44,26.89],[109.6,26.76],[109.28,26.7],[109.41,26.53],[109.27,26.33],[109.47,26.31],[109.45,26.06],[109.73,25.99],[109.69,25.88],[109.81,25.88],[109.78,26.0],[109.97,26.2],[110.26,25.96],[110.61,26.33],[110.84,26.26],[110.97,26.39],[111.28,26.27],[111.19,25.95],[111.49,25.86],[111.31,25.72],[111.33,25.52],[111.0,25.16],[110.97,24.98],[111.1,24.95],[111.27,25.15],[111.47,25.02],[111.45,24.67],[111.95,24.77]],[[113.56,22.21],[113.67,22.44],[113.57,22.41],[113.74,22.53],[113.68,22.73],[113.89,22.44],[114.38,22.6],[114.51,22.44],[114.63,22.51],[114.52,22.66],[114.71,22.79],[114.75,22.58],[114.89,22.54],[115.19,22.82],[115.58,22.65],[115.65,22.87],[115.83,22.73],[116.3,22.95],[116.51,22.93],[116.57,23.13],[116.81,23.2],[116.89,23.5],[117.19,23.56],[116.96,23.92],[117.0,24.18],[116.76,24.55],[116.82,24.65],[116.53,24.6],[116.4,24.88],[116.24,24.79],[115.89,24.94],[115.76,24.75],[115.84,24.56],[115.69,24.55],[115.41,24.79],[114.43,24.49],[114.17,24.69],[114.74,25.12],[114.74,25.27],[114.54,25.42],[114.04,25.25],[114.0,25.44],[113.58,25.31],[113.23,25.51],[112.85,25.34],[113.03,25.2],[112.99,24.93],[112.87,24.9],[112.66,25.13],[112.19,25.18],[112.17,24.86],[111.94,24.69],[112.06,24.34],[111.88,24.23],[111.94,23.99],[111.81,23.81],[111.65,23.83],[111.62,23.64],[111.4,23.47],[111.36,22.89],[110.75,22.56],[110.79,22.28],[110.68,22.17],[110.35,22.2],[110.39,21.89],[110.0,21.88],[109.92,21.67],[109.74,21.62],[109.9,21.43],[109.76,21.35],[109.66,20.93],[109.91,20.24],[110.35,20.26],[110.54,20.42],[110.39,20.82],[110.18,20.89],[110.21,21.05],[110.42,21.19],[111.03,21.44],[111.97,21.6],[111.96,21.71],[112.14,21.79],[112.35,21.71],[112.45,21.8],[112.65,21.76],[112.79,21.92],[112.93,21.84],[113.09,22.13],[113.27,21.87],[113.57,22.08],[113.54,22.21]],[[110.52,21.08],[110.31,21.09],[110.2,20.94],[110.54,20.92],[110.56,21.06]],[[109.48,26.03],[109.34,25.73],[109.1,25.81],[108.9,25.71],[109.08,25.72],[109.02,25.51],[108.69,25.62],[108.63,25.31],[108.35,25.54],[108.16,25.44],[108.12,25.21],[107.76,25.13],[107.66,25.32],[107.47,25.21],[107.21,25.61],[106.96,25.44],[106.98,25.23],[106.15,24.95],[106.17,24.76],[106.02,24.63],[105.21,25.0],[104.73,24.62],[104.53,24.73],[104.52,24.54],[104.71,24.32],[104.77,24.46],[105.11,24.41],[105.26,24.06],[106.05,24.09],[106.19,23.88],[106.14,23.57],[105.64,23.4],[105.7,23.33],[105.53,23.23],[105.57,23.07],[105.88,22.92],[106.15,22.99],[106.37,22.86],[106.53,22.95],[106.84,22.8],[106.56,22.46],[106.7,21.96],[107.0,21.95],[107.02,21.82],[107.31,21.73],[107.39,21.59],[107.86,21.65],[108.11,21.51],[108.24,21.6],[108.23,21.49],[108.63,21.68],[109.14,21.57],[109.04,21.46],[109.14,21.39],[109.53,21.44],[109.61,21.56],[109.79,21.46],[109.74,21.62],[109.92,21.67],[109.95,21.84],[110.39,21.89],[110.35,22.2],[110.68,22.17],[110.79,22.28],[110.75,22.56],[111.36,22.89],[111.4,23.47],[111.62,23.64],[111.65,23.83],[111.81,23.81],[111.91,23.94],[111.88,24.23],[112.06,24.39],[111.93,24.63],[112.02,24.74],[111.71,24.79],[111.57,24.64],[111.43,24.69],[111.47,25.02],[111.38,25.13],[110.97,24.98],[111.0,25.16],[111.33,25.52],[111.31,25.72],[111.49,25.86],[111.19,25.95],[111.28,26.27],[110.97,26.39],[110.84,26.26],[110.61,26.33],[110.26,25.96],[109.97,26.2],[109.78,25.87],[109.64,26.05],[109.51,26.0]],[[110.11,20.03],[109.3,19.92],[108.64,19.35],[108.64,18.49],[109.58,18.14],[109.75,18.19],[109.79,18.34],[110.07,18.38],[110.25,18.61],[110.5,18.65],[110.68,19.29],[111.06,19.61],[111.04,19.76],[110.97,20.02],[110.69,20.16],[110.14,20.07]],[[113.9,7.61],[114.06,7.54],[114.37,7.64],[114.54,7.95],[113.92,7.64]],[[109.46,7.34],[109.95,7.52],[109.72,7.58],[109.54,7.45]],[[106.37,28.53],[106.5,28.54],[106.47,28.83],[106.65,28.65],[106.56,28.49],[106.71,28.45],[106.87,28.62],[106.82,28.76],[107.02,28.88],[107.21,28.87],[107.25,28.76],[107.38,28.85],[107.4,29.18],[107.75,29.2],[107.87,28.96],[108.31,29.08],[108.33,28.68],[108.64,28.62],[108.58,28.34],[108.71,28.5],[108.74,28.23],[109.09,28.18],[109.32,28.58],[109.19,28.64],[109.32,29.04],[109.06,29.4],[108.92,29.33],[108.9,29.6],[108.69,29.69],[108.66,29.85],[108.5,29.71],[108.37,29.84],[108.52,29.89],[108.58,30.26],[108.4,30.38],[108.43,30.49],[108.69,30.59],[108.81,30.49],[109.04,30.66],[109.14,30.52],[109.3,30.63],[109.35,30.49],[109.89,30.9],[110.08,30.8],[110.2,31.16],[110.12,31.41],[109.73,31.55],[109.73,31.7],[109.28,31.72],[109.09,31.93],[108.4,32.19],[108.45,32.09],[108.26,31.97],[108.55,31.67],[108.19,31.49],[108.19,31.34],[108.04,31.25],[108.06,31.05],[107.94,30.99],[107.99,30.91],[107.85,30.79],[107.74,30.88],[107.48,30.84],[107.52,30.64],[107.06,30.04],[106.73,30.03],[106.56,30.32],[106.23,30.19],[105.79,30.43],[105.54,30.15],[105.75,30.02],[105.74,29.89],[105.31,29.53],[105.42,29.31],[105.7,29.29],[105.8,28.94],[106.21,28.9],[106.33,28.55]],[[101.17,27.2],[101.14,27.02],[101.37,26.88],[101.39,26.72],[101.51,26.77],[101.4,26.59],[101.64,26.39],[101.63,26.22],[101.84,26.05],[102.11,26.07],[102.57,26.36],[102.71,26.21],[103.0,26.37],[103.05,26.56],[102.88,27.3],[103.49,27.79],[103.55,27.98],[103.43,28.04],[103.57,28.23],[103.88,28.32],[103.78,28.53],[103.85,28.67],[104.43,28.63],[104.26,28.54],[104.28,28.34],[104.46,28.24],[104.3,28.05],[104.57,27.84],[104.89,27.91],[105.06,28.1],[105.27,28.0],[105.31,27.7],[106.31,27.81],[106.21,28.13],[105.9,28.12],[105.82,28.31],[105.64,28.32],[105.62,28.52],[105.88,28.6],[105.97,28.76],[106.38,28.48],[106.21,28.9],[105.8,28.94],[105.7,29.29],[105.46,29.29],[105.33,29.44],[105.3,29.57],[105.74,29.89],[105.75,30.02],[105.54,30.15],[105.83,30.44],[106.23,30.19],[106.56,30.32],[106.73,30.03],[107.06,30.04],[107.52,30.64],[107.48,30.84],[107.74,30.88],[107.85,30.79],[107.99,30.91],[107.94,30.99],[108.06,31.05],[108.04,31.25],[108.19,31.34],[108.19,31.49],[108.55,31.67],[108.26,31.97],[108.51,32.25],[108.24,32.27],[107.98,32.15],[107.68,32.4],[107.46,32.42],[107.44,32.53],[107.21,32.43],[107.07,32.71],[106.73,32.74],[106.42,32.62],[106.12,32.72],[106.04,32.86],[105.6,32.7],[105.47,32.93],[105.38,32.88],[105.45,32.73],[105.19,32.62],[104.64,32.66],[104.29,32.84],[104.43,33.01],[104.3,33.3],[104.42,33.33],[104.22,33.4],[104.18,33.6],[103.17,33.81],[103.18,34.08],[102.91,34.31],[102.6,34.15],[102.65,34.08],[102.14,33.97],[102.48,33.54],[102.19,33.34],[102.2,33.22],[102.12,33.29],[101.83,33.12],[101.77,33.27],[101.95,33.44],[101.84,33.6],[101.66,33.38],[101.74,33.28],[101.63,33.1],[101.49,33.23],[101.12,33.22],[101.12,32.91],[101.24,32.83],[101.16,32.66],[100.69,32.68],[100.65,32.53],[100.4,32.76],[100.11,32.64],[100.12,32.84],[99.88,33.05],[99.72,32.73],[99.27,32.88],[99.2,33.04],[98.76,33.28],[98.66,33.65],[98.41,33.87],[98.4,34.09],[97.9,34.21],[97.67,34.13],[97.63,33.92],[97.37,33.82],[97.42,33.61],[97.75,33.41],[97.49,33.17],[97.52,32.99],[97.35,32.9],[97.48,32.65],[98.22,32.34],[98.43,32.01],[98.41,31.83],[98.89,31.37],[98.77,31.25],[98.64,31.34],[98.6,31.19],[98.96,30.77],[99.16,28.43],[99.37,28.18],[99.4,28.55],[99.72,28.85],[100.18,28.33],[100.02,28.15],[100.31,27.86],[100.31,27.72],[100.68,27.92],[101.04,27.22],[101.17,27.2]],[[109.27,28.49],[109.09,28.18],[108.77,28.21],[108.71,28.5],[108.58,28.34],[108.64,28.62],[108.33,28.68],[108.31,29.08],[107.87,28.96],[107.75,29.2],[107.44,29.2],[107.38,28.85],[107.25,28.76],[107.21,28.87],[107.02,28.88],[106.82,28.76],[106.87,28.62],[106.71,28.45],[106.56,28.49],[106.65,28.65],[106.47,28.83],[106.5,28.54],[106.38,28.48],[105.97,28.76],[105.88,28.6],[105.62,28.52],[105.64,28.32],[105.82,28.31],[105.9,28.12],[106.15,28.16],[106.27,28.07],[106.34,27.86],[106.24,27.77],[105.62,27.67],[105.35,27.75],[105.18,27.37],[105.07,27.42],[104.87,27.29],[104.36,27.47],[104.17,27.26],[103.93,27.44],[103.6,27.06],[103.78,26.95],[103.76,26.59],[104.07,26.51],[104.12,26.64],[104.42,26.71],[104.68,26.38],[104.31,25.65],[104.83,25.24],[104.62,25.06],[104.71,25.0],[104.53,24.73],[104.73,24.62],[105.21,25.0],[106.02,24.63],[106.17,24.76],[106.15,24.95],[106.98,25.23],[106.96,25.44],[107.21,25.61],[107.47,25.21],[107.66,25.32],[107.84,25.12],[108.12,25.21],[108.16,25.44],[108.31,25.53],[108.63,25.31],[108.69,25.62],[109.02,25.51],[109.08,25.72],[108.9,25.71],[109.1,25.81],[109.34,25.73],[109.51,26.13],[109.47,26.31],[109.27,26.33],[109.41,26.53],[109.28,26.7],[109.49,26.76],[109.52,27.06],[109.42,27.15],[108.94,27.02],[108.79,27.08],[109.14,27.45],[109.3,27.42],[109.46,27.57],[109.3,27.96],[109.39,28.27],[109.26,28.46]],[[105.31,27.7],[105.27,28.0],[105.06,28.1],[104.89,27.91],[104.51,27.88],[104.3,28.05],[104.45,28.11],[104.45,28.27],[104.25,28.4],[104.26,28.54],[104.43,28.63],[103.85,28.67],[103.78,28.53],[103.88,28.32],[103.57,28.23],[103.43,28.04],[103.55,27.98],[103.49,27.79],[102.88,27.3],[103.05,26.56],[102.98,26.34],[102.71,26.21],[102.57,26.36],[102.11,26.07],[101.84,26.05],[101.4,26.59],[101.51,26.77],[101.39,26.72],[101.37,26.88],[101.14,27.02],[101.17,27.2],[101.04,27.22],[100.68,27.92],[100.31,27.72],[100.31,27.86],[100.02,28.15],[100.18,28.33],[99.72,28.85],[99.4,28.55],[99.37,28.18],[99.31,28.23],[99.16,28.43],[99.11,29.22],[98.98,29.2],[98.97,28.83],[98.85,28.8],[98.79,29.0],[98.62,28.96],[98.71,28.23],[98.39,28.11],[98.3,28.38],[98.14,28.14],[98.32,27.52],[98.44,27.67],[98.71,27.55],[98.78,26.62],[98.72,26.13],[98.58,26.12],[98.71,25.86],[98.53,25.84],[98.31,25.54],[98.17,25.62],[98.14,25.38],[97.94,25.21],[97.84,25.27],[97.72,25.08],[97.8,24.85],[97.55,24.74],[97.53,24.44],[97.67,24.45],[97.75,24.16],[97.53,23.93],[97.65,23.84],[98.09,24.09],[98.88,24.15],[98.67,23.96],[98.67,23.8],[98.88,23.62],[98.8,23.54],[98.91,23.43],[98.89,23.21],[99.53,23.07],[99.56,22.93],[99.45,22.93],[99.32,22.74],[99.38,22.49],[99.16,22.16],[99.97,22.05],[99.99,21.7],[100.13,21.7],[100.13,21.5],[100.24,21.47],[100.44,21.53],[100.58,21.45],[101.12,21.77],[101.22,21.23],[101.76,21.15],[101.83,21.62],[101.55,22.24],[101.67,22.48],[102.27,22.42],[102.51,22.77],[103.03,22.44],[103.32,22.81],[103.53,22.59],[103.64,22.79],[103.96,22.5],[104.12,22.81],[104.26,22.84],[104.38,22.69],[104.74,22.83],[104.88,23.16],[105.33,23.39],[105.54,23.18],[105.7,23.33],[105.64,23.4],[106.14,23.57],[106.19,23.88],[106.0,24.12],[105.8,24.02],[105.59,24.14],[105.49,24.02],[105.26,24.06],[105.11,24.41],[104.77,24.46],[104.71,24.32],[104.58,24.42],[104.49,24.65],[104.71,25.0],[104.62,25.06],[104.83,25.24],[104.31,25.65],[104.67,26.43],[104.42,26.71],[104.12,26.64],[104.07,26.51],[103.82,26.53],[103.71,26.79],[103.78,26.95],[103.6,27.06],[103.93,27.44],[104.17,27.26],[104.36,27.47],[104.87,27.29],[105.07,27.42],[105.18,27.37],[105.3,27.63]],[[89.71,36.09],[88.93,36.36],[88.77,36.29],[88.47,36.48],[87.57,36.34],[87.43,36.43],[86.28,36.17],[86.05,35.84],[85.61,35.65],[85.05,35.75],[84.16,35.36],[83.13,35.4],[82.97,35.67],[82.47,35.72],[82.03,35.45],[82.03,35.32],[81.69,35.24],[80.43,35.45],[80.27,35.3],[80.36,35.21],[80.03,35.03],[79.8,34.48],[79.04,34.42],[78.93,34.16],[78.66,34.09],[78.78,33.73],[78.68,33.65],[79.15,33.18],[79.31,32.6],[78.97,32.33],[78.78,32.48],[78.74,32.7],[78.4,32.53],[78.47,32.13],[78.76,31.95],[78.65,31.82],[78.85,31.61],[78.76,31.36],[79.1,30.99],[79.33,30.97],[79.4,31.07],[79.67,30.98],[80.04,30.6],[81.03,30.25],[81.13,30.02],[81.39,30.2],[81.42,30.42],[82.1,30.35],[82.18,30.07],[82.56,29.96],[82.83,29.69],[83.27,29.57],[83.6,29.17],[83.91,29.32],[84.12,29.29],[84.23,28.89],[84.48,28.74],[84.86,28.57],[85.13,28.68],[85.11,28.34],[85.6,28.25],[85.72,28.37],[86.0,27.91],[86.13,27.92],[86.09,28.09],[86.19,28.17],[86.23,27.97],[86.41,27.9],[86.57,28.1],[86.7,28.1],[87.23,27.81],[87.73,27.8],[87.83,27.93],[88.11,27.86],[88.65,28.11],[88.76,28.07],[88.89,27.85],[88.78,27.47],[88.98,27.21],[89.18,27.37],[89.1,27.47],[89.24,27.8],[89.79,28.24],[90.7,28.08],[91.03,27.86],[91.31,28.06],[91.46,28.0],[91.61,27.89],[91.59,27.54],[92.06,27.39],[92.11,26.85],[93.82,27.03],[94.28,27.58],[94.89,27.74],[95.29,27.94],[95.4,28.14],[95.83,28.3],[96.28,28.23],[97.1,27.74],[97.39,27.88],[97.35,28.24],[97.52,28.33],[97.57,28.54],[98.14,28.14],[98.3,28.38],[98.39,28.11],[98.71,28.23],[98.62,28.96],[98.79,29.0],[98.85,28.8],[98.97,28.83],[98.96,29.17],[99.11,29.22],[98.99,29.68],[99.07,29.93],[98.96,30.77],[98.6,31.19],[98.64,31.34],[98.77,31.25],[98.89,31.37],[98.41,31.83],[98.43,32.01],[98.22,32.34],[97.36,32.56],[97.42,32.32],[97.3,32.29],[97.31,32.08],[96.72,32.01],[96.78,31.68],[96.47,31.77],[96.39,31.92],[96.19,31.9],[96.25,31.7],[96.16,31.6],[95.98,31.82],[95.82,31.68],[95.51,31.75],[95.36,31.96],[95.44,32.16],[95.32,32.15],[95.24,32.32],[95.08,32.28],[95.22,32.4],[94.91,32.42],[94.61,32.67],[94.14,32.43],[93.72,32.58],[93.52,32.48],[93.24,32.66],[93.07,32.63],[93.02,32.74],[92.26,32.72],[92.21,32.87],[91.96,32.82],[91.54,33.1],[90.9,33.08],[90.41,33.26],[90.01,33.55],[89.94,33.8],[89.64,34.05],[89.87,34.32],[89.73,34.66],[89.87,34.81],[89.79,34.92],[89.58,34.9],[89.59,35.1],[89.45,35.22],[89.5,35.36],[89.77,35.48],[89.8,35.85],[89.55,35.86],[89.4,36.02],[89.69,36.09]],[[110.38,34.6],[110.23,34.69],[110.23,34.88],[110.61,35.63],[110.38,37.02],[110.69,37.29],[110.64,37.44],[110.8,37.56],[110.52,37.96],[110.51,38.19],[110.91,38.52],[110.98,38.97],[111.25,39.3],[111.06,39.4],[111.14,39.59],[110.87,39.49],[110.7,39.27],[110.15,39.45],[110.22,39.28],[109.9,39.27],[109.92,39.11],[109.05,38.43],[108.94,38.21],[109.07,38.02],[108.93,37.92],[108.8,38.05],[108.78,37.68],[108.13,37.62],[107.68,37.89],[107.31,37.61],[107.31,36.91],[108.65,36.38],[108.69,36.02],[108.5,35.87],[108.61,35.33],[107.75,35.31],[107.65,35.24],[107.86,35.0],[107.52,34.91],[107.25,34.88],[106.9,35.09],[106.54,35.08],[106.58,34.77],[106.31,34.58],[106.72,34.37],[106.65,34.24],[106.53,34.29],[106.59,34.15],[106.41,33.91],[106.58,33.58],[105.97,33.61],[105.83,33.38],[105.71,33.38],[105.97,33.2],[105.92,32.99],[105.5,32.87],[105.6,32.7],[106.04,32.86],[106.12,32.72],[106.42,32.62],[106.73,32.74],[107.07,32.71],[107.08,32.54],[107.26,32.4],[107.44,32.53],[107.46,32.42],[107.68,32.4],[107.98,32.15],[108.47,32.27],[109.28,31.72],[109.59,31.73],[109.62,32.11],[109.5,32.3],[109.63,32.6],[110.02,32.55],[110.21,32.63],[110.11,32.83],[109.79,32.88],[109.79,33.07],[109.44,33.15],[109.51,33.24],[110.34,33.16],[110.54,33.26],[110.7,33.1],[111.03,33.33],[111.0,33.58],[110.59,33.89],[110.64,34.16],[110.44,34.24],[110.5,34.34],[110.37,34.57]],[[106.51,35.74],[106.5,35.36],[106.36,35.24],[106.17,35.44],[105.89,35.41],[106.05,35.5],[105.85,35.49],[105.76,35.72],[105.38,35.79],[105.34,36.03],[105.52,36.15],[105.25,36.55],[105.2,36.7],[105.33,36.8],[105.17,36.99],[104.95,37.04],[104.78,37.25],[104.64,37.2],[104.68,37.41],[104.18,37.41],[103.41,37.86],[103.37,38.09],[103.53,38.16],[103.42,38.4],[104.2,38.99],[104.09,39.42],[103.34,39.33],[103.01,39.1],[102.45,39.26],[101.9,39.11],[102.08,38.89],[101.78,38.66],[101.33,38.78],[101.23,39.02],[100.97,38.95],[100.84,39.03],[100.84,39.41],[100.5,39.4],[100.25,39.69],[99.44,39.89],[99.84,40.01],[100.17,40.28],[100.24,40.72],[100.11,40.88],[99.17,40.86],[99.1,40.68],[98.98,40.78],[98.79,40.71],[98.8,40.61],[98.67,40.77],[98.34,40.57],[98.33,40.92],[97.63,41.44],[97.85,41.66],[97.17,42.8],[96.1,42.6],[95.98,42.44],[96.18,42.22],[96.05,41.94],[95.57,41.8],[95.3,41.57],[95.14,41.77],[94.53,41.51],[94.01,41.11],[93.76,40.66],[92.93,40.57],[92.64,39.51],[92.34,39.24],[92.41,39.04],[93.12,39.18],[93.18,38.92],[93.73,38.92],[93.88,38.87],[93.76,38.81],[93.89,38.72],[94.37,38.76],[94.56,38.35],[94.97,38.43],[95.46,38.29],[95.7,38.4],[96.26,38.15],[96.38,38.28],[96.67,38.23],[96.67,38.48],[96.79,38.61],[97.06,38.59],[96.96,39.2],[97.35,39.17],[98.09,38.79],[98.28,39.03],[98.58,38.93],[98.82,39.09],[100.13,38.23],[100.03,38.51],[100.43,38.28],[100.91,38.18],[100.9,38.01],[101.2,37.85],[101.6,37.83],[101.82,37.65],[102.0,37.72],[102.1,37.48],[102.64,37.1],[102.45,36.97],[102.72,36.77],[102.6,36.71],[102.85,36.33],[103.07,36.22],[102.88,36.08],[102.94,35.83],[102.69,35.77],[102.81,35.56],[102.74,35.49],[102.5,35.59],[102.45,35.44],[102.29,35.42],[102.4,35.18],[101.92,34.87],[101.93,34.59],[102.26,34.36],[101.96,34.11],[101.72,34.08],[100.95,34.38],[100.76,34.18],[101.15,33.84],[101.17,33.66],[101.58,33.67],[101.62,33.5],[101.88,33.58],[101.95,33.44],[101.77,33.27],[101.87,33.1],[102.46,33.45],[102.14,33.97],[102.65,34.08],[102.6,34.15],[102.91,34.31],[103.18,34.08],[103.17,33.81],[104.18,33.6],[104.22,33.4],[104.42,33.33],[104.3,33.3],[104.43,33.01],[104.29,32.84],[104.88,32.6],[105.3,32.66],[105.45,32.73],[105.41,32.92],[105.92,32.99],[105.97,33.2],[105.71,33.38],[105.83,33.38],[105.97,33.61],[106.58,33.58],[106.41,33.91],[106.59,34.15],[106.53,34.29],[106.65,34.24],[106.72,34.37],[106.31,34.58],[106.58,34.77],[106.54,35.08],[106.9,35.09],[107.25,34.88],[107.84,34.98],[107.65,35.24],[107.75,35.31],[108.58,35.29],[108.63,35.54],[108.5,35.87],[108.71,36.14],[108.62,36.43],[107.31,36.91],[107.18,37.14],[106.62,37.14],[106.64,36.96],[106.54,36.98],[106.64,36.72],[106.37,36.55],[106.52,36.47],[106.5,36.27],[106.83,36.23],[106.96,36.09],[106.9,35.76],[106.57,35.74]],[[102.83,36.37],[102.6,36.71],[102.72,36.77],[102.45,36.97],[102.64,37.1],[102.6,37.17],[102.1,37.48],[102.0,37.72],[101.82,37.65],[101.6,37.83],[101.2,37.85],[100.9,38.01],[100.91,38.18],[100.43,38.28],[100.03,38.51],[100.13,38.23],[98.82,39.09],[98.58,38.93],[98.28,39.03],[98.09,38.79],[97.35,39.17],[96.96,39.2],[97.06,38.59],[96.79,38.61],[96.67,38.48],[96.67,38.23],[96.38,38.28],[96.26,38.15],[95.7,38.4],[95.46,38.29],[94.97,38.43],[94.56,38.35],[94.37,38.76],[93.89,38.72],[93.76,38.81],[93.88,38.87],[93.73,38.92],[93.18,38.92],[93.12,39.18],[90.13,38.49],[90.28,38.24],[90.53,38.32],[90.52,37.73],[91.07,37.48],[91.28,37.16],[91.3,37.01],[90.85,36.92],[90.71,36.66],[91.04,36.53],[91.12,36.12],[90.85,36.02],[90.0,36.28],[89.94,36.07],[89.4,36.02],[89.55,35.86],[89.8,35.85],[89.77,35.48],[89.5,35.36],[89.45,35.22],[89.59,35.1],[89.58,34.9],[89.79,34.92],[89.87,34.81],[89.73,34.66],[89.87,34.32],[89.64,34.05],[90.36,33.28],[90.9,33.08],[91.54,33.1],[91.96,32.82],[92.21,32.87],[92.26,32.72],[93.02,32.74],[93.07,32.63],[93.24,32.66],[93.52,32.48],[93.72,32.58],[94.14,32.43],[94.61,32.67],[94.91,32.42],[95.22,32.4],[95.08,32.28],[95.24,32.32],[95.32,32.15],[95.44,32.16],[95.36,31.96],[95.51,31.75],[95.82,31.68],[95.98,31.82],[96.21,31.6],[96.19,31.9],[96.39,31.92],[96.47,31.77],[96.78,31.68],[96.72,32.01],[97.31,32.08],[97.3,32.29],[97.42,32.32],[97.33,32.54],[97.73,32.53],[97.42,32.7],[97.35,32.9],[97.52,32.99],[97.49,33.17],[97.75,33.41],[97.42,33.61],[97.37,33.84],[97.63,33.92],[97.67,34.13],[97.81,34.21],[98.4,34.09],[98.41,33.87],[98.66,33.65],[98.76,33.28],[99.2,33.04],[99.27,32.88],[99.72,32.73],[99.88,33.05],[100.21,32.61],[100.26,32.74],[100.4,32.76],[100.65,32.53],[100.69,32.68],[101.16,32.66],[101.24,32.83],[101.12,32.91],[101.12,33.22],[101.49,33.23],[101.63,33.1],[101.78,33.53],[101.62,33.5],[101.5,33.7],[101.17,33.66],[101.15,33.84],[100.76,34.18],[100.82,34.32],[101.19,34.34],[101.74,34.08],[101.96,34.11],[102.26,34.36],[101.93,34.59],[101.92,34.87],[102.4,35.18],[102.29,35.42],[102.45,35.44],[102.5,35.59],[102.81,35.56],[102.69,35.77],[102.94,35.83],[102.88,36.08],[103.07,36.22],[102.84,36.34]],[[107.27,37.1],[107.31,37.61],[107.66,37.84],[107.19,38.15],[106.94,38.13],[106.48,38.32],[106.95,38.94],[106.75,39.38],[106.28,39.26],[106.29,39.15],[106.15,39.15],[105.97,38.91],[105.76,37.8],[104.29,37.43],[104.68,37.41],[104.64,37.2],[104.78,37.25],[104.95,37.04],[105.17,36.99],[105.33,36.8],[105.2,36.7],[105.25,36.55],[105.52,36.15],[105.34,36.03],[105.38,35.79],[105.76,35.72],[105.85,35.49],[106.08,35.51],[106.11,35.36],[106.24,35.41],[106.36,35.24],[106.5,35.36],[106.43,35.69],[106.93,35.81],[106.85,35.89],[106.93,36.14],[106.5,36.27],[106.52,36.47],[106.36,36.58],[106.64,36.72],[106.54,36.98],[106.64,36.96],[106.61,37.13],[107.23,37.1]],[[96.39,42.73],[96.36,42.9],[95.88,43.28],[95.53,44.01],[95.33,44.03],[95.41,44.3],[94.72,44.34],[93.51,44.97],[90.88,45.19],[90.68,45.58],[91.03,46.02],[90.9,46.31],[91.08,46.56],[91.05,46.72],[90.56,47.21],[90.38,47.64],[90.14,47.72],[90.07,47.88],[89.76,47.84],[89.57,48.04],[89.08,47.99],[88.64,48.18],[88.52,48.4],[87.97,48.58],[88.09,48.72],[87.74,48.88],[87.91,48.98],[87.82,49.17],[87.44,49.08],[86.89,49.13],[86.73,48.99],[86.78,48.73],[86.58,48.54],[85.79,48.42],[85.59,48.19],[85.7,47.29],[85.55,47.06],[85.28,47.07],[84.96,46.86],[84.75,47.01],[83.93,46.97],[83.03,47.22],[82.27,45.62],[82.55,45.43],[82.56,45.2],[81.92,45.23],[81.79,45.38],[80.9,45.13],[80.11,45.05],[79.89,44.91],[80.0,44.79],[80.17,44.84],[80.4,44.63],[80.39,44.13],[80.76,43.49],[80.69,43.33],[80.8,43.18],[80.38,43.03],[80.6,42.89],[80.26,42.83],[80.16,42.63],[80.29,42.26],[80.14,42.03],[79.92,42.04],[79.78,41.89],[79.33,41.81],[78.65,41.47],[78.16,41.38],[78.13,41.23],[77.84,41.15],[77.78,41.02],[76.89,41.03],[76.54,40.46],[76.33,40.34],[76.28,40.44],[75.71,40.28],[75.73,40.47],[75.6,40.66],[75.24,40.45],[74.84,40.52],[74.91,40.34],[74.7,40.35],[74.36,40.09],[74.02,40.09],[73.85,39.83],[73.95,39.6],[73.87,39.48],[73.5,39.38],[73.84,39.01],[73.7,38.86],[73.8,38.61],[74.01,38.52],[74.15,38.68],[74.42,38.65],[74.86,38.48],[74.8,38.17],[75.01,37.77],[74.89,37.67],[75.14,37.36],[74.91,37.23],[74.51,37.24],[74.5,37.07],[74.85,37.06],[74.89,36.94],[75.41,36.95],[75.46,36.72],[75.87,36.67],[76.06,36.23],[75.95,36.07],[76.1,36.02],[76.16,35.82],[76.56,35.92],[76.77,35.65],[77.2,35.52],[78.14,35.49],[78.02,35.23],[78.24,34.88],[78.21,34.72],[78.9,34.35],[79.8,34.48],[80.03,35.03],[80.36,35.21],[80.27,35.3],[80.43,35.45],[81.69,35.24],[82.03,35.32],[82.03,35.45],[82.47,35.72],[82.97,35.67],[83.13,35.4],[84.16,35.36],[85.05,35.75],[85.61,35.65],[86.05,35.84],[86.19,36.13],[87.36,36.42],[87.57,36.34],[88.47,36.48],[88.77,36.29],[88.93,36.36],[89.77,36.07],[89.94,36.07],[90.04,36.28],[90.85,36.02],[91.12,36.12],[91.04,36.53],[90.74,36.59],[90.73,36.83],[91.3,37.01],[91.28,37.16],[91.07,37.48],[90.52,37.73],[90.53,38.32],[90.28,38.24],[90.11,38.48],[92.42,39.01],[92.34,39.24],[92.64,39.51],[92.93,40.57],[93.76,40.66],[94.01,41.11],[94.53,41.51],[95.14,41.77],[95.3,41.57],[95.57,41.8],[96.05,41.94],[96.18,42.22],[95.98,42.44],[96.17,42.62]],[[120.44,22.44],[120.64,22.24],[120.7,21.93],[120.87,21.9],[120.98,22.53],[121.43,23.14],[121.64,24.1],[121.89,24.53],[121.84,24.84],[122.01,25.0],[121.92,25.14],[121.54,25.31],[121.02,25.04],[120.1,23.7],[120.02,23.07],[120.3,22.53]],[[114.03,22.5],[113.85,22.19],[114.07,22.33],[114.27,22.2],[114.28,22.39],[114.39,22.36],[114.33,22.48],[114.22,22.43],[114.34,22.5],[114.26,22.55],[114.08,22.51]],[[122.52,23.46],[122.79,24.59],[122.52,23.46]],[[121.17,20.81],[121.91,21.7],[121.17,20.8]],[[119.47,18.01],[120.02,19.04],[119.47,18.0]],[[118.69,11.19],[118.53,10.9],[118.98,12.0],[118.86,11.61]],[[115.54,7.15],[116.25,7.99],[115.54,7.14]],[[112.31,3.53],[111.78,3.4],[112.86,3.75],[112.52,3.6]],[[109.83,15.23],[109.86,15.15],[109.69,15.68],[109.29,16.21],[109.77,15.44]]];
+
+/* ============ 工具 ============ */
+var NS='http://www.w3.org/2000/svg';
+var GC={'东北':'#3E6470','北疆':'#63743F','西域':'#A7812F','西南':'#6E5378','海路':'#2A6A66','远西':'#494F6B'};
+var GN={'东北':'东北','北疆':'北方草原','西域':'西域 · 中亚','西南':'西南 · 南亚','海路':'海路贸易','远西':'远西诸国'};
+var FMIN=-1046,FMAX=1912;
+function $(s){return document.querySelector(s)}
+function N(tag,a){var n=document.createElementNS(NS,tag);for(var k in a){n.setAttribute(k,a[k])}return n}
+function FMT(y){return y<0?'前'+(-y):''+y}
+function SPAN(a,b){return FMT(a)+'—'+FMT(b)}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
+function rnd(s){var x=Math.sin(s*127.1+311.7)*43758.5453;return x-Math.floor(x)}
+function polyPath(arr,close){
+  var d='M'+PX(arr[0][0]).toFixed(1)+','+PY(arr[0][1]).toFixed(1);
+  for(var i=1;i<arr.length;i++){d+=' L'+PX(arr[i][0]).toFixed(1)+','+PY(arr[i][1]).toFixed(1)}
+  return close?d+' Z':d;
+}
+function blobPath(cx,cy,r,seed){
+  var n=8+Math.floor(rnd(seed)*4),pts=[],i,a,rr;
+  for(i=0;i<n;i++){
+    a=i/n*Math.PI*2-Math.PI/2;
+    rr=r*(0.78+rnd(seed*13+i*29)*0.42);
+    pts.push([cx+Math.cos(a)*rr*1.12,cy+Math.sin(a)*rr*0.96]);
+  }
+  var d='M'+((pts[n-1][0]+pts[0][0])/2).toFixed(1)+','+((pts[n-1][1]+pts[0][1])/2).toFixed(1);
+  for(i=0;i<n;i++){
+    var p=pts[i],q=pts[(i+1)%n];
+    d+=' Q'+p[0].toFixed(1)+','+p[1].toFixed(1)+' '+((p[0]+q[0])/2).toFixed(1)+','+((p[1]+q[1])/2).toFixed(1);
+  }
+  return d+' Z';
+}
+
+/* ============ 状态 ============ */
+var st={year:FMIN,sel:null,tab:'emp',playing:false,acc:0,introStop:false};
+var entG={},lblG={},areaG={};
+var CLBL={'西周':[110,34.5],'春秋战国':[112.5,34.5],'秦':[110,34.5],'西汉':[108,34],'新':[108,34],
+'东汉':[108,34],'三国':[110.5,33.5],'西晋':[110,33.5],'东晋':[115.5,31],'南北朝':[110,34],
+'隋':[110,34],'唐':[110,34],'五代十国':[112,34],'北宋':[112,32.5],'南宋':[114.5,29],'元':[108,36],'明':[110,33],'清':[110,33]};
+
+/* ============ 底图 ============ */
+function buildBase(){
+  $('#gSea').appendChild(N('rect',{x:-8,y:-8,width:931,height:506,class:'sea'}));
+  var lg=N('g',{});
+  lg.appendChild(N('path',{d:polyPath(GEO.land,true),class:'land'}));
+  GEO.islands.forEach(function(p){lg.appendChild(N('path',{d:polyPath(p,true),class:'land'}))});
+  GEO.seas.forEach(function(p){lg.appendChild(N('path',{d:polyPath(p,true),class:'sea'}))});
+  $('#gLand').appendChild(lg);
+  var gg=N('g',{});
+  for(var lon=30;lon<=150;lon+=10){gg.appendChild(N('line',{x1:PX(lon),y1:PY(57).toFixed(1),x2:PX(lon),y2:PY(-10).toFixed(1),class:'grid'}))}
+  for(var lat=0;lat<=50;lat+=10){gg.appendChild(N('line',{x1:PX(26).toFixed(1),y1:PY(lat),x2:PX(152).toFixed(1),y2:PY(lat),class:'grid'}))}
+  gg.appendChild(N('line',{x1:PX(26).toFixed(1),y1:PY(23.5).toFixed(1),x2:PX(152).toFixed(1),y2:PY(23.5).toFixed(1),class:'grid-l'}));
+  $('#gGrid').appendChild(gg);
+  var rg=N('g',{});
+  GEO.rivers.forEach(function(p){rg.appendChild(N('path',{d:polyPath(p,false),class:'river'}))});
+  GEO.ridges.forEach(function(p){rg.appendChild(N('path',{d:polyPath(p,false),class:'ridge'}))});
+  $('#gRivers').appendChild(rg);
+}
+
+/* ============ 今日中国：半透明暗影 + 省界 + 国界 ============ */
+function buildChina(){
+  if(typeof CHN==='undefined'||typeof CHP==='undefined')return;
+  var g=$('#gChina'),i;
+  for(i=0;i<CHN.length;i++)g.appendChild(N('path',{d:polyPath(CHN[i],true),class:'chb'}));
+  for(i=0;i<CHP.length;i++)g.appendChild(N('path',{d:polyPath(CHP[i],true),class:'chp'}));
+  for(i=0;i<CHN.length;i++)g.appendChild(N('path',{d:polyPath(CHN[i],true),class:'chc'}));
+}
+
+/* ============ 图层：中原疆域、周边政权 ============ */
+function buildLayers(){
+  CORE.forEach(function(c,i){
+    var p=N('path',{d:polyPath(c.ext,true),fill:'#9E3A20','fill-opacity':0.09,
+      stroke:'#9E3A20','stroke-opacity':0.5,'stroke-width':1.2});
+    p.style.cursor='pointer';
+    p.addEventListener('click',function(ev){ev.stopPropagation();pick('c'+i)});
+    $('#gAreas').appendChild(p);areaG['c'+i]=p;
+    var xy=CLBL[c.n]||[110,34];
+    var t=N('text',{x:PX(xy[0]),y:PY(xy[1]),'text-anchor':'middle',class:'lbl core'});
+    t.textContent=c.n;$('#gLabels').appendChild(t);lblG['c'+i]=t;
+  });
+  var cell={};
+  FOREIGN.forEach(function(d,i){
+    var cx=PX(d.x),cy=PY(d.y),r=d.r*S,col=GC[d.g];
+    var ck=Math.floor(d.x/3)+','+Math.floor(d.y/3);
+    var ck2=cell[ck]||0;cell[ck]=ck2+1;
+    var g=N('g',{class:'ent'});
+    var bp=blobPath(cx,cy,r,i*3+5);
+    g.appendChild(N('path',{d:blobPath(cx,cy,r*1.2,i*3+5),fill:'none',stroke:col,
+      'stroke-opacity':0.26,'stroke-width':0.85,'stroke-dasharray':'2.4 2.8','stroke-linecap':'round'}));
+    g.appendChild(N('path',{d:bp,fill:col,'fill-opacity':0.19,
+      stroke:col,'stroke-opacity':0.85,'stroke-width':1}));
+    g.appendChild(N('circle',{cx:cx,cy:cy,r:Math.max(r*1.5,11),fill:'transparent'}));
+    g.setAttribute('data-id','f'+i);
+    g.addEventListener('click',function(ev){ev.stopPropagation();pick('f'+i)});
+    $('#gEntities').appendChild(g);entG['f'+i]=g;
+    var ty=(d.r>=2.4)?cy+4:cy-r-8-(ck2%4)*8;
+    var t=N('text',{x:cx+((ck2%2)?7:-7),y:ty,'text-anchor':'middle',class:'lbl'+(d.r<1.35?' sm':'')});
+    t.textContent=d.n;$('#gLabels').appendChild(t);lblG['f'+i]=t;
+  });
+}
+
+/* ============ 查询 ============ */
+function coreIndex(y){var m=-1;for(var i=0;i<CORE.length;i++){var c=CORE[i];if(y>=c.from&&y<=c.to)m=i}return m}
+function findCore(y){var i=coreIndex(y);return i<0?null:CORE[i]}
+function empAt(c,y){if(!c||!c.emp)return null;for(var i=0;i<c.emp.length;i++){var e=c.emp[i];if(y>=e[2]&&y<=e[3])return e}return null}
+function alive(sel,y){
+  if(!sel)return false;
+  var i=+sel.slice(1),d=sel[0]==='c'?CORE[i]:FOREIGN[i];
+  if(!d)return false;
+  return sel[0]==='c'?(y>=d.from&&y<=d.to):(y>=d.f&&y<=d.t);
+}
+
+/* ============ 渲染 ============ */
+function render(){
+  var y=st.year;
+  var c=findCore(y),ci=coreIndex(y),em=empAt(c,y);
+  $('#eraBig').innerHTML=FMT(y)+'<small>年</small>';
+  $('#dynLine').innerHTML='中原：<b>'+(c?c.n:'分裂过渡')+'</b>'+(em?'　'+em[0]+' '+em[1]:'');
+
+  FOREIGN.forEach(function(d,i){
+    var on=(y>=d.f&&y<=d.t),g=entG['f'+i],l=lblG['f'+i];
+    g.style.opacity=on?1:0;g.style.pointerEvents=on?'auto':'none';
+    l.style.opacity=on?1:0;
+  });
+  CORE.forEach(function(d,i){
+    var on=(y>=d.from&&y<=d.to);
+    areaG['c'+i].style.opacity=on?1:0;
+    areaG['c'+i].style.pointerEvents=on?'auto':'none';
+    lblG['c'+i].style.opacity=on?1:0;
+  });
+
+  if(st.sel&&!alive(st.sel,y))st.sel=null;
+  paintSel();
+
+  $('#slider').value=y;
+  $('#yearInput').value=y;
+  var onBand=-1;
+  if(c)onBand=CORE.indexOf(c);
+  var bands=$('#bands').children;
+  for(var b=0;b<bands.length;b++){bands[b].classList.toggle('on',+bands[b].getAttribute('data-i')===onBand)}
+  var chips=$('#chips').children;
+  for(var k=0;k<chips.length;k++){chips[k].classList.toggle('on',+chips[k].getAttribute('data-y')===y)}
+
+  renderPanel();renderNear();renderRoster();
+}
+
+function paintSel(){
+  for(var k in entG){var p=entG[k].children[1];p.setAttribute('stroke-width',1);p.setAttribute('fill-opacity',0.19)}
+  for(var k2 in areaG){areaG[k2].setAttribute('stroke-width',1.2);areaG[k2].setAttribute('fill-opacity',0.09)}
+  if(!st.sel)return;
+  if(st.sel.charAt(0)==='f'){
+    var q=entG[st.sel];if(q){var e=q.children[1];e.setAttribute('stroke-width',2.6);e.setAttribute('fill-opacity',0.31)}
+  }else{
+    var r=areaG[st.sel];if(r){r.setAttribute('stroke-width',2.2);r.setAttribute('fill-opacity',0.17)}
+  }
+}
+
+function pick(id){st.introStop=true;st.sel=id;render()}
+
+/* ============ 侧栏：详情 ============ */
+function renderPanel(){
+  var y=st.year,c=findCore(y),ci=coreIndex(y),box=$('#panel');
+  var sel=st.sel||(ci>=0?'c'+ci:null);
+  if(!sel){box.innerHTML='<div class="panel-label"><span class="kicker">中原</span></div><div class="p-name">分裂过渡</div><p class="p-tie">此年中原无统一王朝，或处两朝交替之际。</p>';return}
+
+  if(sel.charAt(0)==='c'){
+    var d=CORE[+sel.slice(1)],em=empAt(d,y);
+    var h='<div class="panel-label"><span class="kicker">中原王朝</span>'+
+      '<span style="font-size:10.5px;color:var(--ink-3);letter-spacing:.06em">拖动时间轴看帝王更替</span></div>';
+    h+='<div class="p-name">'+d.n+'</div>';
+    h+='<div class="p-alias">'+(d.a?d.a+'　·　':'')+'都邑 '+d.cap+'　·　'+SPAN(d.from,d.to)+'</div>';
+    if(em){
+      h+='<div class="throne"><span class="throne-k">此年在位</span><span class="throne-n">'+em[0]+' '+em[1]+
+         '</span><span class="throne-y">'+SPAN(em[2],em[3])+'</span><div class="throne-note">'+em[4]+'</div></div>';
+    }else{
+      h+='<div class="throne"><span class="throne-k">此年在位</span><span class="throne-n">—</span></div>';
+    }
+    h+='<p class="p-tie">'+d.tie+'</p>';
+    h+='<div class="tabs"><button class="tab'+(st.tab==='emp'?' on':'')+'" data-tab="emp">帝王 '+(d.emp||[]).length+
+       '</button><button class="tab'+(st.tab==='min'?' on':'')+'" data-tab="min">名臣 '+(d.min||[]).length+
+       '</button><button class="tab'+(st.tab==='evt'?' on':'')+'" data-tab="evt">大事 '+(d.evt||[]).length+'</button></div>';
+    h+='<div class="tabbody">';
+    if(st.tab==='emp'){
+      (d.emp||[]).forEach(function(e){
+        var now=(y>=e[2]&&y<=e[3]);
+        h+='<div class="emp'+(now?' now':'')+'"><div class="emp-h"><span class="emp-t">'+e[0]+'</span><span class="emp-n">'+e[1]+
+           '</span><span class="emp-y">'+SPAN(e[2],e[3])+'</span></div><div class="emp-d">'+e[4]+'</div></div>';
+      });
+    }else if(st.tab==='min'){
+      (d.min||[]).forEach(function(m){
+        h+='<div class="min"><span class="min-y">'+FMT(m[1])+'</span><span class="min-b"><b>'+m[0]+'</b><span>'+m[2]+'</span></span></div>';
+      });
+    }else{
+      (d.evt||[]).forEach(function(e){
+        h+='<div class="evt"><div class="evt-t"><em>'+FMT(e[0])+'</em>'+e[1]+'</div><div class="evt-d">'+e[2]+'</div></div>';
+      });
+    }
+    h+='</div>';
+    box.innerHTML=h;
+    return;
+  }
+
+  var f=FOREIGN[+sel.slice(1)];
+  var h2='<div class="panel-label"><span class="kicker">周边 · '+(GN[f.g]||'')+'</span><button class="back" id="backCore">回中原 →</button></div>';
+  h2+='<div class="p-name">'+f.n+'</div>';
+  h2+='<div class="p-alias">'+(f.a?f.a:'')+'</div>';
+  h2+='<dl class="p-meta"><dt>存续</dt><dd>'+SPAN(f.f,f.t)+'</dd><dt>今地</dt><dd>'+f.p+'</dd></dl>';
+  h2+='<p class="p-tie">'+f.tie+'</p>';
+  if(f.pp&&f.pp.length){
+    h2+='<div class="sect"><div class="sect-h">人物</div>';
+    f.pp.forEach(function(p){
+      h2+='<div class="person"><span class="p-year">'+FMT(p[1])+'</span><span class="p-body"><b>'+p[0]+'</b><span>'+p[2]+'</span></span></div>';
+    });
+    h2+='</div>';
+  }
+  if(f.e&&f.e.length){
+    h2+='<div class="sect"><div class="sect-h">大事</div>';
+    f.e.forEach(function(e){
+      h2+='<div class="evt"><div class="evt-t"><em>'+FMT(e[0])+'</em>'+e[1]+'</div><div class="evt-d">'+e[2]+'</div></div>';
+    });
+    h2+='</div>';
+  }
+  box.innerHTML=h2;
+}
+
+/* ============ 侧栏：此际大事 ============ */
+function renderNear(){
+  var y=st.year,list=[];
+  CORE.forEach(function(c){(c.evt||[]).forEach(function(e){list.push({y:e[0],t:e[1],d:e[2],g:c.n})})});
+  FOREIGN.forEach(function(f){(f.e||[]).forEach(function(e){list.push({y:e[0],t:e[1],d:e[2],g:f.n})})});
+  list.sort(function(a,b){return Math.abs(a.y-y)-Math.abs(b.y-y)});
+  var pick3=list.slice(0,3);
+  var h='<div class="near-h">此际 · 前后最近的大事</div>';
+  if(!pick3.length){h+='<div class="near-empty">无记载</div>'}
+  pick3.forEach(function(e){
+    var gap=e.y-y;
+    var tag=gap===0?'本年':(gap<0?'前'+(-gap)+'年':'后'+gap+'年');
+    h+='<div class="near-item"><i>'+FMT(e.y)+'</i><span><b class="g">'+e.t+'</b>　'+e.g+'　<span style="color:var(--ink-3)">('+tag+')</span></span></div>';
+  });
+  $('#near').innerHTML=h;
+}
+
+/* ============ 侧栏：当世交往对象 ============ */
+function renderRoster(){
+  var y=st.year,groups={};
+  FOREIGN.forEach(function(d,i){if(y>=d.f&&y<=d.t){(groups[d.g]=groups[d.g]||[]).push({i:i,d:d})}});
+  var order=['北疆','东北','西域','西南','海路','远西'];
+  var h='';
+  order.forEach(function(g){
+    if(!groups[g])return;
+    h+='<div class="r-group"><div class="r-head"><span class="r-dot" style="background:'+GC[g]+'"></span><span class="r-name">'+GN[g]+'</span></div>';
+    groups[g].forEach(function(o){
+      var on=(st.sel==='f'+o.i)?' on':'';
+      h+='<button class="chip2'+on+'" data-id="f'+o.i+'">'+o.d.n+'</button>';
+    });
+    h+='</div>';
+  });
+  if(!h)h='<div class="near-empty">此年周边无可考政权</div>';
+  $('#roster').innerHTML=h;
+}
+
+/* ============ 时间轴 ============ */
+var CHIPS=[['西周',-900],['春秋战国',-500],['秦',-215],['西汉',-100],['东汉',100],['唐',700],['北宋',1050],['南宋',1200],['元',1300],['明',1500],['清',1800]];
+
+function buildBands(){
+  var w=$('#bands');w.innerHTML='';
+  CORE.forEach(function(c,i){
+    var pct=(c.to-c.from+1)/(FMAX-FMIN)*100;
+    var b=document.createElement('div');
+    b.className='band';b.setAttribute('data-i',i);
+    b.style.left=((c.from-FMIN)/(FMAX-FMIN)*100)+'%';
+    b.style.width=pct+'%';
+    b.style.background=(i%2?'#C7BDA7':'#D6CDB9');
+    b.addEventListener('click',function(){jump(+b.getAttribute('data-i'))});
+    w.appendChild(b);
+    if(pct>2.4){
+      var s=document.createElement('div');
+      s.className='band-label';s.style.left=b.style.left;s.textContent=c.n;
+      w.appendChild(s);
+    }
+  });
+}
+function buildChips(){
+  var w=$('#chips');w.innerHTML='';
+  CHIPS.forEach(function(ch){
+    var b=document.createElement('button');
+    b.className='chip';b.type='button';b.setAttribute('data-y',ch[1]);b.textContent=ch[0];
+    b.addEventListener('click',function(){setYear(ch[1])});
+    w.appendChild(b);
+  });
+}
+function jump(i){var c=CORE[i];if(c)setYear(Math.round((Math.max(c.from,-1000)+c.to)/2))}
+
+function setYear(v,keepIntro){
+  st.introStop=true;
+  st.year=clamp(Math.round(v),FMIN,FMAX);
+  render();
+}
+
+/* ============ 播放 ============ */
+var rafId=null;
+function stopPlay(){
+  st.playing=false;
+  if(rafId)cancelAnimationFrame(rafId);rafId=null;
+  $('#playBtn').textContent='演进';$('#playBtn').classList.remove('on');
+}
+function startPlay(){
+  st.introStop=true;
+  st.playing=true;st.acc=0;
+  $('#playBtn').textContent='暂停';$('#playBtn').classList.add('on');
+  var last=0;
+  function tick(ts){
+    if(!st.playing)return;
+    if(!last)last=ts;
+    st.acc+=ts-last;last=ts;
+    if(st.acc>=34){
+      st.acc=0;
+      st.year+=2;
+      if(st.year>=FMAX){st.year=FMAX;render();stopPlay();return}
+      render();
+    }
+    rafId=requestAnimationFrame(tick);
+  }
+  rafId=requestAnimationFrame(tick);
+}
+
+/* ============ 视口 ============ */
+function fitView(){
+  var narrow=window.innerWidth<760;
+  var vb=narrow?'278 0 612 392':'-6 -6 919 494';
+  var svg=$('#map');
+  svg.setAttribute('viewBox',vb);
+  var cw=svg.getBoundingClientRect().width||600;
+  var uw=narrow?612:919;
+  var fs=Math.max(7,11*uw/cw);
+  document.documentElement.style.setProperty('--lbl',fs.toFixed(2)+'px');
+}
+
+/* ============ 事件绑定 ============ */
+function bind(){
+  $('#slider').addEventListener('input',function(){setYear(+this.value)});
+  $('#yearInput').addEventListener('change',function(){
+    var v=parseFloat(this.value);
+    if(isNaN(v)){this.value=st.year;return}
+    setYear(v);
+  });
+  $('#yearInput').addEventListener('focus',function(){st.introStop=true});
+  $('#playBtn').addEventListener('click',function(){
+    if(st.playing)stopPlay();else startPlay();
+  });
+  $('#panel').addEventListener('click',function(ev){
+    var t=ev.target;
+    if(t.id==='backCore'){st.sel=null;render();return}
+    var tab=t.getAttribute&&t.getAttribute('data-tab');
+    if(tab){st.tab=tab;renderPanel();return}
+  });
+  $('#roster').addEventListener('click',function(ev){
+    var id=ev.target.getAttribute&&ev.target.getAttribute('data-id');
+    if(id)pick(id);
+  });
+  $('#map').addEventListener('click',function(){if(st.sel){st.sel=null;render()}});
+  window.addEventListener('resize',fitView);
+  document.addEventListener('keydown',function(ev){
+    if(ev.target&&(ev.target.tagName==='INPUT'))return;
+    if(ev.key==='ArrowRight'){setYear(st.year+1);ev.preventDefault()}
+    if(ev.key==='ArrowLeft'){setYear(st.year-1);ev.preventDefault()}
+  });
+}
+
+/* ============ 开场 ============ */
+function intro(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){st.year=627;render();return}
+  var from=-1046,to=627,t0=null,dur=2500;
+  function step(ts){
+    if(st.introStop)return;
+    if(!t0)t0=ts;
+    var p=Math.min(1,(ts-t0)/dur);
+    var e=1-Math.pow(1-p,3);
+    st.year=Math.round(from+(to-from)*e);
+    render();
+    if(p<1)rafId=requestAnimationFrame(step);
+  }
+  rafId=requestAnimationFrame(step);
+}
+
+/* ============ 启动 ============ */
+buildBase();
+buildChina();
+buildLayers();
+buildBands();
+buildChips();
+bind();
+fitView();
+st.year=FMIN;
+render();
+intro();
+</script>
+</body>
+</html>
